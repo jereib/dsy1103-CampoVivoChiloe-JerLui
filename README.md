@@ -8,6 +8,7 @@ Sistema de microservicios para gestionar una cooperativa rural que ofrece hosped
 |--------|--------|
 | Luis Fermin | @Lguille99 |
 | Jeremy Ibañez | @Jereib|
+| Vicente Krausse | @Mardram|
 
 ## Microservicios
 | # | Microservicio | Puerto | Descripción |
