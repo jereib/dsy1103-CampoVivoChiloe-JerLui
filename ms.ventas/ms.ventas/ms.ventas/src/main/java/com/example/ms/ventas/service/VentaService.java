@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class VentaService {
@@ -48,5 +49,30 @@ public class VentaService {
 
         log.info("Venta calculada con éxito. Total: {}", venta.getTotal());
         return repository.save(venta);
+    }
+    public List<Venta> listarTodas() {
+        return repository.findAll();
+    }
+
+    public Venta obtenerPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Venta no encontrada con ID: " + id));
+    }
+
+    public Venta actualizarVenta(Long id, VentaRequestDTO dto) {
+        log.info("Actualizando venta con ID: {}", id);
+        Venta venta = obtenerPorId(id);
+
+        // Se actualizan los datos básicos. En la vida real aquí habría más lógica de stock.
+        venta.setCantidad(dto.getCantidad());
+        venta.setCanal(dto.getCanal());
+
+        return repository.save(venta);
+    }
+
+    public void eliminarVenta(Long id) {
+        log.info("Eliminando venta con ID: {}", id);
+        Venta venta = obtenerPorId(id);
+        repository.delete(venta);
     }
 }
