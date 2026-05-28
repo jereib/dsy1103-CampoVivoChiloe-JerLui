@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Producto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Es mejor especificar el tipo de generación para la BD
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;
