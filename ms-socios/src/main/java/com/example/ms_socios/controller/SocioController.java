@@ -3,6 +3,9 @@ package com.example.ms_socios.controller;
 import com.example.ms_socios.model.Estado;
 import com.example.ms_socios.model.Socio;
 import com.example.ms_socios.service.SocioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -11,12 +14,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/socios")
+@Tag( name = "Socios", description = "Operaciones relacionadas con socios")
 public class SocioController {
     private final SocioService socioService;
 
     public SocioController(SocioService socioService){
         this.socioService = socioService;
     }
+
+    @Operation( summary = "Listar socios", description = "Obtiene todos las familias socias registradas" )
+    @ApiResponse( responseCode = "200", description = "Consulta exitosa" )
 
     //mostrar familias socias
     @GetMapping
