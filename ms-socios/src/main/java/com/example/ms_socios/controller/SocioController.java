@@ -5,6 +5,7 @@ import com.example.ms_socios.model.Socio;
 import com.example.ms_socios.service.SocioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,69 @@ public class SocioController {
         this.socioService = socioService;
     }
 
-    @Operation( summary = "Listar socios", description = "Obtiene todos las familias socias registradas" )
-    @ApiResponse( responseCode = "200", description = "Consulta exitosa" )
 
     //mostrar familias socias
     @GetMapping
+    @Operation( summary = "Listar socios", description = "Obtiene todas las familias socias registradas" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> listarSocios(){
         return ResponseEntity.ok(socioService.listarSocios());
     }
 
     //buscar por id de las familias socias
     @GetMapping("/{id}")
+    @Operation( summary = "Listar socios por id", description = "Obtiene una familia socia registrada mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> buscarPorId(@PathVariable Long id){
         Socio socio = socioService.buscarPorId(id);
 
@@ -46,6 +99,33 @@ public class SocioController {
 
     //buscar por el estado de las familias socias
     @GetMapping("/estado/{estado}")
+    @Operation( summary = "Listar socios por estado", description = "Obtiene una familia socia registrada mediante su estado" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> obtenerSocioPorEstado(@PathVariable String estado){
         try {
 
@@ -64,6 +144,33 @@ public class SocioController {
 
     //guardar familias socias
     @PostMapping
+    @Operation( summary = "ingresa una familia socia", description = "se ingresa una familia socia nueva con sus atributos correspondientes" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> guardarSocio(@Valid @RequestBody Socio socio){
         Socio nuevoSocio =
                 socioService.guardarSocio(socio);
@@ -79,6 +186,33 @@ public class SocioController {
 
     //actualizar familias socias por id
     @PutMapping("/{id}")
+    @Operation( summary = "Actualiza socios por id", description = "Actualiza una familia socia mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> actualizarSocio(@PathVariable Long id,@Valid @RequestBody Socio socio) {
 
         Socio socioActualizado = socioService.actualizarPorId(id, socio);
@@ -93,6 +227,33 @@ public class SocioController {
 
     //eliminar familias socias por id
     @DeleteMapping("/{id}")
+    @Operation( summary = "Eliminar socios por id", description = "Elimina una familia socia registrada mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> eliminarSocio(@PathVariable Long id) {
 
         boolean eliminado = socioService.eliminarSocio(id);
