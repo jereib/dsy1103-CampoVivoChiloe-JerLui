@@ -3,6 +3,7 @@ package com.example.ms_recursos;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//swagger http://localhost:8088/swagger-ui.html
 @SpringBootApplication
 public class MsRecursosApplication {
 

@@ -13,8 +13,8 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("Usuario API")
-                                .description("Microservicio de gestión de usuarios")
+                                .title("Ms-socios")
+                                .description("Microservicio de gestión de familias socias")
                                 .version("1.0.0")
                 );
     }

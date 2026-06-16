@@ -1,18 +1,30 @@
 package com.example.ms_recursos.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+@Schema(name = "Reserva recurso", description = "Representa la reserva de un recurso")
 @Entity
 public class ReservaRecurso {
 
+    @Schema(description = "Identificador único", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "ID de la familia socia", example = "1")
     private Long socioId;
+
+    @Schema(description = "Nombre del recurso", example = "Tractor agricola")
     private String nombreRecurso;
+
+    @Schema(description = "Fecha de inicio del recurso", example = "2026-06-10")
     private String fechaInicio;
+
+    @Schema(description = "Fecha fin del recurso", example = "2026-06-12")
     private String fechaFin;
+
+    @Schema(description = "Estado del recurso", example = "RESERVADO")
     private String estado;
 
     public ReservaRecurso() {
@@ -28,6 +40,10 @@ public class ReservaRecurso {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getSocioId() {
