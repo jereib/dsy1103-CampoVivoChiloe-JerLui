@@ -1,18 +1,30 @@
 package com.example.ms.ventas.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Schema(name = "Venta", description = "Representa una venta registrada en el sistema")
 @Entity
 public class Venta {
+    @Schema(description = "Identificador único", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Id del producto", example = "1")
     private Long productoId;
+
+    @Schema(description = "Cantidad de productos en la venta", example = "5")
     private Integer cantidad;
+
+    @Schema(description = "Valor total de la venta", example = "15000")
     private Double total;
+
+    @Schema(description = "Medio o plataforma donde se realizo la venta", example = "WEB")
     private String canal;
+
+    @Schema(description = "Fecha de la venta", example = "2026-06-20T15:48:00")
     private LocalDateTime fechaVenta;
 
     public Long getId() { return id; }
