@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ms-socios
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/socios/**
+
+        - id: ms-hospedajes
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/hospedajes/**
+
+        - id: ms-huespedes
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/huespedes/**
+
+        - id: ms-insumos
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/v1/insumos/**
+
+        - id: ms-actividades
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/v1/actividades/**
+
+        - id: ms-productos
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/v1/productos/**
+
+        - id: ms-ventas
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/v1/ventas/**
+
+        - id: ms-recursos
+          uri: http://localhost:8088
+          predicates:
+            - Path=/api/v1/recursos/**
+
+        - id: ms-fondo
+          uri: http://localhost:8089
+          predicates:
+            - Path=/api/v1/fondo/**
+
+        - id: ms-liquidaciones
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/v1/liquidaciones/**
