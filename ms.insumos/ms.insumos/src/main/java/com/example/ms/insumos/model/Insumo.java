@@ -1,17 +1,28 @@
 package com.example.ms.insumos.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+@Schema(name = "Insumo", description = "Representa un insumo en el sistema")
 @Entity
 @Table(name = "insumos")
 public class Insumo {
 
+    @Schema(description = "Identificador único", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Schema(description = "Nombre del insumo", example = "Tornillos de acero 1/2")
     private String nombre;
+
+    @Schema(description = "Descripcion sobre el insumo", example = "Caja de 100 unidades de tornillos de alta resistencia")
     private String descripcion;
+
+    @Schema(description = "Cantidad del insumo", example = "50")
     private Integer stock;
+
+    @Schema(description = "Precio unitario del insumo", example = "4000")
     private Double precioUnidad;
 
     // Getters y Setters

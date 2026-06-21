@@ -2,6 +2,10 @@ package com.example.ms_huespedes.controller;
 
 import com.example.ms_huespedes.model.Huesped;
 import com.example.ms_huespedes.service.HuespedService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/v1/huespedes")
+@Tag( name = "Huespedes", description = "Operaciones relacionadas con los huespedes")
 public class HuespedController {
     private final HuespedService huespedService;
 
@@ -18,12 +23,66 @@ public class HuespedController {
     }
 
     @GetMapping
+    @Operation( summary = "Listar huespedes", description = "Obtiene a todos los huespedes registrados en el sistema" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> listarHuespedes(){
         return ResponseEntity.ok(huespedService.listarHuespedes());
 
     }
 
     @GetMapping("/{id}")
+    @Operation( summary = "Listar huesped por id", description = "Permite obtener a un huesped mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         Huesped huesped = huespedService.buscarPorId(id);
 
@@ -36,6 +95,33 @@ public class HuespedController {
     }
 
     @PostMapping
+    @Operation( summary = "Crear huesped", description = "Permite registrar a un huesped en el sistema" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> guardarHuesped(@Valid @RequestBody Huesped huesped){
         Huesped nuevoHuesped =
                 huespedService.guardarHuesped(huesped);
@@ -50,6 +136,33 @@ public class HuespedController {
     }
 
     @PutMapping("/{id}")
+    @Operation( summary = "Actualizar huesped", description = "Permite actualizar a un huesped por id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> actualizarHuesped(@PathVariable Long id, @Valid @RequestBody Huesped huesped){
         Huesped huespedActualizado = huespedService.actualizarPorId(id, huesped);
 
@@ -62,6 +175,33 @@ public class HuespedController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation( summary = "Eliminar huesped", description = "Permite eliminar a un huesped registrado mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     public ResponseEntity<?> eliminarHuesped(@PathVariable Long id){
         boolean eliminado = huespedService.eliminarHuesped(id);
 

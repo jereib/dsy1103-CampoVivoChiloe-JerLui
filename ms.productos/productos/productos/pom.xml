@@ -5,7 +5,9 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version> <relativePath/> </parent>
+		<version>3.2.5</version>
+		<relativePath/>
+	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>productos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>

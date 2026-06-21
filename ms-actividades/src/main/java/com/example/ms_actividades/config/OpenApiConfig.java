@@ -1,4 +1,4 @@
-package com.example.ms_socios.config;
+package com.example.ms_actividades.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -13,8 +13,8 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("Ms-socios")
-                                .description("Microservicio de gestión de familias socias")
+                                .title("Ms-actividades")
+                                .description("Microservicio de gestión de actividades")
                                 .version("1.0.0")
                 );
     }

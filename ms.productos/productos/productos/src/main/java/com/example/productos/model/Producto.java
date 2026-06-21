@@ -1,23 +1,33 @@
 package com.example.productos.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+@Schema(name = "Producto", description = "Representa un producto en el sistema")
 @Entity
 public class Producto {
 
+    @Schema(description = "Identificador único", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Nombre del producto", example = "Pan")
     private String nombre;
+
+    @Schema(description = "Precio del producto", example = "1200")
     private Double precio;
+
+    @Schema(description = "Cantidad del producto", example = "15")
     private Double stock;
+
+    @Schema(description = "Costo de producir el producto", example = "800")
     private Double costoProduccion;
 
-    // Constructor vacío (Obligatorio para JPA)
+    // Constructor vacío
     public Producto() {
     }
 
