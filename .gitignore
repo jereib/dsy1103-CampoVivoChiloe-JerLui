@@ -1,2 +1,28 @@
 .idea
 .DS_Store
+._DS_Store
+
+# Carpetas de compilación
+target/
+*/target/
+
+# Archivos de configuración de IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Archivos compilados de Java
+*.class
+
+# Archivos temporales
+*.tmp
+~$*
+
+# Archivos comprimidos
+*.zip
+*.jar
+
+# Base de datos H2 local
+data/
+*.mv.db
+*.trace.db
