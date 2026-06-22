@@ -1,25 +1,32 @@
 package com.example.ms_socios.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(name = "Familia socia", description = "Representa una familia socia del sistema")
 @Entity
 public class Socio {
     //atributos
+    @Schema(description = "Identificador único", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Nombre de la familia socia", example = "Los Krausse")
     @NotBlank(message = "Nombre de la familia socia obligatorio")
     private String socio;
 
+    @Schema(description = "Nombre del predio", example = "Los abetos")
     @NotBlank(message = "Nombre del predio obligatorio")
     private String predio;
 
+    @Schema(description = "Capacidad de la familia socia", example = "15")
     @NotNull(message = "Capacidad obligatoria")
     private Integer capacidad;
 
+    @Schema(description = "Estado de la familia socia", example = "SUSPENDIDO")
     @NotNull(message = "Estado obligatorio")
     @Enumerated(EnumType.STRING)
     private Estado estado;

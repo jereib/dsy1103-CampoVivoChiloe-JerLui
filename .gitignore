@@ -1,12 +1,12 @@
+ HEAD
 .idea
 .DS_Store
-._DS_Store
 
-# Carpetas de compilación
+# Carpetas de compilación (Basura de Maven)
 target/
 */target/
 
-# Archivos de configuración de IntelliJ
+# Archivos de configuración de IntelliJ (Basura del IDE)
 .idea/
 *.iml
 *.iws
@@ -14,15 +14,11 @@ target/
 # Archivos compilados de Java
 *.class
 
-# Archivos temporales
+# Archivos temporales de OneDrive
 *.tmp
 ~$*
 
-# Archivos comprimidos
+# Archivos comprimidos que no deben subir
 *.zip
 *.jar
-
-# Base de datos H2 local
-data/
-*.mv.db
-*.trace.db
+ origin/feat/ms-productos-y-ventas
