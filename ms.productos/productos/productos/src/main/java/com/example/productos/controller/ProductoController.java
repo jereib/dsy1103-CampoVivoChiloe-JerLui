@@ -188,4 +188,33 @@ public class ProductoController {
         service.eliminarProducto(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Actualizar parcialmente un producto", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id del producto")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Actualización parcial exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida o margen de precio incorrecto"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Producto no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+    public ResponseEntity<?> actualizarParcial(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
+        try {
+            Producto productoParcial = service.actualizarParcial(id, campos);
+            return new ResponseEntity<>(productoParcial, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

@@ -186,4 +186,33 @@ public class VentaController {
         service.eliminarVenta(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping("/{id}")
+    @Operation( summary = "Actualizar parcialmente una venta", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id de la venta" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Actualización parcial exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida o datos de negocio erróneos"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Venta no encontrada"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+    public ResponseEntity<?> actualizarParcial(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
+        try {
+            Venta ventaParcial = service.actualizarParcial(id, campos);
+            return new ResponseEntity<>(ventaParcial, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

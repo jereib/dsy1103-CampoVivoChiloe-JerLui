@@ -266,4 +266,45 @@ public class SocioController {
         return ResponseEntity.ok("Socio eliminado correctamente");
     }
 
+    @PatchMapping("/{id}")
+    @Operation( summary = "Actualizar parcialmente socios por id", description = "Actualiza algunos campos de una familia socia mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+
+    public ResponseEntity<?> actualizarParcialSocio(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
+
+        Socio socioActualizado = socioService.actualizarParcial(id, campos);
+
+        if (socioActualizado == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("El socio con el ID " + id + " no existe");
+        }
+
+        return ResponseEntity.ok(socioActualizado);
+    }
+
 }

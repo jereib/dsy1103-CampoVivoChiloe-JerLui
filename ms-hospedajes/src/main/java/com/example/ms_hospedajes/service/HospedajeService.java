@@ -7,12 +7,14 @@ import com.example.ms_hospedajes.dto.SocioDTO;
 import com.example.ms_hospedajes.model.HospedajeModel;
 import com.example.ms_hospedajes.repository.HospedajeRepositorio;
 import org.springframework.stereotype.Service;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @Service
 public class HospedajeService {
+
     private static final Logger logger = LoggerFactory.getLogger(HospedajeService.class);
+
     private final HuespedClient huespedClient;
     private final SocioClient socioClient;
     private final HospedajeRepositorio hospedajeRepositorio;
@@ -26,25 +28,74 @@ public class HospedajeService {
     }
 
     public HuespedDTO obtenerHuesped(Long id){
-        return huespedClient.obtenerHuesped(id);
+        logger.debug("Consultando externamente al ms-huespedes por el ID: {}", id);
+        try {
+            HuespedDTO huesped = huespedClient.obtenerHuesped(id);
+            if (huesped == null) {
+                logger.warn("La consulta al ms-huespedes devolvió un objeto nulo para el ID: [{}]", id);
+            }
+            return huesped;
+        } catch (Exception e) {
+            logger.error("Error crítico de comunicación con ms-huespedes al buscar ID [{}]: {}", id, e.getMessage());
+            throw e;
+        }
     }
 
     public SocioDTO obtenerSocio(Long id){
-        return socioClient.obtenerSocio(id);
+        logger.debug("Consultando externamente al ms-socios por el ID: {}", id);
+        try {
+            SocioDTO socio = socioClient.obtenerSocio(id);
+            if (socio == null) {
+                logger.warn("La consulta al ms-socios devolvió un objeto nulo para el ID: [{}]", id);
+            }
+            return socio;
+        } catch (Exception e) {
+            logger.error("Error crítico de comunicación con ms-socios al buscar ID [{}]: {}", id, e.getMessage());
+            throw e;
+        }
     }
 
     public String crearHospedaje(Long socioId, Long huespedId){
+        logger.info("Iniciando proceso para orquestar hospedaje. SocioID: [{}], HuespedID: [{}]", socioId, huespedId);
 
-        HuespedDTO huesped = huespedClient.obtenerHuesped(huespedId);
-        SocioDTO socio = socioClient.obtenerSocio(socioId);
+        HuespedDTO huesped;
+        try {
+            huesped = huespedClient.obtenerHuesped(huespedId);
+            if (huesped == null) {
+                logger.warn("Orquestación fallida: ms-huespedes retornó vacío para el ID [{}]", huespedId);
+                throw new RuntimeException("Huésped no encontrado");
+            }
+        } catch (Exception e) {
+            logger.error("Fallo de comunicación al validar huésped con ID [{}]: {}", huespedId, e.getMessage());
+            throw e;
+        }
+
+        SocioDTO socio;
+        try {
+            socio = socioClient.obtenerSocio(socioId);
+            if (socio == null) {
+                logger.warn("Orquestación fallida: ms-socios retornó vacío para el ID [{}]", socioId);
+                throw new RuntimeException("Socio no encontrado");
+            }
+        } catch (Exception e) {
+            logger.error("Fallo de comunicación al validar socio con ID [{}]: {}", socioId, e.getMessage());
+            throw e;
+        }
 
         HospedajeModel hospedaje = new HospedajeModel();
         hospedaje.setSocioId(socioId);
         hospedaje.setHuespedId(huespedId);
 
-        hospedajeRepositorio.save(hospedaje);
+        try {
+            HospedajeModel guardado = hospedajeRepositorio.save(hospedaje);
 
-        logger.info("Hospedaje creado correctamente");
+            logger.info("Hospedaje creado correctamente. ID Asignado: [{}]. Relación: Huésped [{}] -> Familia [{}]",
+                    guardado.getId(), huesped.getNombreCompleto(), socio.getSocio());
+
+        } catch (Exception e) {
+            logger.error("Error al persistir la relación de hospedaje en la base de datos local: {}", e.getMessage());
+            throw e;
+        }
 
         return "Hospedaje creado para el huésped: "
                 + huesped.getNombreCompleto()

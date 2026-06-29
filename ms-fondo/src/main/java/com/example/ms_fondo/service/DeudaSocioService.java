@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DeudaSocioService {
@@ -66,5 +67,40 @@ public class DeudaSocioService {
                 deudaSocioRepository.findBySocioIdAndEstado(socioId, "ACTIVA");
 
         return !deudasActivas.isEmpty();
+    }
+
+    // Actualiza parcialmente una deuda existente
+    public DeudaSocio actualizarParcial(Long id, Map<String, Object> campos) {
+        DeudaSocio deudaExistente = buscarPorId(id);
+
+        if (deudaExistente == null) {
+            return null;
+        }
+
+        campos.forEach((clave, valor) -> {
+            switch (clave) {
+                case "socioId":
+                    if (valor != null) {
+                        deudaExistente.setSocioId(Long.valueOf(valor.toString()));
+                    } else {
+                        deudaExistente.setSocioId(null);
+                    }
+                    break;
+                case "monto":
+                    if (valor != null) {
+                        deudaExistente.setMonto(Double.parseDouble(valor.toString()));
+                    }
+                    break;
+                case "estado":
+                    if (valor != null) {
+                        deudaExistente.setEstado(valor.toString().toUpperCase());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        return deudaSocioRepository.save(deudaExistente);
     }
 }

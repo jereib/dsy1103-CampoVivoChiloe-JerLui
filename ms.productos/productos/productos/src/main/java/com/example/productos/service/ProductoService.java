@@ -71,4 +71,48 @@ public class ProductoService {
         repository.delete(producto);
         log.info("Producto con ID {} eliminado exitosamente", id);
     }
+
+    public Producto actualizarParcial(Long id, java.util.Map<String, Object> campos) {
+        log.info("Iniciando actualización parcial (PATCH) para el producto con ID: {}", id);
+
+        Producto productoActual = obtenerProductoPorId(id);
+
+        campos.forEach((clave, valor) -> {
+            switch (clave) {
+                case "nombre":
+                    if (valor != null) {
+                        productoActual.setNombre(valor.toString());
+                    }
+                    break;
+                case "precio":
+                    if (valor != null) {
+                        productoActual.setPrecio(Double.parseDouble(valor.toString()));
+                    }
+                    break;
+                case "stock":
+                    if (valor != null) {
+                        productoActual.setStock(Double.parseDouble(valor.toString()));
+                    }
+                    break;
+                case "costoProduccion":
+                    if (valor != null) {
+                        productoActual.setCostoProduccion(Double.parseDouble(valor.toString()));
+                    }
+                    break;
+                default:
+                    log.warn("Campo no reconocido o ignorado en actualización parcial: [{}]", clave);
+                    break;
+            }
+        });
+
+        double precioMinimo = productoActual.getCostoProduccion() * 1.20;
+        if (productoActual.getPrecio() < precioMinimo) {
+            log.error("Error de validación en PATCH: El precio actual de {} es menor al margen permitido (Mínimo requerido: {})",
+                    productoActual.getPrecio(), precioMinimo);
+            throw new IllegalArgumentException("El precio no cumple con el margen mínimo del 20% establecido por la cooperativa");
+        }
+
+        log.info("Producto con ID {} modificado parcialmente de forma exitosa", id);
+        return repository.save(productoActual);
+    }
 }

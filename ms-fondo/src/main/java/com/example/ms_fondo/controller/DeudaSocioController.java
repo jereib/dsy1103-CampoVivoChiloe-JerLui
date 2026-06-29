@@ -265,4 +265,44 @@ public class DeudaSocioController {
     public ResponseEntity<Boolean> tieneDeuda(@PathVariable Long socioId) {
         return ResponseEntity.ok(deudaSocioService.tieneDeudaActiva(socioId));
     }
+
+    @PatchMapping("/{id}")
+    @Operation( summary = "Actualizar parcialmente deuda", description = "Permite actualizar algunos campos de una deuda mediante su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+    public ResponseEntity<?> actualizarParcial(@PathVariable Long id,
+                                               @RequestBody java.util.Map<String, Object> campos) {
+
+        DeudaSocio actualizada = deudaSocioService.actualizarParcial(id, campos);
+
+        if (actualizada == null) {
+            return ResponseEntity.status(404).body("Deuda no encontrada");
+        }
+
+        return ResponseEntity.ok(actualizada);
+    }
 }

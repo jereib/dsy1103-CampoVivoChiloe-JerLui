@@ -212,4 +212,45 @@ public class HuespedController {
 
         return ResponseEntity.ok("Huesped eliminado correctamente");
     }
+
+    @PatchMapping("/{id}")
+    @Operation( summary = "Actualizar parcialmente huesped", description = "Permite actualizar algunos datos de un huesped ya existente" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+
+    public ResponseEntity<?> actualizarParcialHuesped(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
+
+        Huesped huespedActualizado = huespedService.actualizarParcial(id, campos);
+
+        if (huespedActualizado == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("El huésped con el ID " + id + " no existe");
+        }
+
+        return ResponseEntity.ok(huespedActualizado);
+    }
 }
