@@ -58,4 +58,41 @@ public class InsumoService {
         Insumo insumo = obtenerPorId(id);
         repository.delete(insumo);
     }
+
+    public Insumo actualizarParcial(Long id, java.util.Map<String, Object> campos) {
+        log.info("Iniciando actualización parcial (PATCH) para el insumo con ID: {}", id);
+
+        Insumo insumoActual = obtenerPorId(id);
+
+        campos.forEach((clave, valor) -> {
+            switch (clave) {
+                case "nombre":
+                    if (valor != null) {
+                        insumoActual.setNombre(valor.toString());
+                    }
+                    break;
+                case "descripcion":
+                    if (valor != null) {
+                        insumoActual.setDescripcion(valor.toString());
+                    }
+                    break;
+                case "stock":
+                    if (valor != null) {
+                        insumoActual.setStock(Integer.valueOf(valor.toString()));
+                    }
+                    break;
+                case "precioUnidad":
+                    if (valor != null) {
+                        insumoActual.setPrecioUnidad(Double.parseDouble(valor.toString()));
+                    }
+                    break;
+                default:
+                    log.warn("Campo no reconocido o ignorado en PATCH de insumos: [{}]", clave);
+                    break;
+            }
+        });
+
+        log.info("Insumo con ID {} actualizado parcialmente con éxito", id);
+        return repository.save(insumoActual);
+    }
 }

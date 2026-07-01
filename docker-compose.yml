@@ -1,0 +1,56 @@
+
+services:
+  gateway:
+    image: campo-vivo/gateway
+    ports:
+      - "8080:8080"
+
+  actividades:
+    image: campo-vivo/actividades
+    ports:
+      - "8081:8080"
+
+  fondo:
+    image: campo-vivo/fondo
+    ports:
+      - "8082:8080"
+
+  hospedajes:
+    image: campo-vivo/hospedajes
+    ports:
+      - "8083:8080"
+
+  huespedes:
+    image: campo-vivo/huespedes
+    ports:
+      - "8084:8080"
+
+  liquidaciones:
+    image: campo-vivo/liquidaciones
+    ports:
+      - "8085:8080"
+
+  recursos:
+    image: campo-vivo/recursos
+    ports:
+      - "8086:8080"
+
+  socios:
+    image: campo-vivo/socios
+    ports:
+      - "8087:8080"
+
+  insumos:
+    image: campo-vivo/insumos
+    ports:
+      - "8088:8080"
+
+  productos:
+    image: campo-vivo/productos
+    ports:
+      - "8089:8080"
+
+  ventas:
+    image: campo-vivo/ventas
+    ports:
+      - "8090:8080"

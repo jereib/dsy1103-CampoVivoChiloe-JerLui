@@ -225,4 +225,50 @@ public class ActividadesController {
                     .body(e.getMessage());
         }
     }
+
+    @PatchMapping("/{id}")
+    @Operation( summary = "Actualizar parcialmente actividad", description = "Permite actualizar algunos datos de una actividad ya existente" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+
+    public ResponseEntity<?> actualizarParcialActividad(
+            @PathVariable Long id,
+            @RequestBody java.util.Map<String, Object> campos) {
+
+        try {
+            // Delegamos la actualización parcial a la capa de servicio
+            ActividadModel actividadActualizada = actividadService.actualizarParcial(id, campos);
+
+            return ResponseEntity.ok(actividadActualizada);
+
+        } catch (RuntimeException e) {
+            // Captura el error si la actividad no existe, devolviendo un 404 con el mensaje correspondiente
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+    }
 }

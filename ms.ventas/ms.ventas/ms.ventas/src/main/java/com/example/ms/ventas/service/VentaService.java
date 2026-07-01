@@ -63,7 +63,6 @@ public class VentaService {
         log.info("Actualizando venta con ID: {}", id);
         Venta venta = obtenerPorId(id);
 
-        // Se actualizan los datos básicos. En la vida real aquí habría más lógica de stock.
         venta.setCantidad(dto.getCantidad());
         venta.setCanal(dto.getCanal());
 
@@ -74,5 +73,58 @@ public class VentaService {
         log.info("Eliminando venta con ID: {}", id);
         Venta venta = obtenerPorId(id);
         repository.delete(venta);
+    }
+
+    public Venta actualizarParcial(Long id, java.util.Map<String, Object> campos) {
+        log.info("Iniciando actualización parcial (PATCH) para la venta con ID: {}", id);
+
+        Venta ventaActual = obtenerPorId(id);
+
+        final boolean[] cantidadModificada = {false};
+
+        campos.forEach((clave, valor) -> {
+            switch (clave) {
+                case "cantidad":
+                    if (valor != null) {
+                        ventaActual.setCantidad(Integer.valueOf(valor.toString()));
+                        cantidadModificada[0] = true;
+                    }
+                    break;
+                case "canal":
+                    if (valor != null) {
+                        ventaActual.setCanal(valor.toString());
+                    }
+                    break;
+                case "productoId":
+                    log.warn("Se ignoró el intento de modificar el productoId. El producto de una venta es inmutable.");
+                    break;
+                default:
+                    log.warn("Campo no reconocido o no permitido para edición en PATCH: [{}]", clave);
+                    break;
+            }
+        });
+
+        if (cantidadModificada[0]) {
+            log.info("La cantidad ha sido modificada. Recalculando total y validando stock con ms-productos...");
+            ProductoDTO productoExistente;
+            try {
+                productoExistente = productoClient.obtenerProductoPorId(ventaActual.getProductoId());
+            } catch (Exception e) {
+                log.error("Error de comunicación con ms-productos al actualizar venta: {}", e.getMessage());
+                throw new IllegalArgumentException("No se pudo verificar el stock del producto. Servicio no responde.");
+            }
+
+            if (productoExistente.getStock() < ventaActual.getCantidad()) {
+                log.warn("Actualización rechazada: Stock insuficiente. Requerido: {}, Disponible: {}",
+                        ventaActual.getCantidad(), productoExistente.getStock());
+                throw new IllegalArgumentException("Stock insuficiente. Stock actual: " + productoExistente.getStock());
+            }
+
+            // Recalculamos el total automáticamente
+            ventaActual.setTotal(productoExistente.getPrecio() * ventaActual.getCantidad());
+            log.info("Nuevo total recalculado: {}", ventaActual.getTotal());
+        }
+
+        return repository.save(ventaActual);
     }
 }
