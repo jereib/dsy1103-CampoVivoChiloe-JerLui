@@ -2,6 +2,8 @@ package com.example.ms_recursos.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(name = "Recurso", description = "Representa un recurso del sistema")
 @Entity
@@ -12,18 +14,23 @@ public class ReservaRecurso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "El socioId es obligatorio")
     @Schema(description = "Id de la familia socia", example = "1")
     private Long socioId;
 
+    @NotBlank(message = "El nombre del recurso es obligatorio")
     @Schema(description = "Nombre del recurso", example = "Tractor agricola")
     private String nombreRecurso;
 
+    @NotBlank(message = "La fecha de inicio es obligatoria")
     @Schema(description = "Fecha de inicio del recurso", example = "2026-06-10")
     private String fechaInicio;
 
+    @NotBlank(message = "La fecha fin es obligatoria")
     @Schema(description = "Fecha fin del recurso", example = "2026-06-12")
     private String fechaFin;
 
+    @NotBlank(message = "El estado es obligatorio")
     @Schema(description = "Estado del recurso", example = "RESERVADO")
     private String estado;
 

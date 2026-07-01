@@ -1,10 +1,12 @@
 package com.example.ms_liquidaciones.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(name = "Liquidacion", description = "Representa una liquidacion del sistema")
 public class Liquidacion {
 
+    @NotNull(message = "El socioId es obligatorio")
     @Schema(description = "Id socio", example = "1")
     private Long socioId;
 
