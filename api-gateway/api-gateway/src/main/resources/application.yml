@@ -6,53 +6,55 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: ms-socios
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/v1/socios/**
+      server:
+        webmvc:
+          routes:
+            - id: ms-socios
+              uri: ${ms-socios.url:http://localhost:8081}
+              predicates:
+                - Path=/api/v1/socios/**
 
-        - id: ms-hospedajes
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/v1/hospedajes/**
+            - id: ms-hospedajes
+              uri: ${ms-hospedajes.url:http://localhost:8082}
+              predicates:
+                - Path=/api/v1/hospedajes/**
 
-        - id: ms-huespedes
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/v1/huespedes/**
+            - id: ms-huespedes
+              uri: ${ms-huespedes.url:http://localhost:8083}
+              predicates:
+                - Path=/api/v1/huespedes/**
 
-        - id: ms-insumos
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/v1/insumos/**
+            - id: ms-insumos
+              uri: ${ms-insumos.url:http://localhost:8084}
+              predicates:
+                - Path=/api/v1/insumos/**
 
-        - id: ms-actividades
-          uri: http://localhost:8085
-          predicates:
-            - Path=/api/v1/actividades/**
+            - id: ms-actividades
+              uri: ${ms-actividades.url:http://localhost:8085}
+              predicates:
+                - Path=/api/v1/actividades/**
 
-        - id: ms-productos
-          uri: http://localhost:8086
-          predicates:
-            - Path=/api/v1/productos/**
+            - id: ms-productos
+              uri: ${ms-productos.url:http://localhost:8086}
+              predicates:
+                - Path=/api/v1/productos/**
 
-        - id: ms-ventas
-          uri: http://localhost:8087
-          predicates:
-            - Path=/api/v1/ventas/**
+            - id: ms-ventas
+              uri: ${ms-ventas.url:http://localhost:8087}
+              predicates:
+                - Path=/api/v1/ventas/**
 
-        - id: ms-recursos
-          uri: http://localhost:8088
-          predicates:
-            - Path=/api/v1/recursos/**
+            - id: ms-recursos
+              uri: ${ms-recursos.url:http://localhost:8088}
+              predicates:
+                - Path=/api/v1/recursos/**
 
-        - id: ms-fondo
-          uri: http://localhost:8089
-          predicates:
-            - Path=/api/v1/fondo/**
+            - id: ms-fondo
+              uri: ${ms-fondo.url:http://localhost:8089}
+              predicates:
+                - Path=/api/v1/fondo/**
 
-        - id: ms-liquidaciones
-          uri: http://localhost:8090
-          predicates:
-            - Path=/api/v1/liquidaciones/**
+            - id: ms-liquidaciones
+              uri: ${ms-liquidaciones.url:http://localhost:8090}
+              predicates:
+                - Path=/api/v1/liquidaciones/**

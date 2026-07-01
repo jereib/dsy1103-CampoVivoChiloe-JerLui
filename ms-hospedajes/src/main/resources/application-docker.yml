@@ -1,0 +1,4 @@
+ms-huespedes:
+  url: http://huespedes:8083
+ms-socios:
+  url: http://socios:8081

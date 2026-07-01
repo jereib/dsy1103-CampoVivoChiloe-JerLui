@@ -1,0 +1,20 @@
+ms-socios:
+  url: http://socios:8081
+ms-hospedajes:
+  url: http://hospedajes:8082
+ms-huespedes:
+  url: http://huespedes:8083
+ms-insumos:
+  url: http://insumos:8084
+ms-actividades:
+  url: http://actividades:8085
+ms-productos:
+  url: http://productos:8086
+ms-ventas:
+  url: http://ventas:8087
+ms-recursos:
+  url: http://recursos:8088
+ms-fondo:
+  url: http://fondo:8089
+ms-liquidaciones:
+  url: http://liquidaciones:8090
