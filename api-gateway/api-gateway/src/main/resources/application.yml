@@ -52,7 +52,7 @@ spring:
             - id: ms-fondo
               uri: ${ms-fondo.url:http://localhost:8089}
               predicates:
-                - Path=/api/v1/fondo/**
+                - Path=/api/v1/deudas/**
 
             - id: ms-liquidaciones
               uri: ${ms-liquidaciones.url:http://localhost:8090}

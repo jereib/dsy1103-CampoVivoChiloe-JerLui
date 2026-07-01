@@ -31,7 +31,7 @@ venta de productos y gestión de recursos comunitarios.
 ## Tecnologías
 
 - Java 17
-- Spring Boot 4.0
+- Spring Boot 3.5.15
 - Spring Cloud OpenFeign (comunicación entre microservicios)
 - Spring Data JPA + H2 (base de datos en memoria)
 - Spring Cloud Gateway (API Gateway en puerto 8080)
@@ -53,7 +53,7 @@ El gateway centraliza todas las rutas en el puerto `8080`:
 | `/api/v1/productos/**` | ms-productos (8086) |
 | `/api/v1/ventas/**` | ms-ventas (8087) |
 | `/api/v1/recursos/**` | ms-recursos (8088) |
-| `/api/v1/fondo/**` | ms-fondo (8089) |
+| `/api/v1/deudas/**` | ms-fondo (8089) |
 | `/api/v1/liquidaciones/**` | ms-liquidaciones (8090) |
 
 Ejemplo de uso:

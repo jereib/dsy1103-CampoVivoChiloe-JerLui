@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -129,7 +130,7 @@ public class ActividadesController {
                     description = "Error interno del servidor"
             )
     })
-    public ResponseEntity<?> crearActividad(@RequestBody ActividadModel actividad){
+    public ResponseEntity<?> crearActividad(@Valid @RequestBody ActividadModel actividad){
 
         ActividadModel nuevaActividad = actividadService.crearActividad(actividad);
 
@@ -167,7 +168,7 @@ public class ActividadesController {
     })
     public ResponseEntity<?> actualizarActividad(
             @PathVariable Long id,
-            @RequestBody ActividadModel actividadActualizada){
+            @Valid @RequestBody ActividadModel actividadActualizada){
 
         try {
 

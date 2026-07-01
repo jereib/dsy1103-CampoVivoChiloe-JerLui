@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -118,7 +119,7 @@ public class DeudaSocioController {
                     description = "Error interno del servidor"
             )
     })
-    public ResponseEntity<DeudaSocio> crear(@RequestBody DeudaSocio deudaSocio) {
+    public ResponseEntity<DeudaSocio> crear(@Valid @RequestBody DeudaSocio deudaSocio) {
         return ResponseEntity.status(201).body(deudaSocioService.guardar(deudaSocio));
     }
 
@@ -151,7 +152,7 @@ public class DeudaSocioController {
             )
     })
     public ResponseEntity<?> actualizar(@PathVariable Long id,
-                                        @RequestBody DeudaSocio deudaSocio) {
+                                        @Valid @RequestBody DeudaSocio deudaSocio) {
 
         DeudaSocio actualizada = deudaSocioService.actualizar(id, deudaSocio);
 
