@@ -14,6 +14,13 @@ target/
 # Archivos compilados de Java
 *.class
 
+# Bases de datos H2
+*.mv.db
+*.trace.db
+
+# Bases H2 embebidas
+data/
+
 # Archivos temporales de OneDrive
 *.tmp
 ~$*

@@ -13,6 +13,18 @@ venta de productos y gestión de recursos comunitarios.
 | Jeremy Ibañez | @Jereib |
 | Vicente Krausse | @Mardram |
 
+## Requisitos previos
+
+- Java 17+
+- Apache Maven 3.9+ (o usar `./mvnw` en cada microservicio)
+- Docker + Docker Compose (para ejecución con contenedores)
+
+Los wrappers Maven (`mvnw`) deben tener permisos de ejecución:
+
+```bash
+find . -name mvnw -type f -exec chmod +x {} \;
+```
+
 ## Microservicios
 
 | # | Microservicio | Puerto | Descripción |
@@ -59,9 +71,9 @@ El gateway centraliza todas las rutas en el puerto `8080`:
 Ejemplo de uso:
 
 ```bash
-curl http://localhost:8080/api/v1/socios
-curl http://localhost:8080/api/v1/recursos
-curl http://localhost:8080/api/v1/liquidaciones/1
+curl -s http://localhost:8080/api/v1/socios/1
+curl -s http://localhost:8080/api/v1/recursos
+curl -s http://localhost:8080/api/v1/liquidaciones/1
 ```
 
 ## Swagger UI
@@ -83,51 +95,56 @@ Cada microservicio expone su documentación OpenAPI:
 
 ## Ejecución local (Maven)
 
-Cada microservicio se ejecuta de forma independiente:
+Cada microservicio usa su wrapper `./mvnw` (dar permiso con `chmod +x mvnw` si es necesario):
 
 ```bash
-# 1. Compilar y ejecutar pruebas
+# Compilar y ejecutar pruebas
 cd ms-recursos && ./mvnw clean test
 
-# 2. Ejecutar el microservicio
+# Ejecutar el microservicio
 cd ms-recursos && ./mvnw spring-boot:run
+```
 
-# 3. Ejecutar todos los microservicios (terminales separadas)
-cd ms-socios && ./mvnw spring-boot:run
-cd ms-hospedajes && ./mvnw spring-boot:run
-cd ms-huespedes && ./mvnw spring-boot:run
-cd ms-insumos && ./mvnw spring-boot:run
-cd ms-actividades && ./mvnw spring-boot:run
-cd ms-productos && ./mvnw spring-boot:run
-cd ms-ventas && ./mvnw spring-boot:run
-cd ms-recursos && ./mvnw spring-boot:run
-cd ms-fondo && ./mvnw spring-boot:run
-cd ms-liquidaciones && ./mvnw spring-boot:run
-cd api-gateway/api-gateway && ./mvnw spring-boot:run
+Para ejecutar todos los microservicios (terminales separadas):
+
+```bash
+cd ms-socios                    && ./mvnw spring-boot:run
+cd ms-hospedajes                && ./mvnw spring-boot:run
+cd ms-huespedes                 && ./mvnw spring-boot:run
+cd ms.insumos/ms.insumos        && ./mvnw spring-boot:run
+cd ms-actividades               && ./mvnw spring-boot:run
+cd ms.productos/productos/productos && ./mvnw spring-boot:run
+cd ms.ventas/ms.ventas/ms.ventas    && ./mvnw spring-boot:run
+cd ms-recursos                  && ./mvnw spring-boot:run
+cd ms-fondo                     && ./mvnw spring-boot:run
+cd ms-liquidaciones             && ./mvnw spring-boot:run
+cd api-gateway/api-gateway      && ./mvnw spring-boot:run
 ```
 
 ## Ejecución con Docker
 
 ```bash
-# 1. Construir imágenes (ejecutar desde la raíz de cada microservicio)
-cd ms-socios && ./mvnw clean package -DskipTests && docker build -t campo-vivo/socios .
+# Construir y levantar todos los servicios
+docker compose up --build -d
 
-# 2. Iniciar todos los servicios
-docker compose up -d
-
-# 3. Verificar estado
+# Verificar estado (deben aparecer 11 contenedores UP)
 docker compose ps
 
-# 4. Ver logs
+# Ver logs en vivo
 docker compose logs -f
 
-# 5. Detener
+# Detener
 docker compose down
 ```
 
-Para usar el perfil Docker (nombres de servicio en vez de localhost), las imágenes
-se ejecutan automáticamente con el perfil `docker` activo si se define la variable
-`SPRING_PROFILES_ACTIVE=docker`.
+Para construir imágenes manualmente:
+
+```bash
+cd ms-recursos && ./mvnw clean package -DskipTests && docker build -t campo-vivo/recursos .
+```
+
+El perfil Docker (nombres de servicio en vez de localhost) se activa automáticamente
+en los contenedores vía `SPRING_PROFILES_ACTIVE=docker` definido en `docker-compose.yml`.
 
 ## Pruebas y cobertura
 
@@ -139,12 +156,23 @@ cd ms-recursos && ./mvnw clean test
 open ms-recursos/target/site/jacoco/index.html
 
 # Ejecutar pruebas de todos los microservicios
-for d in ms-* ms.*/ms.*/ms.*; do
-  if [ -f "$d/pom.xml" ]; then
-    (cd "$d" && ./mvnw clean test 2>&1 | tail -5)
-  fi
+for d in ms-recursos ms-liquidaciones ms-fondo ms-actividades ms-hospedajes \
+         ms-huespedes ms-socios ms.insumos/ms.insumos \
+         ms.productos/productos/productos ms.ventas/ms.ventas/ms.ventas \
+         api-gateway/api-gateway; do
+  echo "=== $d ==="
+  (cd "$d" && ./mvnw clean test 2>&1 | tail -3)
+  echo
 done
 ```
+
+## Cobertura JaCoCo
+
+Los umbrales mínimos están configurados en cada `pom.xml`:
+- LINE ≥ 20% (api-gateway ≥ 10%)
+- BRANCH ≥ 15%
+
+Reportes generados en `target/site/jacoco/index.html` de cada microservicio.
 
 ## Estado
 
