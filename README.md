@@ -169,6 +169,18 @@ cd ms-recursos && ./mvnw clean package -DskipTests && docker build -t campo-vivo
 El perfil Docker (nombres de servicio en vez de localhost) se activa automáticamente
 en los contenedores vía `SPRING_PROFILES_ACTIVE=docker` definido en `docker-compose.yml`.
 
+## Despliegue en Render
+
+**ms-fondo** desplegado en Render:
+
+| Recurso | URL |
+|---------|-----|
+| API Deudas | https://campo-vivo-fondo.onrender.com/api/v1/deudas |
+| Swagger UI | https://campo-vivo-fondo.onrender.com/swagger-ui.html |
+
+Para desplegar otros MS en Render, crear un Web Service desde el dashboard de Render,
+configurar `Root Directory` al path del microservicio y `Runtime` como `Docker`.
+
 ## Pruebas y cobertura
 
 ```bash
