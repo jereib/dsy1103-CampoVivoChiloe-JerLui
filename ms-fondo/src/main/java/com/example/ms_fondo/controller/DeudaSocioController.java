@@ -16,12 +16,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/deudas")
 @Tag( name = "Fondos", description = "Operaciones relacionadas con los fondos")
+/**
+ * Controlador que expone los endpoints para gestionar las deudas de los socios.
+ * Opera sobre la entidad DeudaSocio a través del servicio correspondiente.
+ */
 public class DeudaSocioController {
 
     @Autowired
     private DeudaSocioService deudaSocioService;
 
-    // Obtener todas las deudas
+    /**
+     * Obtiene todas las deudas registradas en el sistema.
+     *
+     * @return lista de todas las deudas.
+     */
     @GetMapping
     @Operation( summary = "Listar fondos", description = "Obtiene todos los fondos registrados" )
     @ApiResponses({
@@ -54,7 +62,12 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deudaSocioService.listar());
     }
 
-    // Buscar una deuda por su id
+    /**
+     * Busca una deuda por su identificador.
+     *
+     * @param id identificador de la deuda.
+     * @return la deuda encontrada o un mensaje de error 404.
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Obtener fondo por id", description = "Permite obtener un fondo mediante su id" )
     @ApiResponses({
@@ -93,7 +106,12 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deuda);
     }
 
-    // Crear una nueva deuda
+    /**
+     * Crea una nueva deuda en el sistema.
+     *
+     * @param deudaSocio datos de la deuda a crear.
+     * @return la deuda creada con código 201.
+     */
     @PostMapping
     @Operation( summary = "Crear fondo", description = "Permite crear un fondo de acuerdo a sus atributos" )
     @ApiResponses({
@@ -126,7 +144,13 @@ public class DeudaSocioController {
         return ResponseEntity.status(201).body(deudaSocioService.guardar(deudaSocio));
     }
 
-    // Actualizar una deuda completa
+    /**
+     * Actualiza todos los campos de una deuda existente.
+     *
+     * @param id         identificador de la deuda a actualizar.
+     * @param deudaSocio datos actualizados de la deuda.
+     * @return la deuda actualizada o un mensaje de error 404.
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar fondo", description = "Permite actualizar un fondo ya existente en el sistema" )
     @ApiResponses({
@@ -167,7 +191,12 @@ public class DeudaSocioController {
         return ResponseEntity.ok(actualizada);
     }
 
-    // Eliminar una deuda
+    /**
+     * Elimina una deuda del sistema por su identificador.
+     *
+     * @param id identificador de la deuda a eliminar.
+     * @return respuesta vacía 204 o mensaje de error 404.
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar fondo", description = "Permite eliminar un fondo ya existente en el sistema" )
     @ApiResponses({
@@ -207,7 +236,12 @@ public class DeudaSocioController {
         return ResponseEntity.noContent().build();
     }
 
-    // Buscar todas las deudas de un socio específico
+    /**
+     * Obtiene todas las deudas asociadas a un socio específico.
+     *
+     * @param socioId identificador del socio.
+     * @return lista de deudas del socio.
+     */
     @GetMapping("/socio/{socioId}")
     @Operation( summary = "Obtener fondo por id de familia socia", description = "Obtiene todas las deudas relacionadas a una familia socia mediante su id")
     @ApiResponses({
@@ -240,7 +274,12 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deudaSocioService.buscarPorSocio(socioId));
     }
 
-    // Verificar si un socio tiene deuda activa
+    /**
+     * Verifica si un socio tiene al menos una deuda activa.
+     *
+     * @param socioId identificador del socio.
+     * @return true si tiene deuda activa, false en caso contrario.
+     */
     @GetMapping("/validar/{socioId}")
     @Operation( summary = "Validar deuda", description = "Permite validar si una deuda esta activa en una familia socia" )
     @ApiResponses({
@@ -273,7 +312,13 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deudaSocioService.tieneDeudaActiva(socioId));
     }
 
-    // Actualizar solo algunos campos de la deuda
+    /**
+     * Actualiza parcialmente una deuda. Solo se modifican los campos enviados.
+     *
+     * @param id     identificador de la deuda.
+     * @param campos mapa con los campos a actualizar.
+     * @return la deuda actualizada o un mensaje de error 404.
+     */
     @PatchMapping("/{id}")
     @Operation( summary = "Actualizar parcialmente deuda", description = "Permite actualizar algunos campos de una deuda mediante su id" )
     @ApiResponses({

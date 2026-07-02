@@ -15,6 +15,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Pruebas unitarias del servicio LiquidacionService.
+ * Verifica la lógica de negocio usando mocks para el repositorio y el cliente Feign.
+ */
 @ExtendWith(MockitoExtension.class)
 class LiquidacionServiceTest {
 
@@ -27,6 +31,9 @@ class LiquidacionServiceTest {
     @InjectMocks
     private LiquidacionService liquidacionService;
 
+    /**
+     * Verifica que la liquidación descuente la deuda cuando el socio debe.
+     */
     @Test
     void generarLiquidacion_debeCalcularConDeuda_cuandoSocioTieneDeudaActiva() {
         // Given: un socio con deuda activa
@@ -44,6 +51,9 @@ class LiquidacionServiceTest {
         assertEquals(150000, liquidacion.getTotal(), 0.001);
     }
 
+    /**
+     * Verifica que la liquidación no descuente deuda cuando el socio no debe.
+     */
     @Test
     void generarLiquidacion_debeCalcularSinDeuda_cuandoSocioNoTieneDeuda() {
         // Given: un socio sin deuda
@@ -61,6 +71,9 @@ class LiquidacionServiceTest {
         assertEquals(200000, liquidacion.getTotal(), 0.001);
     }
 
+    /**
+     * Verifica que se lance excepción cuando ms-fondo no responde.
+     */
     @Test
     void generarLiquidacion_debeLanzarExcepcion_cuandoFondoNoResponde() {
         // Given: ms-fondo no responde
@@ -76,6 +89,9 @@ class LiquidacionServiceTest {
         assertEquals("No se pudo obtener el estado de deuda del socio.", exception.getMessage());
     }
 
+    /**
+     * Verifica que listar retorne una lista (posiblemente vacía).
+     */
     @Test
     void listar_debeRetornarLista() {
         when(liquidacionRepository.findAll()).thenReturn(List.of());
@@ -86,6 +102,9 @@ class LiquidacionServiceTest {
         assertTrue(resultado.isEmpty());
     }
 
+    /**
+     * Verifica que guardar persista y retorne la liquidación.
+     */
     @Test
     void guardar_debeGuardarLiquidacion() {
         Liquidacion l = new Liquidacion(1L, 200000, 50000, 150000);
@@ -98,6 +117,9 @@ class LiquidacionServiceTest {
         verify(liquidacionRepository).save(l);
     }
 
+    /**
+     * Verifica que buscarPorId retorne la liquidación cuando existe.
+     */
     @Test
     void buscarPorId_debeRetornarLiquidacion_cuandoExiste() {
         Liquidacion l = new Liquidacion(1L, 200000, 50000, 150000);
@@ -110,6 +132,9 @@ class LiquidacionServiceTest {
         assertEquals(1L, resultado.getId());
     }
 
+    /**
+     * Verifica que buscarPorId retorne null cuando no existe.
+     */
     @Test
     void buscarPorId_debeRetornarNull_cuandoNoExiste() {
         when(liquidacionRepository.findById(99L)).thenReturn(Optional.empty());
@@ -119,6 +144,9 @@ class LiquidacionServiceTest {
         assertNull(resultado);
     }
 
+    /**
+     * Verifica que actualizar retorne null cuando la liquidación no existe.
+     */
     @Test
     void actualizar_debeRetornarNull_cuandoNoExiste() {
         when(liquidacionRepository.findById(99L)).thenReturn(Optional.empty());
@@ -128,6 +156,9 @@ class LiquidacionServiceTest {
         assertNull(resultado);
     }
 
+    /**
+     * Verifica que actualizar modifique los campos correctamente cuando existe.
+     */
     @Test
     void actualizar_debeActualizar_cuandoExiste() {
         Liquidacion existente = new Liquidacion(1L, 200000, 50000, 150000);
@@ -145,6 +176,9 @@ class LiquidacionServiceTest {
         assertEquals(300000, resultado.getTotal(), 0.001);
     }
 
+    /**
+     * Verifica que eliminar retorne true cuando la liquidación existe.
+     */
     @Test
     void eliminar_debeRetornarTrue_cuandoExiste() {
         when(liquidacionRepository.existsById(1L)).thenReturn(true);
@@ -155,6 +189,9 @@ class LiquidacionServiceTest {
         verify(liquidacionRepository).deleteById(1L);
     }
 
+    /**
+     * Verifica que eliminar retorne false cuando la liquidación no existe.
+     */
     @Test
     void eliminar_debeRetornarFalse_cuandoNoExiste() {
         when(liquidacionRepository.existsById(99L)).thenReturn(false);

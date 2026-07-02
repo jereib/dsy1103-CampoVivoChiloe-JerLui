@@ -15,15 +15,27 @@ import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("/api/v1/huespedes")
 @Tag( name = "Huespedes", description = "Operaciones relacionadas con los huespedes")
+/**
+ * Controlador que expone los endpoints para gestionar los huéspedes.
+ * Permite realizar operaciones CRUD sobre la entidad Huesped.
+ */
 public class HuespedController {
     private final HuespedService huespedService;
 
-    // Inyectamos el servicio por constructor
+    /**
+     * Constructor que inyecta el servicio de huéspedes.
+     *
+     * @param huespedService servicio de huéspedes.
+     */
     public HuespedController(HuespedService huespedService){
         this.huespedService = huespedService;
     }
 
-    // Devuelve todos los huéspedes registrados
+    /**
+     * Obtiene todos los huéspedes registrados en el sistema.
+     *
+     * @return lista de huéspedes.
+     */
     @GetMapping
     @Operation( summary = "Listar huespedes", description = "Obtiene a todos los huespedes registrados en el sistema" )
     @ApiResponses({
@@ -57,7 +69,12 @@ public class HuespedController {
 
     }
 
-    // Busca un huésped por su id
+    /**
+     * Busca un huésped por su identificador.
+     *
+     * @param id identificador del huésped.
+     * @return el huésped encontrado o un mensaje de error 400.
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Listar huesped por id", description = "Permite obtener a un huesped mediante su id" )
     @ApiResponses({
@@ -97,7 +114,13 @@ public class HuespedController {
         return ResponseEntity.ok(huesped);
     }
 
-    // Registra un nuevo huésped en el sistema
+    /**
+     * Registra un nuevo huésped en el sistema.
+     * Si ya existe un huésped con el mismo nombre, retorna error 400.
+     *
+     * @param huesped datos del huésped a registrar.
+     * @return el huésped creado o un mensaje de error.
+     */
     @PostMapping
     @Operation( summary = "Crear huesped", description = "Permite registrar a un huesped en el sistema" )
     @ApiResponses({
@@ -139,7 +162,13 @@ public class HuespedController {
         return ResponseEntity.ok(nuevoHuesped);
     }
 
-    // Reemplaza todos los datos de un huésped existente
+    /**
+     * Actualiza todos los datos de un huésped existente.
+     *
+     * @param id     identificador del huésped.
+     * @param huesped datos actualizados del huésped.
+     * @return el huésped actualizado o un mensaje de error.
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar huesped", description = "Permite actualizar a un huesped por id" )
     @ApiResponses({
@@ -179,7 +208,12 @@ public class HuespedController {
         return ResponseEntity.ok(huespedActualizado);
     }
 
-    // Elimina un huésped por su id
+    /**
+     * Elimina un huésped del sistema por su identificador.
+     *
+     * @param id identificador del huésped.
+     * @return mensaje de confirmación o error.
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar huesped", description = "Permite eliminar a un huesped registrado mediante su id" )
     @ApiResponses({
@@ -248,7 +282,13 @@ public class HuespedController {
             )
     })
 
-    // Actualiza solo los campos enviados en el Map, sin tocar el resto
+    /**
+     * Actualiza parcialmente los datos de un huésped. Solo se modifican los campos enviados.
+     *
+     * @param id     identificador del huésped.
+     * @param campos mapa con los campos a actualizar.
+     * @return el huésped actualizado o mensaje de error 404.
+     */
     public ResponseEntity<?> actualizarParcialHuesped(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
 
         Huesped huespedActualizado = huespedService.actualizarParcial(id, campos);

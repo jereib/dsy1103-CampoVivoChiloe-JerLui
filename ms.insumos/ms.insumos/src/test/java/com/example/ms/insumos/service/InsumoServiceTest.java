@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Pruebas unitarias para el servicio InsumoService.
+ * Verifica la lógica de negocio de creación, consulta, actualización y eliminación de insumos.
+ */
 @ExtendWith(MockitoExtension.class)
 class InsumoServiceTest {
 
@@ -28,6 +32,9 @@ class InsumoServiceTest {
     @InjectMocks
     private InsumoService insumoService;
 
+    /**
+     * Verifica que crear un insumo mapea correctamente los campos del DTO y lo guarda.
+     */
     @Test
     void crearInsumo_mapeaCamposDTOYGuarda() {
         // given
@@ -66,6 +73,9 @@ class InsumoServiceTest {
         assertEquals(4000.0, insumoCapturado.getPrecioUnidad());
     }
 
+    /**
+     * Verifica que obtenerPorId retorna el insumo cuando existe.
+     */
     @Test
     void obtenerPorId_retornaInsumoCuandoExiste() {
         // given
@@ -85,6 +95,9 @@ class InsumoServiceTest {
         verify(repository).findById(id);
     }
 
+    /**
+     * Verifica que obtenerPorId lanza una excepción cuando el insumo no existe.
+     */
     @Test
     void obtenerPorId_lanzaExcepcionCuandoNoExiste() {
         // given
@@ -97,6 +110,9 @@ class InsumoServiceTest {
         verify(repository).findById(id);
     }
 
+    /**
+     * Verifica que listarTodos retorna todos los insumos registrados.
+     */
     @Test
     void listarTodos_retornaTodos() {
         // given
@@ -111,6 +127,9 @@ class InsumoServiceTest {
         verify(repository).findAll();
     }
 
+    /**
+     * Verifica que actualizar un insumo modifica sus datos cuando existe.
+     */
     @Test
     void actualizarInsumo_actualizaCuandoExiste() {
         // given
@@ -151,6 +170,9 @@ class InsumoServiceTest {
         verify(repository).save(insumoExistente);
     }
 
+    /**
+     * Verifica que actualizar un insumo que no existe lanza una excepción.
+     */
     @Test
     void actualizarInsumo_lanzaExcepcionCuandoNoExiste() {
         // given
@@ -164,6 +186,9 @@ class InsumoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Verifica que eliminar un insumo lo remueve cuando existe.
+     */
     @Test
     void eliminarInsumo_eliminaCuandoExiste() {
         // given
@@ -181,6 +206,9 @@ class InsumoServiceTest {
         verify(repository).delete(insumo);
     }
 
+    /**
+     * Verifica que eliminar un insumo que no existe lanza una excepción.
+     */
     @Test
     void eliminarInsumo_lanzaExcepcionCuandoNoExiste() {
         // given
@@ -193,6 +221,9 @@ class InsumoServiceTest {
         verify(repository, never()).delete(any());
     }
 
+    /**
+     * Verifica que actualizarParcial modifica solo el campo nombre.
+     */
     @Test
     void actualizarParcial_actualizaCampoNombre() {
         // given
@@ -222,6 +253,9 @@ class InsumoServiceTest {
         verify(repository).save(insumoExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica solo el campo descripcion.
+     */
     @Test
     void actualizarParcial_actualizaCampoDescripcion() {
         // given
@@ -248,6 +282,9 @@ class InsumoServiceTest {
         verify(repository).save(insumoExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica solo el campo stock.
+     */
     @Test
     void actualizarParcial_actualizaCampoStock() {
         // given
@@ -274,6 +311,9 @@ class InsumoServiceTest {
         verify(repository).save(insumoExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica solo el campo precioUnidad.
+     */
     @Test
     void actualizarParcial_actualizaCampoPrecioUnidad() {
         // given
@@ -300,6 +340,9 @@ class InsumoServiceTest {
         verify(repository).save(insumoExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial ignora campos que no pertenecen al insumo.
+     */
     @Test
     void actualizarParcial_ignoraCampoDesconocido() {
         // given
@@ -329,6 +372,9 @@ class InsumoServiceTest {
         verify(repository).save(insumoExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial ignora campos cuyo valor es null.
+     */
     @Test
     void actualizarParcial_ignoraCamposConValorNull() {
         // given

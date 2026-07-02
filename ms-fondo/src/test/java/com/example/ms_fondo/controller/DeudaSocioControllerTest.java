@@ -18,6 +18,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Pruebas unitarias del controlador DeudaSocioController.
+ * Simula peticiones HTTP y verifica las respuestas del controlador.
+ */
 @WebMvcTest(DeudaSocioController.class)
 class DeudaSocioControllerTest {
 
@@ -29,6 +33,9 @@ class DeudaSocioControllerTest {
     @MockitoBean
     private DeudaSocioService deudaSocioService;
 
+    /**
+     * Verifica que listar todas las deudas retorna una lista con código 200.
+     */
     @Test
     void listar_debeRetornarLista() throws Exception {
         List<DeudaSocio> deudas = List.of(
@@ -44,6 +51,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).listar();
     }
 
+    /**
+     * Verifica que buscar una deuda por id retorna la deuda con código 200.
+     */
     @Test
     void buscarPorId_debeRetornarDeuda() throws Exception {
         Long id = 1L;
@@ -57,6 +67,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).buscarPorId(id);
     }
 
+    /**
+     * Verifica que buscar una deuda inexistente retorna código 404.
+     */
     @Test
     void buscarPorId_debeRetornar404_cuandoNoExiste() throws Exception {
         Long id = 999L;
@@ -69,6 +82,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).buscarPorId(id);
     }
 
+    /**
+     * Verifica que crear una deuda retorna código 201.
+     */
     @Test
     void crear_debeRetornar201() throws Exception {
         DeudaSocio deuda = new DeudaSocio(1L, 30000, "ACTIVA");
@@ -83,6 +99,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).guardar(any(DeudaSocio.class));
     }
 
+    /**
+     * Verifica que actualizar una deuda existente retorna código 200.
+     */
     @Test
     void actualizar_debeRetornar200() throws Exception {
         Long id = 1L;
@@ -98,6 +117,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).actualizar(eq(id), any(DeudaSocio.class));
     }
 
+    /**
+     * Verifica que actualizar una deuda inexistente retorna código 404.
+     */
     @Test
     void actualizar_debeRetornar404_cuandoNoExiste() throws Exception {
         Long id = 999L;
@@ -113,6 +135,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).actualizar(eq(id), any(DeudaSocio.class));
     }
 
+    /**
+     * Verifica que eliminar una deuda existente retorna código 204.
+     */
     @Test
     void eliminar_debeRetornar204() throws Exception {
         Long id = 1L;
@@ -124,6 +149,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).eliminar(id);
     }
 
+    /**
+     * Verifica que eliminar una deuda inexistente retorna código 404.
+     */
     @Test
     void eliminar_debeRetornar404_cuandoNoExiste() throws Exception {
         Long id = 999L;
@@ -136,6 +164,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).eliminar(id);
     }
 
+    /**
+     * Verifica que buscar deudas por socio retorna una lista con código 200.
+     */
     @Test
     void buscarPorSocio_debeRetornarLista() throws Exception {
         Long socioId = 1L;
@@ -152,6 +183,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).buscarPorSocio(socioId);
     }
 
+    /**
+     * Verifica que validar deuda activa retorna un booleano con código 200.
+     */
     @Test
     void tieneDeuda_debeRetornarBoolean() throws Exception {
         Long socioId = 1L;
@@ -164,6 +198,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).tieneDeudaActiva(socioId);
     }
 
+    /**
+     * Verifica que actualizar parcialmente una deuda retorna código 200.
+     */
     @Test
     void actualizarParcial_debeRetornar200() throws Exception {
         Long id = 1L;
@@ -180,6 +217,9 @@ class DeudaSocioControllerTest {
         verify(deudaSocioService).actualizarParcial(eq(id), anyMap());
     }
 
+    /**
+     * Verifica que actualizar parcialmente una deuda inexistente retorna código 404.
+     */
     @Test
     void actualizarParcial_debeRetornar404_cuandoNoExiste() throws Exception {
         Long id = 999L;

@@ -1,6 +1,9 @@
 package com.example.ms_socios.model;
 
-// Estados posibles de una familia socia
+/**
+ * Enum que representa los estados posibles de una familia socia:
+ * DISPONIBLE, SUSPENDIDO o MANTENIMIENTO.
+ */
 public enum Estado {
     DISPONIBLE,
     SUSPENDIDO,

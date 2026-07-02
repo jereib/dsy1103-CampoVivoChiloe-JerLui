@@ -7,12 +7,20 @@ import org.springframework.context.ApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Prueba de integración que verifica que el contexto de Spring
+ * se cargue correctamente en el API Gateway.
+ */
 @SpringBootTest
 class ApiGatewayApplicationTests {
 
     @Autowired
     private ApplicationContext applicationContext;
 
+    /**
+     * Verifica que el contexto de la aplicación se haya levantado
+     * y que los beans estén disponibles.
+     */
     @Test
     void contextLoads() {
         assertNotNull(applicationContext);

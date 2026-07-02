@@ -9,11 +9,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-// Captura errores de validación y reglas de negocio
+/**
+ * Manejador global de excepciones para el microservicio de ventas.
+ * Captura errores de validación y reglas de negocio, devolviendo
+ * respuestas adecuadas al cliente.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Maneja errores de reglas de negocio como stock insuficiente
+    /**
+     * Maneja errores de reglas de negocio como stock insuficiente o producto inexistente.
+     *
+     * @param ex excepción lanzada por la lógica de negocio
+     * @return respuesta con código 400 y detalle del error
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBusinessRuleException(IllegalArgumentException ex) {
         Map<String, String> response = new HashMap<>();
@@ -22,7 +31,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Agrupa todos los errores de validación campo por campo
+    /**
+     * Captura errores de validación de los DTO y los devuelve agrupados campo por campo.
+     *
+     * @param ex excepción de validación
+     * @return respuesta con código 400 y los errores por campo
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();

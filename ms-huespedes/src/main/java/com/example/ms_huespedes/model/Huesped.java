@@ -6,9 +6,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Column;
 
+/**
+ * Entidad que representa a un huésped en el sistema.
+ * Almacena información personal como nombre, RUT, edad, perfil, historial y correo.
+ */
 @Schema(name = "Huesped", description = "Representa a un huesped el sistema")
 @Entity
-// Entidad que representa a un huésped en la base de datos
 public class Huesped {
 
     @Schema(description = "Identificador único", example = "1")
@@ -41,9 +44,23 @@ public class Huesped {
     @NotBlank(message = "Correo obligatorio")
     private String correo;
 
+    /**
+     * Constructor vacío requerido por JPA.
+     */
     public Huesped() {
     }
 
+    /**
+     * Constructor con todos los campos del huésped.
+     *
+     * @param id             identificador del huésped.
+     * @param nombreCompleto nombre completo del huésped.
+     * @param rut            RUT del huésped.
+     * @param edad           edad del huésped.
+     * @param perfil         perfil o descripción del huésped.
+     * @param historial      historial de estadías del huésped.
+     * @param correo         correo electrónico del huésped.
+     */
     public Huesped(Long id, String nombreCompleto, String rut, Integer edad, String perfil, String historial, String correo) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;

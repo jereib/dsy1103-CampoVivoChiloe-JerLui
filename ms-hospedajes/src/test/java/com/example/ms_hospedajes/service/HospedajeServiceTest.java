@@ -22,6 +22,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+/**
+ * Pruebas unitarias del servicio HospedajeService.
+ * Verifica la lógica de negocio usando mocks de los clientes Feign y el repositorio.
+ */
 @ExtendWith(MockitoExtension.class)
 class HospedajeServiceTest {
 
@@ -40,6 +44,9 @@ class HospedajeServiceTest {
     @Captor
     private ArgumentCaptor<HospedajeModel> hospedajeCaptor;
 
+    /**
+     * Debe retornar todos los hospedajes registrados.
+     */
     @Test
     void listar_retornaTodosLosHospedajes() {
         List<HospedajeModel> hospedajes = List.of(
@@ -54,6 +61,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio).findAll();
     }
 
+    /**
+     * Debe retornar un DTO de huésped cuando el cliente Feign responde correctamente.
+     */
     @Test
     void obtenerHuesped_retornaHuespedDTO_cuandoExiste() {
         Long id = 1L;
@@ -71,6 +81,9 @@ class HospedajeServiceTest {
         verify(huespedClient).obtenerHuesped(id);
     }
 
+    /**
+     * Debe retornar null cuando el cliente Feign devuelve null.
+     */
     @Test
     void obtenerHuesped_retornaNull_cuandoFeignRetornaNull() {
         Long id = 1L;
@@ -82,6 +95,9 @@ class HospedajeServiceTest {
         verify(huespedClient).obtenerHuesped(id);
     }
 
+    /**
+     * Debe lanzar excepción cuando el cliente Feign falla en la comunicación.
+     */
     @Test
     void obtenerHuesped_lanzaExcepcion_cuandoFeignFalla() {
         Long id = 1L;
@@ -91,6 +107,9 @@ class HospedajeServiceTest {
         verify(huespedClient).obtenerHuesped(id);
     }
 
+    /**
+     * Debe retornar un DTO de socio cuando el cliente Feign responde correctamente.
+     */
     @Test
     void obtenerSocio_retornaSocioDTO_cuandoExiste() {
         Long id = 1L;
@@ -108,6 +127,9 @@ class HospedajeServiceTest {
         verify(socioClient).obtenerSocio(id);
     }
 
+    /**
+     * Debe retornar null cuando el cliente Feign devuelve null.
+     */
     @Test
     void obtenerSocio_retornaNull_cuandoFeignRetornaNull() {
         Long id = 1L;
@@ -119,6 +141,9 @@ class HospedajeServiceTest {
         verify(socioClient).obtenerSocio(id);
     }
 
+    /**
+     * Debe lanzar excepción cuando el cliente Feign falla en la comunicación.
+     */
     @Test
     void obtenerSocio_lanzaExcepcion_cuandoFeignFalla() {
         Long id = 1L;
@@ -128,6 +153,9 @@ class HospedajeServiceTest {
         verify(socioClient).obtenerSocio(id);
     }
 
+    /**
+     * Debe crear un hospedaje cuando ambos clientes Feign responden correctamente.
+     */
     @Test
     void crearHospedaje_creaHospedaje_cuandoAmbosFeignExitosos() {
         Long socioId = 1L;
@@ -160,6 +188,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio).save(any(HospedajeModel.class));
     }
 
+    /**
+     * Debe lanzar excepción cuando el huésped no se encuentra.
+     */
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoHuespedNoEncontrado() {
         Long socioId = 1L;
@@ -173,6 +204,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio, never()).save(any());
     }
 
+    /**
+     * Debe lanzar excepción cuando el socio no se encuentra.
+     */
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoSocioNoEncontrado() {
         Long socioId = 999L;
@@ -191,6 +225,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio, never()).save(any());
     }
 
+    /**
+     * Debe lanzar excepción cuando el cliente Feign falla al validar el huésped.
+     */
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoFeignFalla() {
         Long socioId = 1L;
@@ -204,6 +241,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio, never()).save(any());
     }
 
+    /**
+     * Debe lanzar excepción cuando el repositorio falla al guardar.
+     */
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoRepositorioFalla() {
         Long socioId = 1L;
@@ -227,6 +267,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio).save(any(HospedajeModel.class));
     }
 
+    /**
+     * Debe actualizar un hospedaje cuando existe.
+     */
     @Test
     void actualizar_actualizaHospedaje_cuandoExiste() {
         Long id = 1L;
@@ -250,6 +293,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio).save(existente);
     }
 
+    /**
+     * Debe retornar null cuando el hospedaje a actualizar no existe.
+     */
     @Test
     void actualizar_retornaNull_cuandoNoExiste() {
         Long id = 999L;
@@ -266,6 +312,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio, never()).save(any());
     }
 
+    /**
+     * Debe retornar true cuando el hospedaje existe y se elimina.
+     */
     @Test
     void eliminar_retornaTrue_cuandoExiste() {
         Long id = 1L;
@@ -279,6 +328,9 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio).deleteById(id);
     }
 
+    /**
+     * Debe retornar false cuando el hospedaje a eliminar no existe.
+     */
     @Test
     void eliminar_retornaFalse_cuandoNoExiste() {
         Long id = 999L;
@@ -291,6 +343,14 @@ class HospedajeServiceTest {
         verify(hospedajeRepositorio, never()).deleteById(anyLong());
     }
 
+    /**
+     * Crea un objeto HospedajeModel con los valores dados.
+     *
+     * @param id        identificador del hospedaje.
+     * @param socioId   identificador del socio.
+     * @param huespedId identificador del huésped.
+     * @return hospedaje configurado.
+     */
     private HospedajeModel crearHospedaje(Long id, Long socioId, Long huespedId) {
         HospedajeModel h = new HospedajeModel();
         h.setId(id);

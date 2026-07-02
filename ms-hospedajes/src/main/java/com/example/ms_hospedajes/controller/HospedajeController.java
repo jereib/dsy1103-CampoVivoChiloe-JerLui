@@ -15,18 +15,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST que expone los endpoints para gestionar hospedajes.
+ * Permite listar, crear, actualizar y eliminar relaciones entre socios y huéspedes.
+ */
 @RestController
 @RequestMapping("/api/v1/hospedajes")
 @Tag( name = "Hospedajes", description = "Operaciones relacionadas con los hospedajes")
 public class HospedajeController {
     private final HospedajeService hospedajeService;
 
-    // Inyectamos el servicio de hospedajes
+    /**
+     * Construye el controlador con el servicio de hospedajes.
+     *
+     * @param hospedajeService servicio que contiene la lógica de negocio.
+     */
     public HospedajeController(HospedajeService hospedajeService){
         this.hospedajeService = hospedajeService;
     }
 
-    // Obtiene todas las relaciones de hospedaje
+    /**
+     * Obtiene todos los hospedajes registrados.
+     *
+     * @return lista de hospedajes.
+     */
     @GetMapping
     @Operation( summary = "Listar hospedajes", description = "Obtiene todos los hospedajes registrados" )
     @ApiResponses({
@@ -59,7 +71,12 @@ public class HospedajeController {
         return ResponseEntity.ok(hospedajeService.listar());
     }
 
-    // Consulta remota al ms-huespedes para obtener datos de un huésped
+    /**
+     * Consulta un huésped por su ID mediante el microservicio ms-huespedes.
+     *
+     * @param id identificador del huésped.
+     * @return datos del huésped encontrado.
+     */
     @GetMapping("/huespedes/{id}")
     @Operation( summary = "Listar huesped por id", description = "Permite obtener un huesped resgitrado mediante su id, se tiene que ejecutar el ms-huespedes" )
     @ApiResponses({
@@ -92,7 +109,12 @@ public class HospedajeController {
         return hospedajeService.obtenerHuesped(id);
     }
 
-    // Consulta remota al ms-socios para obtener datos de una familia socia
+    /**
+     * Consulta un socio por su ID mediante el microservicio ms-socios.
+     *
+     * @param id identificador del socio.
+     * @return datos del socio encontrado.
+     */
     @GetMapping("/socios/{id}")
     @Operation( summary = "Listar socios por id", description = "Permite obtener a una familia socia registrada mediante el id, se tiene que ejecutar el ms-socios" )
     @ApiResponses({
@@ -125,7 +147,13 @@ public class HospedajeController {
         return hospedajeService.obtenerSocio(id);
     }
 
-    // Crea un hospedaje vinculando un socio y un huésped por sus IDs
+    /**
+     * Crea un hospedaje a partir de los IDs de socio y huésped en la URL.
+     *
+     * @param socioId   identificador del socio.
+     * @param huespedId identificador del huésped.
+     * @return mensaje de confirmación o error.
+     */
     @GetMapping("/crear/{socioId}/{huespedId}")
     @Operation( summary = "Crear hospedaje", description = "Permite crear un hospedaje relacionando un huesped a una familia socia" )
     @ApiResponses({
@@ -173,7 +201,12 @@ public class HospedajeController {
         }
     }
 
-    // Crea un hospedaje desde un JSON con socioId y huespedId
+    /**
+     * Crea un hospedaje a partir de un JSON con socioId y huespedId.
+     *
+     * @param hospedaje objeto con los datos del hospedaje.
+     * @return mensaje de confirmación o error.
+     */
     @PostMapping
     @Operation( summary = "Crear hospedaje", description = "Permite crear un hospedaje con los IDs de socio y huésped" )
     @ApiResponses({
@@ -213,7 +246,13 @@ public class HospedajeController {
         }
     }
 
-    // Actualiza los IDs de socio y huésped de un hospedaje existente
+    /**
+     * Actualiza los IDs de socio y huésped de un hospedaje existente.
+     *
+     * @param id        identificador del hospedaje.
+     * @param hospedaje objeto con los nuevos datos.
+     * @return hospedaje actualizado o mensaje de error.
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar hospedaje", description = "Actualiza un hospedaje existente por su id" )
     @ApiResponses({
@@ -252,7 +291,12 @@ public class HospedajeController {
         return ResponseEntity.ok(actualizado);
     }
 
-    // Elimina un hospedaje por su id
+    /**
+     * Elimina un hospedaje por su identificador.
+     *
+     * @param id identificador del hospedaje.
+     * @return respuesta vacía si se elimina, o error si no existe.
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar hospedaje", description = "Elimina un hospedaje por su id" )
     @ApiResponses({

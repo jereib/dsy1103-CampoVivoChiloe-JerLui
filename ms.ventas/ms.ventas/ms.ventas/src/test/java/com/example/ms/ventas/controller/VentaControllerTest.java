@@ -19,6 +19,11 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Tests del controlador de ventas.
+ * Verifica que los endpoints REST respondan correctamente
+ * y que el servicio sea invocado con los parámetros adecuados.
+ */
 @WebMvcTest(VentaController.class)
 class VentaControllerTest {
 
@@ -31,6 +36,9 @@ class VentaControllerTest {
     @MockBean
     private VentaService service;
 
+    /**
+     * Al listar todas las ventas, el endpoint retorna 200 con la lista.
+     */
     @Test
     void listarTodas_retorna200YLista() throws Exception {
         when(service.listarTodas()).thenReturn(List.of(new Venta(), new Venta()));
@@ -42,6 +50,9 @@ class VentaControllerTest {
         verify(service).listarTodas();
     }
 
+    /**
+     * Al buscar una venta por id existente, retorna 200 con los datos.
+     */
     @Test
     void obtenerPorId_retorna200YVenta() throws Exception {
         Venta venta = new Venta();
@@ -58,6 +69,9 @@ class VentaControllerTest {
         verify(service).obtenerPorId(1L);
     }
 
+    /**
+     * Al crear una venta válida, retorna 201 con los datos guardados.
+     */
     @Test
     void crearVenta_retorna201YVenta() throws Exception {
         VentaRequestDTO dto = new VentaRequestDTO();
@@ -80,6 +94,9 @@ class VentaControllerTest {
         verify(service).registrarVenta(any());
     }
 
+    /**
+     * Al actualizar una venta existente, retorna 200 con los nuevos datos.
+     */
     @Test
     void actualizar_retorna200YVenta() throws Exception {
         VentaRequestDTO dto = new VentaRequestDTO();
@@ -102,6 +119,9 @@ class VentaControllerTest {
         verify(service).actualizarVenta(eq(1L), any());
     }
 
+    /**
+     * Al eliminar una venta existente, retorna 204 sin contenido.
+     */
     @Test
     void eliminar_retorna204() throws Exception {
         doNothing().when(service).eliminarVenta(1L);
@@ -112,6 +132,9 @@ class VentaControllerTest {
         verify(service).eliminarVenta(1L);
     }
 
+    /**
+     * Al actualizar parcialmente una venta, retorna 200 con los cambios.
+     */
     @Test
     void actualizarParcial_retorna200() throws Exception {
         Venta venta = new Venta();
@@ -131,6 +154,9 @@ class VentaControllerTest {
         verify(service).actualizarParcial(eq(1L), any());
     }
 
+    /**
+     * Al actualizar parcialmente con datos inválidos, retorna 400.
+     */
     @Test
     void actualizarParcial_retorna400_cuandoIllegalArgument() throws Exception {
         when(service.actualizarParcial(eq(1L), any())).thenThrow(new IllegalArgumentException("Stock insuficiente"));

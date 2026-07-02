@@ -7,9 +7,12 @@ import jakarta.validation.constraints.NotNull;
 
 @Schema(name = "Familia socia", description = "Representa una familia socia del sistema")
 @Entity
-// Modelo principal del microservicio, mapea a la tabla de socios
+/**
+ * Modelo principal que representa una familia socia.
+ * Se mapea a la tabla de socios en la base de datos.
+ */
 public class Socio {
-    //atributos
+
     @Schema(description = "Identificador único", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +35,21 @@ public class Socio {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
-    //constructor vacio
+    /**
+     * Constructor vacío requerido por JPA.
+     */
     public Socio() {
     }
 
-    //constructor con los atributos
+    /**
+     * Constructor con todos los atributos de la familia socia.
+     *
+     * @param id        identificador único
+     * @param socio     nombre de la familia socia
+     * @param predio    nombre del predio
+     * @param capacidad capacidad de la familia
+     * @param estado    estado actual (DISPONIBLE, SUSPENDIDO, MANTENIMIENTO)
+     */
     public Socio(Long id, String socio, String predio, Integer capacidad, Estado estado) {
         this.id = id;
         this.socio = socio;
@@ -45,43 +58,72 @@ public class Socio {
         this.estado = estado;
     }
 
-    //getter and setters
+    /**
+     * @return el identificador único del socio
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * @param id identificador único a asignar
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * @return el nombre de la familia socia
+     */
     public String getSocio() {
         return socio;
     }
 
+    /**
+     * @param socio nombre de la familia socia a asignar
+     */
     public void setSocio(String socio) {
         this.socio = socio;
     }
 
+    /**
+     * @return el nombre del predio
+     */
     public String getPredio() {
         return predio;
     }
 
+    /**
+     * @param predio nombre del predio a asignar
+     */
     public void setPredio(String predio) {
         this.predio = predio;
     }
 
+    /**
+     * @return la capacidad de la familia socia
+     */
     public Integer getCapacidad() {
         return capacidad;
     }
 
+    /**
+     * @param capacidad capacidad a asignar
+     */
     public void setCapacidad(Integer capacidad) {
         this.capacidad = capacidad;
     }
 
+    /**
+     * @return el estado actual del socio
+     */
     public Estado getEstado() {
         return estado;
     }
 
+    /**
+     * @param estado estado a asignar (DISPONIBLE, SUSPENDIDO, MANTENIMIENTO)
+     */
     public void setEstado(Estado estado) {
         this.estado = estado;
     }

@@ -23,6 +23,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests del servicio de ventas.
+ * Verifica la lógica de negocio: registro, validación de stock,
+ * actualización parcial y manejo de errores.
+ */
 @ExtendWith(MockitoExtension.class)
 class VentaServiceTest {
 
@@ -38,6 +43,9 @@ class VentaServiceTest {
     @Captor
     private ArgumentCaptor<Venta> ventaCaptor;
 
+    /**
+     * Registrar venta: debe guardar la venta cuando el producto existe y hay stock.
+     */
     @Test
     void registrarVenta_guardaVenta_cuandoProductoExisteYStockSuficiente() {
         // given
@@ -74,6 +82,9 @@ class VentaServiceTest {
         verify(repository).save(any(Venta.class));
     }
 
+    /**
+     * Registrar venta: debe lanzar excepción cuando el producto no existe.
+     */
     @Test
     void registrarVenta_lanzaExcepcion_cuandoProductoNoExiste() {
         // given
@@ -90,6 +101,9 @@ class VentaServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Registrar venta: debe lanzar excepción cuando el stock es insuficiente.
+     */
     @Test
     void registrarVenta_lanzaExcepcion_cuandoStockInsuficiente() {
         // given
@@ -112,6 +126,9 @@ class VentaServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Listar todas: debe retornar todas las ventas registradas.
+     */
     @Test
     void listarTodas_retornaTodasLasVentas() {
         // given
@@ -129,6 +146,9 @@ class VentaServiceTest {
         verify(repository).findAll();
     }
 
+    /**
+     * Obtener por id: debe retornar la venta cuando existe.
+     */
     @Test
     void obtenerPorId_retornaVenta_cuandoExiste() {
         // given
@@ -146,6 +166,9 @@ class VentaServiceTest {
         verify(repository).findById(id);
     }
 
+    /**
+     * Obtener por id: debe lanzar excepción cuando la venta no existe.
+     */
     @Test
     void obtenerPorId_lanzaExcepcion_cuandoNoExiste() {
         // given
@@ -157,6 +180,9 @@ class VentaServiceTest {
         verify(repository).findById(id);
     }
 
+    /**
+     * Actualizar venta: debe modificar los datos cuando la venta existe.
+     */
     @Test
     void actualizarVenta_actualizaVenta_cuandoExiste() {
         // given
@@ -184,6 +210,9 @@ class VentaServiceTest {
         verify(repository).save(ventaExistente);
     }
 
+    /**
+     * Eliminar venta: debe eliminar la venta cuando existe.
+     */
     @Test
     void eliminarVenta_eliminaVenta_cuandoExiste() {
         // given
@@ -200,6 +229,9 @@ class VentaServiceTest {
         verify(repository).delete(venta);
     }
 
+    /**
+     * Eliminar venta: debe lanzar excepción cuando la venta no existe.
+     */
     @Test
     void eliminarVenta_lanzaExcepcion_cuandoNoExiste() {
         // given
@@ -212,6 +244,9 @@ class VentaServiceTest {
         verify(repository, never()).delete(any());
     }
 
+    /**
+     * Actualización parcial: al cambiar cantidad, debe recalcular el total.
+     */
     @Test
     void actualizarParcial_actualizaCantidadYRecalculaTotal_cuandoCambiaCantidad() {
         // given
@@ -247,6 +282,9 @@ class VentaServiceTest {
         verify(repository).save(ventaExistente);
     }
 
+    /**
+     * Actualización parcial: debe lanzar excepción si el stock es insuficiente.
+     */
     @Test
     void actualizarParcial_lanzaExcepcion_cuandoStockInsuficiente() {
         // given
@@ -276,6 +314,9 @@ class VentaServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Actualización parcial: debe lanzar excepción si el Feign falla al consultar productos.
+     */
     @Test
     void actualizarParcial_lanzaExcepcion_cuandoFeignFalla() {
         // given
@@ -300,6 +341,9 @@ class VentaServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Actualización parcial: al cambiar solo el canal, el total no debe recalcularse.
+     */
     @Test
     void actualizarParcial_actualizaCanal_sinRecalcularTotal() {
         // given
@@ -330,6 +374,9 @@ class VentaServiceTest {
         verify(productoClient, never()).obtenerProductoPorId(anyLong());
     }
 
+    /**
+     * Actualización parcial: debe ignorar el campo productoId si se envía.
+     */
     @Test
     void actualizarParcial_ignoraProductoId() {
         // given
@@ -358,6 +405,9 @@ class VentaServiceTest {
         verify(productoClient, never()).obtenerProductoPorId(anyLong());
     }
 
+    /**
+     * Actualización parcial: debe ignorar campos que no existen en la entidad.
+     */
     @Test
     void actualizarParcial_ignoraCampoDesconocido() {
         // given
@@ -387,6 +437,9 @@ class VentaServiceTest {
         verify(productoClient, never()).obtenerProductoPorId(anyLong());
     }
 
+    /**
+     * Actualizar venta: debe lanzar excepción cuando la venta no existe.
+     */
     @Test
     void actualizarVenta_lanzaExcepcion_cuandoNoExiste() {
         // given

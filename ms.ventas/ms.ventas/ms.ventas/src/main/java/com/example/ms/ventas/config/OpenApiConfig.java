@@ -5,10 +5,17 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// Configuración de Swagger/OpenAPI para documentar los endpoints
+/**
+ * Configuración de Swagger/OpenAPI para documentar los endpoints
+ * del microservicio de ventas.
+ */
 @Configuration
 public class OpenApiConfig {
 
+    /**
+     * Crea y personaliza la configuración de OpenAPI con la información
+     * del microservicio (título, descripción y versión).
+     */
     @Bean
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()

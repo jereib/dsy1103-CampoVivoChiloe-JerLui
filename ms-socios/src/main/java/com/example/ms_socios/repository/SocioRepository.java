@@ -6,11 +6,25 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-// Capa de acceso a datos, Spring Data genera las consultas automáticamente
+/**
+ * Repositorio JPA para la entidad Socio.
+ * Spring Data genera automáticamente las implementaciones de los métodos.
+ */
 public interface SocioRepository extends JpaRepository<Socio, Long> {
 
-    // JPA convierte esto en: SELECT * FROM socio WHERE estado = ?
+    /**
+     * Busca todas las familias socias que tengan un estado específico.
+     *
+     * @param estado estado por el que filtrar
+     * @return lista de socios con ese estado
+     */
     List<Socio> findByEstado(Estado estado);
-    // Verifica si ya existe un socio con el mismo nombre (sin importar mayúsculas)
+
+    /**
+     * Verifica si ya existe un socio con el mismo nombre (sin importar mayúsculas).
+     *
+     * @param socio nombre de la familia socia a verificar
+     * @return true si ya existe un socio con ese nombre
+     */
     boolean existsBySocioIgnoreCase(String socio);
 }

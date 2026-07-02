@@ -4,11 +4,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-//http://localhost:8085/swagger-ui.html
+/**
+ * Punto de entrada del microservicio de actividades.
+ * Levanta el contexto de Spring Boot y activa la comunicación
+ * con otros microservicios a través de Feign.
+ */
 @SpringBootApplication
-@EnableFeignClients // habilita Feign para comunicarse con otros microservicios
+@EnableFeignClients
 public class MsActividadesApplication {
 
+	/**
+	 * Arranca la aplicación Spring Boot.
+	 *
+	 * @param args argumentos de línea de comandos.
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(MsActividadesApplication.class, args);
 	}

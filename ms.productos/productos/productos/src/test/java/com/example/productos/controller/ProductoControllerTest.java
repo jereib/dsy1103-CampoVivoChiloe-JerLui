@@ -19,6 +19,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Pruebas unitarias del controlador ProductoController.
+ * Verifica que los endpoints respondan correctamente y deleguen en el servicio.
+ */
 @WebMvcTest(ProductoController.class)
 class ProductoControllerTest {
 
@@ -31,6 +35,9 @@ class ProductoControllerTest {
     @MockBean
     private ProductoService service;
 
+    /**
+     * GET /api/v1/productos debe retornar 200 con la lista de productos.
+     */
     @Test
     void listarTodos_retorna200YLista() throws Exception {
         when(service.listarTodos()).thenReturn(List.of(new Producto(), new Producto()));
@@ -42,6 +49,9 @@ class ProductoControllerTest {
         verify(service).listarTodos();
     }
 
+    /**
+     * GET /api/v1/productos/{id} debe retornar 200 con el producto correspondiente.
+     */
     @Test
     void obtenerPorId_retorna200YProducto() throws Exception {
         Producto producto = new Producto(1L, "Pan", 1200.0, 15.0, 1000.0);
@@ -55,6 +65,9 @@ class ProductoControllerTest {
         verify(service).obtenerProductoPorId(1L);
     }
 
+    /**
+     * POST /api/v1/productos debe retornar 201 con el producto creado.
+     */
     @Test
     void crear_retorna201YProducto() throws Exception {
         ProductoRequestDTO dto = new ProductoRequestDTO();
@@ -75,6 +88,9 @@ class ProductoControllerTest {
         verify(service).crearProducto(any());
     }
 
+    /**
+     * PUT /api/v1/productos/{id} debe retornar 200 con el producto actualizado.
+     */
     @Test
     void actualizar_retorna200YProducto() throws Exception {
         ProductoRequestDTO dto = new ProductoRequestDTO();
@@ -95,6 +111,9 @@ class ProductoControllerTest {
         verify(service).actualizarProducto(eq(1L), any());
     }
 
+    /**
+     * DELETE /api/v1/productos/{id} debe retornar 204 sin contenido.
+     */
     @Test
     void eliminar_retorna204() throws Exception {
         doNothing().when(service).eliminarProducto(1L);
@@ -105,6 +124,9 @@ class ProductoControllerTest {
         verify(service).eliminarProducto(1L);
     }
 
+    /**
+     * PATCH /api/v1/productos/{id} debe retornar 200 con el producto modificado.
+     */
     @Test
     void actualizarParcial_retorna200() throws Exception {
         Producto producto = new Producto(1L, "Pan Integral", 1200.0, 15.0, 1000.0);
@@ -121,6 +143,9 @@ class ProductoControllerTest {
         verify(service).actualizarParcial(eq(1L), any());
     }
 
+    /**
+     * PATCH /api/v1/productos/{id} debe retornar 400 cuando el servicio lanza IllegalArgumentException.
+     */
     @Test
     void actualizarParcial_retorna400_cuandoIllegalArgument() throws Exception {
         when(service.actualizarParcial(eq(1L), any())).thenThrow(new IllegalArgumentException("Margen inválido"));

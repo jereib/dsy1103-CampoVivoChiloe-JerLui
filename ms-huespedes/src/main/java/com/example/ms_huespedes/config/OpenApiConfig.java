@@ -6,10 +6,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+/**
+ * Configuración de Swagger/OpenAPI para el microservicio ms-huespedes.
+ * Expone la documentación interactiva de la API.
+ */
 public class OpenApiConfig {
 
     @Bean
-    // Configuración de Swagger para documentar la API de huéspedes
+    /**
+     * Configura la información general de la API de huéspedes.
+     *
+     * @return objeto OpenAPI con el título, descripción y versión.
+     */
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()
                 .info(

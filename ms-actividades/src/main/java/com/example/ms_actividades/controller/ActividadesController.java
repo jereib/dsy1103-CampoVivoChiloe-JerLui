@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 
+/**
+ * Controlador REST que expone los endpoints para gestionar actividades.
+ * Permite listar, obtener, crear, actualizar y eliminar actividades.
+ */
 @RestController
 @RequestMapping("/api/v1/actividades")
 @Tag( name = "Actividades", description = "Operaciones relacionadas con las actividades")
@@ -23,7 +27,11 @@ public class ActividadesController {
     @Autowired
     private ActividadesService actividadService;
 
-    // Obtener todas las actividades
+    /**
+     * Obtiene todas las actividades registradas.
+     *
+     * @return lista de actividades con el nombre del socio incluido.
+     */
     @GetMapping
     @Operation( summary = "Listar actividades", description = "Obtiene todas las actividades registradas" )
     @ApiResponses({
@@ -59,7 +67,12 @@ public class ActividadesController {
         );
     }
 
-    // Buscar una actividad por su id
+    /**
+     * Obtiene una actividad por su id, incluyendo el nombre del socio.
+     *
+     * @param id identificador de la actividad.
+     * @return actividad encontrada o un 404 si no existe.
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Listar actividad por id", description = "Permite obtener una actividad mediante su id" )
     @ApiResponses({
@@ -104,7 +117,12 @@ public class ActividadesController {
         }
     }
 
-    // Crear una nueva actividad
+    /**
+     * Crea una nueva actividad y la guarda en la base de datos.
+     *
+     * @param actividad datos de la actividad a crear.
+     * @return la actividad creada con su id asignado.
+     */
     @PostMapping
     @Operation( summary = "Crear actividad", description = "Permite crear una actividad de acuerdo a sus atributos" )
     @ApiResponses({
@@ -141,7 +159,13 @@ public class ActividadesController {
                 .body(nuevaActividad);
     }
 
-    // Actualizar una actividad completa
+    /**
+     * Reemplaza todos los campos de una actividad existente.
+     *
+     * @param id                  identificador de la actividad.
+     * @param actividadActualizada datos actualizados de la actividad.
+     * @return la actividad actualizada o un 404 si no se encuentra.
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar actividad", description = "Permite actualizar una actividad ya existente" )
     @ApiResponses({
@@ -188,7 +212,12 @@ public class ActividadesController {
         }
     }
 
-    // Eliminar una actividad
+    /**
+     * Elimina una actividad por su id.
+     *
+     * @param id identificador de la actividad a eliminar.
+     * @return mensaje de éxito o un 404 si no se encuentra.
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar actividad", description = "Permite eliminar una actividad ya existente" )
     @ApiResponses({
@@ -232,7 +261,13 @@ public class ActividadesController {
         }
     }
 
-    // Actualizar solo algunos campos
+    /**
+     * Actualiza solo los campos especificados de una actividad.
+     *
+     * @param id     identificador de la actividad.
+     * @param campos mapa con los campos a actualizar.
+     * @return la actividad con los cambios aplicados o 404 si no existe.
+     */
     @PatchMapping("/{id}")
     @Operation( summary = "Actualizar parcialmente actividad", description = "Permite actualizar algunos datos de una actividad ya existente" )
     @ApiResponses({

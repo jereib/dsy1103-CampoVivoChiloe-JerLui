@@ -5,7 +5,10 @@ import lombok.Data;
 
 @Schema(name = "Socio DTO", description = "Un DTO que permite obtener ciertos atributos del modelo socio de ms-socios")
 @Data
-// DTO que solo expone los datos necesarios del socio (nombre, predio, capacidad)
+/**
+ * DTO que transfiere los datos esenciales de un socio desde ms-socios.
+ * Solo expone nombre de la familia, predio y capacidad.
+ */
 public class SocioDTO {
 
     @Schema(description = "Identificador único", example = "1")

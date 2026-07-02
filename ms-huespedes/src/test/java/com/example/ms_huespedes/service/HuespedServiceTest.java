@@ -17,6 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Pruebas unitarias del servicio HuespedService.
+ * Utiliza mocks del repositorio para verificar la lógica de negocio.
+ */
 @ExtendWith(MockitoExtension.class)
 class HuespedServiceTest {
 
@@ -26,6 +30,9 @@ class HuespedServiceTest {
     @InjectMocks
     private HuespedService huespedService;
 
+    /**
+     * Verifica que listarHuespedes retorna todos los huéspedes.
+     */
     @Test
     void listarHuespedes_retornaTodos() {
         List<Huesped> huespedes = List.of(
@@ -40,6 +47,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).findAll();
     }
 
+    /**
+     * Verifica que buscarPorId retorna el huésped cuando existe.
+     */
     @Test
     void buscarPorId_retornaHuespedCuandoExiste() {
         Long id = 1L;
@@ -54,6 +64,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).findById(id);
     }
 
+    /**
+     * Verifica que buscarPorId retorna null cuando el huésped no existe.
+     */
     @Test
     void buscarPorId_retornaNullCuandoNoExiste() {
         Long id = 999L;
@@ -65,6 +78,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).findById(id);
     }
 
+    /**
+     * Verifica que guardarHuesped guarda cuando el nombre no está duplicado.
+     */
     @Test
     void guardarHuesped_guardaCuandoNombreEsUnico() {
         Huesped huesped = new Huesped(null, "Benjamin agüero", "21659428-2", 21, "chileno", "historial", "benja123@gmail.com");
@@ -81,6 +97,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huesped);
     }
 
+    /**
+     * Verifica que guardarHuesped retorna null si el nombre ya existe.
+     */
     @Test
     void guardarHuesped_retornaNullCuandoNombreDuplicado() {
         Huesped huesped = new Huesped(null, "Benjamin agüero", "21659428-2", 21, "chileno", "historial", "benja123@gmail.com");
@@ -93,6 +112,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio, never()).save(any());
     }
 
+    /**
+     * Verifica que guardarHuesped relanza la excepción si el repositorio falla.
+     */
     @Test
     void guardarHuesped_relanzaExcepcionCuandoRepositorioFalla() {
         Huesped huesped = new Huesped(null, "Benjamin agüero", "21659428-2", 21, "chileno", "historial", "benja123@gmail.com");
@@ -104,6 +126,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huesped);
     }
 
+    /**
+     * Verifica que actualizarPorId modifica el huésped cuando existe.
+     */
     @Test
     void actualizarPorId_actualizaCuandoHuespedExiste() {
         Long id = 1L;
@@ -122,6 +147,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarPorId retorna null si el huésped no existe.
+     */
     @Test
     void actualizarPorId_retornaNullCuandoNoEncontrado() {
         Long id = 999L;
@@ -135,6 +163,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio, never()).save(any());
     }
 
+    /**
+     * Verifica que actualizarPorId relanza la excepción si el repositorio falla.
+     */
     @Test
     void actualizarPorId_relanzaExcepcionCuandoRepositorioFalla() {
         Long id = 1L;
@@ -148,6 +179,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que eliminarHuesped retorna true cuando el huésped existe.
+     */
     @Test
     void eliminarHuesped_retornaTrueCuandoExiste() {
         Long id = 1L;
@@ -162,6 +196,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).deleteById(id);
     }
 
+    /**
+     * Verifica que eliminarHuesped retorna false si el huésped no existe.
+     */
     @Test
     void eliminarHuesped_retornaFalseCuandoNoEncontrado() {
         Long id = 999L;
@@ -174,6 +211,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio, never()).deleteById(anyLong());
     }
 
+    /**
+     * Verifica que eliminarHuesped relanza la excepción si el repositorio falla.
+     */
     @Test
     void eliminarHuesped_relanzaExcepcionCuandoRepositorioFalla() {
         Long id = 1L;
@@ -186,6 +226,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).deleteById(id);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el nombre completo.
+     */
     @Test
     void actualizarParcial_actualizaNombreCompleto() {
         Long id = 1L;
@@ -203,6 +246,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el RUT.
+     */
     @Test
     void actualizarParcial_actualizaRut() {
         Long id = 1L;
@@ -220,6 +266,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica la edad.
+     */
     @Test
     void actualizarParcial_actualizaEdad() {
         Long id = 1L;
@@ -237,6 +286,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el perfil.
+     */
     @Test
     void actualizarParcial_actualizaPerfil() {
         Long id = 1L;
@@ -254,6 +306,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el historial.
+     */
     @Test
     void actualizarParcial_actualizaHistorial() {
         Long id = 1L;
@@ -271,6 +326,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el correo.
+     */
     @Test
     void actualizarParcial_actualizaCorreo() {
         Long id = 1L;
@@ -288,6 +346,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial retorna null si el huésped no existe.
+     */
     @Test
     void actualizarParcial_retornaNullCuandoNoEncontrado() {
         Long id = 999L;
@@ -302,6 +363,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio, never()).save(any());
     }
 
+    /**
+     * Verifica que actualizarParcial ignora campos desconocidos sin lanzar error.
+     */
     @Test
     void actualizarParcial_campoDesconocido_noLanzaExcepcion() {
         Long id = 1L;
@@ -321,6 +385,9 @@ class HuespedServiceTest {
         verify(huespedRepositorio).save(huespedExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial relanza la excepción si el repositorio falla.
+     */
     @Test
     void actualizarParcial_relanzaExcepcionCuandoRepositorioFalla() {
         Long id = 1L;

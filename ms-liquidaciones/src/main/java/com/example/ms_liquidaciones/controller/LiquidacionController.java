@@ -18,12 +18,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/liquidaciones")
 @Tag( name = "Liquidaciones", description = "Operaciones relacionadas con las liquidaciones")
+/**
+ * Controlador REST para gestionar liquidaciones.
+ * Expone endpoints CRUD y generación de liquidaciones por socio.
+ */
 public class LiquidacionController {
 
     @Autowired
     private LiquidacionService liquidacionService;
 
-    // Obtener todas las liquidaciones
+    /**
+     * Obtiene todas las liquidaciones registradas.
+     *
+     * @return lista de liquidaciones.
+     */
     @GetMapping
     @Operation( summary = "Listar liquidaciones", description = "Obtiene todas las liquidaciones registradas" )
     @ApiResponses({
@@ -56,7 +64,12 @@ public class LiquidacionController {
         return ResponseEntity.ok(liquidacionService.listar());
     }
 
-    // Generar una liquidación para un socio (consulta deuda en ms-fondo)
+    /**
+     * Genera una liquidación para un socio consultando su deuda en ms-fondo.
+     *
+     * @param socioId identificador del socio.
+     * @return liquidación generada con ingresos, deuda y total.
+     */
     @GetMapping("/{socioId}")
     @Operation( summary = "Listar liquidaciones por socio", description = "Obtiene todas las liquidaciones registradas mediante el id de la familia socia" )
     @ApiResponses({
@@ -93,7 +106,12 @@ public class LiquidacionController {
         );
     }
 
-    // Crear una liquidación manualmente
+    /**
+     * Crea una nueva liquidación manualmente.
+     *
+     * @param liquidacion datos de la liquidación a crear.
+     * @return liquidación creada con estado 201, o mensaje de error si falla.
+     */
     @PostMapping
     @Operation( summary = "Crear liquidación", description = "Permite crear una nueva liquidación" )
     @ApiResponses({
@@ -131,7 +149,13 @@ public class LiquidacionController {
         }
     }
 
-    // Actualizar una liquidación existente
+    /**
+     * Actualiza una liquidación existente por su id.
+     *
+     * @param id          identificador de la liquidación.
+     * @param liquidacion datos actualizados de la liquidación.
+     * @return liquidación actualizada, o 404 si no se encuentra.
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar liquidación", description = "Actualiza una liquidación existente por su id" )
     @ApiResponses({
@@ -169,7 +193,12 @@ public class LiquidacionController {
         return ResponseEntity.ok(actualizado);
     }
 
-    // Eliminar una liquidación
+    /**
+     * Elimina una liquidación por su id.
+     *
+     * @param id identificador de la liquidación.
+     * @return 204 si se eliminó, 404 si no se encuentra.
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar liquidación", description = "Elimina una liquidación por su id" )
     @ApiResponses({

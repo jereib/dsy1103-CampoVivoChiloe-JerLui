@@ -14,6 +14,10 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+/**
+ * Controlador REST que expone los endpoints para gestionar productos.
+ * Soporta operaciones CRUD y actualización parcial de productos.
+ */
 @RestController
 @RequestMapping("/api/v1/productos")
 @Tag( name = "Productos", description = "Operaciones relacionadas con productos")
@@ -21,11 +25,21 @@ public class ProductoController {
 
     private final ProductoService service;
 
+    /**
+     * Constructor que inyecta el servicio de productos.
+     *
+     * @param service lógica de negocio para productos
+     */
     public ProductoController(ProductoService service) {
         this.service = service;
     }
 
-    // Crear un nuevo producto
+    /**
+     * Crea un nuevo producto a partir de los datos enviados en la solicitud.
+     *
+     * @param dto datos del producto a crear
+     * @return el producto creado con estado 201
+     */
     @PostMapping
     @Operation( summary = "Crear producto", description = "Permite crear un producto de acuerdo a sus atributos" )
     @ApiResponses({
@@ -59,7 +73,12 @@ public class ProductoController {
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
 
-    // Obtener un producto por su id
+    /**
+     * Obtiene un producto registrado por su identificador único.
+     *
+     * @param id identificador del producto
+     * @return el producto encontrado con estado 200
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Obtener producto por id", description = "Obtiene un producto registrado mediante su id" )
     @ApiResponses({
@@ -93,7 +112,11 @@ public class ProductoController {
         return new ResponseEntity<>(producto, HttpStatus.OK);
     }
 
-    // Listar todos los productos registrados
+    /**
+     * Lista todos los productos registrados en el sistema.
+     *
+     * @return lista de productos con estado 200
+     */
     @GetMapping
     @Operation( summary = "Listar productos", description = "Obtiene todos los productos registrados" )
     @ApiResponses({
@@ -126,7 +149,13 @@ public class ProductoController {
         return new ResponseEntity<>(service.listarTodos(), HttpStatus.OK);
     }
 
-    // Actualizar un producto completamente
+    /**
+     * Actualiza todos los campos de un producto existente.
+     *
+     * @param id  identificador del producto a actualizar
+     * @param dto nuevos datos del producto
+     * @return el producto actualizado con estado 200
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar producto", description = "Permite actualizar un producto mediante su id" )
     @ApiResponses({
@@ -160,7 +189,12 @@ public class ProductoController {
         return new ResponseEntity<>(productoActualizado, HttpStatus.OK);
     }
 
-    // Eliminar un producto por id
+    /**
+     * Elimina un producto del sistema por su id.
+     *
+     * @param id identificador del producto a eliminar
+     * @return estado 204 sin contenido
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar producto", description = "Elimina un producto registrado mediante su id" )
     @ApiResponses({
@@ -194,7 +228,14 @@ public class ProductoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Actualizar solo campos específicos del producto
+    /**
+     * Actualiza solo los campos enviados en el cuerpo de la petición.
+     * Si el precio o costo cambian, se valida el margen mínimo del 20%.
+     *
+     * @param id     identificador del producto
+     * @param campos mapa con los campos a modificar
+     * @return el producto actualizado o un mensaje de error
+     */
     @PatchMapping("/{id}")
     @Operation(summary = "Actualizar parcialmente un producto", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id del producto")
     @ApiResponses({

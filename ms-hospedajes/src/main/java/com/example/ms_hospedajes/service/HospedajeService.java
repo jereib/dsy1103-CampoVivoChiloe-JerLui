@@ -11,6 +11,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Servicio que contiene la lógica de negocio para gestionar hospedajes.
+ * Orquesta la comunicación con los microservicios de huéspedes y socios.
+ */
 @Service
 public class HospedajeService {
 
@@ -20,6 +24,13 @@ public class HospedajeService {
     private final SocioClient socioClient;
     private final HospedajeRepositorio hospedajeRepositorio;
 
+    /**
+     * Construye el servicio con los clientes Feign y el repositorio.
+     *
+     * @param huespedClient          cliente Feign para ms-huespedes.
+     * @param socioClient            cliente Feign para ms-socios.
+     * @param hospedajeRepositorio   repositorio JPA de hospedajes.
+     */
     public HospedajeService(HuespedClient huespedClient,
                             SocioClient socioClient,
                             HospedajeRepositorio hospedajeRepositorio) {
@@ -28,12 +39,21 @@ public class HospedajeService {
         this.hospedajeRepositorio = hospedajeRepositorio;
     }
 
-    // Devuelve todos los hospedajes registrados
+    /**
+     * Devuelve todos los hospedajes registrados en la base de datos.
+     *
+     * @return lista de hospedajes.
+     */
     public List<HospedajeModel> listar() {
         return hospedajeRepositorio.findAll();
     }
 
-    // Obtiene un huésped llamando al ms-huespedes vía Feign
+    /**
+     * Consulta un huésped por su ID a través del cliente Feign.
+     *
+     * @param id identificador del huésped.
+     * @return datos del huésped, o null si no se encontró.
+     */
     public HuespedDTO obtenerHuesped(Long id){
         logger.debug("Consultando externamente al ms-huespedes por el ID: {}", id);
         try {
@@ -48,7 +68,12 @@ public class HospedajeService {
         }
     }
 
-    // Obtiene un socio llamando al ms-socios vía Feign
+    /**
+     * Consulta un socio por su ID a través del cliente Feign.
+     *
+     * @param id identificador del socio.
+     * @return datos del socio, o null si no se encontró.
+     */
     public SocioDTO obtenerSocio(Long id){
         logger.debug("Consultando externamente al ms-socios por el ID: {}", id);
         try {
@@ -63,7 +88,13 @@ public class HospedajeService {
         }
     }
 
-    // Actualiza los IDs de un hospedaje existente
+    /**
+     * Actualiza los IDs de socio y huésped de un hospedaje existente.
+     *
+     * @param id    identificador del hospedaje.
+     * @param datos objeto con los nuevos IDs.
+     * @return hospedaje actualizado, o null si no existe.
+     */
     public HospedajeModel actualizar(Long id, HospedajeModel datos) {
         HospedajeModel existente = hospedajeRepositorio.findById(id).orElse(null);
         if (existente == null) {
@@ -74,7 +105,12 @@ public class HospedajeService {
         return hospedajeRepositorio.save(existente);
     }
 
-    // Elimina un hospedaje si existe
+    /**
+     * Elimina un hospedaje si existe en la base de datos.
+     *
+     * @param id identificador del hospedaje.
+     * @return true si se eliminó, false si no existía.
+     */
     public boolean eliminar(Long id) {
         if (!hospedajeRepositorio.existsById(id)) {
             return false;
@@ -83,7 +119,14 @@ public class HospedajeService {
         return true;
     }
 
-    // Orquesta la creación: valida que existan socio y huésped, luego guarda la relación
+    /**
+     * Crea un hospedaje validando que el socio y el huésped existan en sus microservicios.
+     *
+     * @param socioId   identificador del socio.
+     * @param huespedId identificador del huésped.
+     * @return mensaje con los nombres del huésped y la familia socia.
+     * @throws RuntimeException si el socio o el huésped no existen o hay error de comunicación.
+     */
     public String crearHospedaje(Long socioId, Long huespedId){
         logger.info("Iniciando proceso para orquestar hospedaje. SocioID: [{}], HuespedID: [{}]", socioId, huespedId);
 

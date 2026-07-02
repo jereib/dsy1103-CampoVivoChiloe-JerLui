@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-// DTO para recibir los datos de un producto desde el cliente
+/**
+ * DTO que recibe los datos de un producto desde las peticiones del cliente.
+ * Incluye validaciones básicas como nombre obligatorio y valores no negativos.
+ */
 @Schema(name = "Producto DTO", description = "Un DTO que permite obtener ciertos atributos de un producto en ms-productos")
 public class ProductoRequestDTO {
 
@@ -29,34 +32,58 @@ public class ProductoRequestDTO {
     private Double costoProduccion;
 
 
+    /**
+     * @return el nombre del producto
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * @param nombre nombre del producto
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * @return el precio del producto
+     */
     public Double getPrecio() {
         return precio;
     }
 
+    /**
+     * @param precio precio del producto
+     */
     public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
+    /**
+     * @return la cantidad en stock
+     */
     public Double getStock() {
         return stock;
     }
 
+    /**
+     * @param stock cantidad en stock
+     */
     public void setStock(Double stock) {
         this.stock = stock;
     }
 
+    /**
+     * @return el costo de producción
+     */
     public Double getCostoProduccion() {
         return costoProduccion;
     }
 
+    /**
+     * @param costoProduccion costo de producción
+     */
     public void setCostoProduccion(Double costoProduccion) {
         this.costoProduccion = costoProduccion;
     }

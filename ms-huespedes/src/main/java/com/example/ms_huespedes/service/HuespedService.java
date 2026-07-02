@@ -11,17 +11,29 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+/**
+ * Servicio que contiene la lógica de negocio para gestionar los huéspedes.
+ * Actúa como intermediario entre el controlador y el repositorio.
+ */
 public class HuespedService {
 
-    // Logger para seguimiento de operaciones del servicio
     private static final Logger log = LoggerFactory.getLogger(HuespedService.class);
     private final HuespedRepositorio huespedRepositorio;
 
+    /**
+     * Constructor que inyecta el repositorio de huéspedes.
+     *
+     * @param huespedRepositorio repositorio de huéspedes.
+     */
     public HuespedService(HuespedRepositorio huespedRepositorio) {
         this.huespedRepositorio = huespedRepositorio;
     }
 
-    // Devuelve todos los huéspedes sin filtro
+    /**
+     * Obtiene todos los huéspedes registrados en el sistema.
+     *
+     * @return lista de todos los huéspedes.
+     */
     public List<Huesped> listarHuespedes(){
         log.info("Solicitando listado completo de todos los huéspedes registrados");
         List<Huesped> huespedes = huespedRepositorio.findAll();
@@ -29,7 +41,12 @@ public class HuespedService {
         return huespedes;
     }
 
-    // Busca un huésped por su id, devuelve null si no lo encuentra
+    /**
+     * Busca un huésped por su identificador.
+     *
+     * @param id identificador del huésped.
+     * @return el huésped encontrado o null si no existe.
+     */
     public Huesped buscarPorId(Long id){
         log.debug("Buscando huésped por ID: {}", id);
         Optional<Huesped> huesped = huespedRepositorio.findById(id);
@@ -42,7 +59,12 @@ public class HuespedService {
         return huesped.get();
     }
 
-    // Guarda un nuevo huésped, evita duplicados por nombre
+    /**
+     * Guarda un nuevo huésped validando que no exista otro con el mismo nombre.
+     *
+     * @param huesped datos del huésped a guardar.
+     * @return el huésped guardado o null si ya existe uno con ese nombre.
+     */
     public Huesped guardarHuesped(Huesped huesped){
         log.info("Iniciando el registro de un nuevo huésped: [{}]", huesped.getNombreCompleto());
 
@@ -63,7 +85,13 @@ public class HuespedService {
         }
     }
 
-    // Reemplaza todos los datos de un huésped existente
+    /**
+     * Reemplaza todos los datos de un huésped existente.
+     *
+     * @param id                identificador del huésped.
+     * @param huespedActualizado huésped con los nuevos datos.
+     * @return el huésped actualizado o null si no se encontró.
+     */
     public Huesped actualizarPorId(Long id, Huesped huespedActualizado){
         log.info("Petición recibida para actualizar (PUT) huésped con ID: [{}]", id);
 
@@ -93,7 +121,12 @@ public class HuespedService {
         }
     }
 
-    // Elimina un huésped si existe, retorna true si se borró
+    /**
+     * Elimina un huésped del sistema por su identificador.
+     *
+     * @param id identificador del huésped a eliminar.
+     * @return true si se eliminó correctamente, false si no existe.
+     */
     public boolean eliminarHuesped(Long id){
         log.info("Petición recibida para eliminar huésped con ID: [{}]", id);
 
@@ -114,7 +147,13 @@ public class HuespedService {
         }
     }
 
-    // Actualiza solo los campos indicados en el Map, útil para PATCH
+    /**
+     * Actualiza solo los campos indicados de un huésped existente.
+     *
+     * @param id     identificador del huésped.
+     * @param campos mapa con los campos y valores a actualizar.
+     * @return el huésped actualizado o null si no se encontró.
+     */
     public Huesped actualizarParcial(Long id, Map<String, Object> campos) {
         log.info("Petición recibida para actualización parcial (PATCH) del huésped con ID: [{}]", id);
 

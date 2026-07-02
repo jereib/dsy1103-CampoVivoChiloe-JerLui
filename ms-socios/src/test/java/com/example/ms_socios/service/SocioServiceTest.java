@@ -20,6 +20,10 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+/**
+ * Pruebas unitarias del servicio SocioService.
+ * Verifica la lógica de negocio de registro, consulta, actualización y eliminación de socios.
+ */
 class SocioServiceTest {
 
     @Mock
@@ -28,6 +32,9 @@ class SocioServiceTest {
     @InjectMocks
     private SocioService socioService;
 
+    /**
+     * Verifica que listarSocios devuelva todos los socios del repositorio.
+     */
     @Test
     void listarSocios_retornaTodosLosSocios() {
         List<Socio> sociosEsperados = List.of(
@@ -43,6 +50,9 @@ class SocioServiceTest {
         verify(socioRepository).findAll();
     }
 
+    /**
+     * Verifica que buscarPorEstado filtre correctamente por el estado indicado.
+     */
     @Test
     void buscarPorEstado_retornaSociosFiltradosPorEstado() {
         Estado estado = Estado.DISPONIBLE;
@@ -58,6 +68,9 @@ class SocioServiceTest {
         verify(socioRepository).findByEstado(estado);
     }
 
+    /**
+     * Verifica que buscarPorId devuelva el socio cuando existe en la BD.
+     */
     @Test
     void buscarPorId_retornaSocioCuandoExiste() {
         Long id = 1L;
@@ -72,6 +85,9 @@ class SocioServiceTest {
         verify(socioRepository).findById(id);
     }
 
+    /**
+     * Verifica que buscarPorId devuelva null cuando el socio no existe.
+     */
     @Test
     void buscarPorId_retornaNullCuandoNoExiste() {
         Long id = 999L;
@@ -83,6 +99,9 @@ class SocioServiceTest {
         verify(socioRepository).findById(id);
     }
 
+    /**
+     * Verifica que guardarSocio guarde y retorne el socio si el nombre es único.
+     */
     @Test
     void guardarSocio_guardaYRetornaCuandoNombreEsUnico() {
         Socio socio = new Socio(null, "Los Krausse", "Los abetos", 15, Estado.DISPONIBLE);
@@ -99,6 +118,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socio);
     }
 
+    /**
+     * Verifica que guardarSocio retorne null si el nombre ya está registrado.
+     */
     @Test
     void guardarSocio_retornaNullCuandoNombreYaExiste() {
         Socio socio = new Socio(null, "Los Krausse", "Los abetos", 15, Estado.DISPONIBLE);
@@ -111,6 +133,9 @@ class SocioServiceTest {
         verify(socioRepository, never()).save(any());
     }
 
+    /**
+     * Verifica que guardarSocio relance la excepción si el repositorio falla.
+     */
     @Test
     void guardarSocio_relanzaExcepcionCuandoRepositorioFalla() {
         Socio socio = new Socio(null, "Los Krausse", "Los abetos", 15, Estado.DISPONIBLE);
@@ -122,6 +147,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socio);
     }
 
+    /**
+     * Verifica que actualizarPorId modifique todos los campos del socio existente.
+     */
     @Test
     void actualizarPorId_actualizaCuandoSocioExiste() {
         Long id = 1L;
@@ -141,6 +169,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que actualizarPorId retorne null si el socio no existe.
+     */
     @Test
     void actualizarPorId_retornaNullCuandoSocioNoEncontrado() {
         Long id = 999L;
@@ -154,6 +185,9 @@ class SocioServiceTest {
         verify(socioRepository, never()).save(any());
     }
 
+    /**
+     * Verifica que actualizarPorId relance la excepción si el repositorio falla.
+     */
     @Test
     void actualizarPorId_relanzaExcepcionCuandoRepositorioFalla() {
         Long id = 1L;
@@ -167,6 +201,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que eliminarSocio retorne true cuando el socio existe y se elimina.
+     */
     @Test
     void eliminarSocio_retornaTrueCuandoSocioExisteYSeElimina() {
         Long id = 1L;
@@ -181,6 +218,9 @@ class SocioServiceTest {
         verify(socioRepository).deleteById(id);
     }
 
+    /**
+     * Verifica que eliminarSocio retorne false si el socio no existe.
+     */
     @Test
     void eliminarSocio_retornaFalseCuandoSocioNoEncontrado() {
         Long id = 999L;
@@ -193,6 +233,9 @@ class SocioServiceTest {
         verify(socioRepository, never()).deleteById(anyLong());
     }
 
+    /**
+     * Verifica que eliminarSocio relance la excepción si el repositorio falla.
+     */
     @Test
     void eliminarSocio_relanzaExcepcionCuandoRepositorioFalla() {
         Long id = 1L;
@@ -205,6 +248,9 @@ class SocioServiceTest {
         verify(socioRepository).deleteById(id);
     }
 
+    /**
+     * Verifica que actualizarParcial modifique el campo socio correctamente.
+     */
     @Test
     void actualizarParcial_actualizaCampoSocio() {
         Long id = 1L;
@@ -224,6 +270,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifique el campo predio correctamente.
+     */
     @Test
     void actualizarParcial_actualizaCampoPredio() {
         Long id = 1L;
@@ -243,6 +292,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifique el campo capacidad correctamente.
+     */
     @Test
     void actualizarParcial_actualizaCampoCapacidad() {
         Long id = 1L;
@@ -262,6 +314,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifique el campo estado correctamente.
+     */
     @Test
     void actualizarParcial_actualizaCampoEstado() {
         Long id = 1L;
@@ -281,6 +336,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial retorne null si el socio no existe.
+     */
     @Test
     void actualizarParcial_retornaNullCuandoSocioNoEncontrado() {
         Long id = 999L;
@@ -295,6 +353,9 @@ class SocioServiceTest {
         verify(socioRepository, never()).save(any());
     }
 
+    /**
+     * Verifica que actualizarParcial ignore campos desconocidos sin lanzar excepción.
+     */
     @Test
     void actualizarParcial_campoDesconocido_noLanzaExcepcion() {
         Long id = 1L;
@@ -316,6 +377,9 @@ class SocioServiceTest {
         verify(socioRepository).save(socioExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial lance IllegalArgumentException si el estado no es válido.
+     */
     @Test
     void actualizarParcial_lanzaExcepcion_cuandoEstadoNoValido() {
         Long id = 1L;
@@ -330,6 +394,9 @@ class SocioServiceTest {
         verify(socioRepository, never()).save(any());
     }
 
+    /**
+     * Verifica que actualizarParcial relance la excepción si el repositorio falla.
+     */
     @Test
     void actualizarParcial_relanzaExcepcion_cuandoRepositorioFalla() {
         Long id = 1L;
