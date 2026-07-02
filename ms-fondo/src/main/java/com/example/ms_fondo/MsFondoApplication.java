@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //http://localhost:8089/swagger-ui.html
 @SpringBootApplication
-public class MsFondoApplication {
+public class MsFondoApplication { // punto de entrada del ms-fondo
 
 	public static void main(String[] args) {
 		SpringApplication.run(MsFondoApplication.class, args);

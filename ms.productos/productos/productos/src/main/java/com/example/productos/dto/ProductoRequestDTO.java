@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+// DTO para recibir los datos de un producto desde el cliente
 @Schema(name = "Producto DTO", description = "Un DTO que permite obtener ciertos atributos de un producto en ms-productos")
 public class ProductoRequestDTO {
 

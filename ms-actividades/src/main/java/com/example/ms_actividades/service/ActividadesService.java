@@ -23,8 +23,9 @@ public class ActividadesService {
     private ActividadesRepositorio actividadRepository;
 
     @Autowired
-    private SocioClient socioClient;
+    private SocioClient socioClient; // para llamar al ms-socios
 
+    // Buscar una actividad por id y devolverla con el nombre del socio
     public ActividadesResponseDTO obtenerActividad(Long id){
         log.info("Petición para obtener detalles de la actividad con ID: [{}]", id);
 
@@ -49,7 +50,7 @@ public class ActividadesService {
         response.setDescripcion(actividad.getDescripcion());
         response.setCalendario(actividad.getCalendario());
 
-        // nombre de familia socia
+        // asignamos el nombre del socio si existe
         if (socio != null) {
             response.setSocio(socio.getSocio());
         }
@@ -58,6 +59,7 @@ public class ActividadesService {
         return response;
     }
 
+    // Guardar una nueva actividad en la base de datos
     public ActividadModel crearActividad(ActividadModel actividad){
         log.info("Iniciando creación de una nueva actividad: [{}]", actividad.getNombreActividad());
         try {
@@ -70,6 +72,7 @@ public class ActividadesService {
         }
     }
 
+    // Trae todas las actividades y les asigna el nombre del socio correspondiente
     public List<ActividadesResponseDTO> listarActividades(){
         log.info("Solicitando listado completo de actividades");
         List<ActividadModel> actividades = actividadRepository.findAll();
@@ -103,6 +106,7 @@ public class ActividadesService {
         return respuesta;
     }
 
+    // Reemplaza todos los campos de una actividad
     public ActividadModel actualizarActividad(Long id, ActividadModel actividadActualizada){
         log.info("Petición recibida para actualizar (PUT) la actividad con ID: [{}]", id);
 
@@ -127,6 +131,7 @@ public class ActividadesService {
         }
     }
 
+    // Elimina una actividad por su id
     public void eliminarActividad(Long id){
         log.info("Petición recibida para eliminar la actividad con ID: [{}]", id);
 
@@ -145,6 +150,7 @@ public class ActividadesService {
         }
     }
 
+    // Actualiza solo los campos que vienen en el mapa (PATCH)
     public ActividadModel actualizarParcial(Long id, Map<String, Object> campos) {
         log.info("Petición recibida para actualización parcial (PATCH) de la actividad con ID: [{}]", id);
 

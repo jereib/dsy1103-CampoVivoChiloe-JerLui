@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+// Entidad que representa un producto agrícola en la base de datos
 @Schema(name = "Producto", description = "Representa un producto en el sistema")
 @Entity
 public class Producto {

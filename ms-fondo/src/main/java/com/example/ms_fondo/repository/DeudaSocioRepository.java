@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DeudaSocioRepository extends JpaRepository<DeudaSocio, Long> {
 
-    List<DeudaSocio> findBySocioId(Long socioId);
+    List<DeudaSocio> findBySocioId(Long socioId); // busca deudas por id de socio
 
-    List<DeudaSocio> findBySocioIdAndEstado(Long socioId, String estado);
+    List<DeudaSocio> findBySocioIdAndEstado(Long socioId, String estado); // busca deudas por socio y estado
 }

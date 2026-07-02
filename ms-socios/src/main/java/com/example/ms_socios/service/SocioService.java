@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class SocioService {
 
-    // Inicialización del Logger de SLF4J para la clase SocioService
+    // Logger para rastrear lo que pasa en el servicio
     private static final Logger log = LoggerFactory.getLogger(SocioService.class);
     private final SocioRepository socioRepository;
 
@@ -22,7 +22,7 @@ public class SocioService {
         this.socioRepository = socioRepository;
     }
 
-    // Muestra las familias socias registradas
+    // Devuelve todas las familias socias sin filtro
     public List<Socio> listarSocios(){
         log.info("Solicitando listado completo de familias socias");
         List<Socio> socios = socioRepository.findAll();
@@ -30,7 +30,7 @@ public class SocioService {
         return socios;
     }
 
-    // Busca por el estado de la familia socia
+    // Filtra según el estado (disponible, suspendido, mantenimiento)
     public List<Socio> buscarPorEstado(Estado estado){
         log.info("Buscando familias socias con estado: [{}]", estado);
         List<Socio> socios = socioRepository.findByEstado(estado);
@@ -38,7 +38,7 @@ public class SocioService {
         return socios;
     }
 
-    // Busca por el id de la familia socia
+    // Busca una familia socia por su id, devuelve null si no existe
     public Socio buscarPorId(Long id){
         log.debug("Buscando socio por ID: {}", id);
         Optional<Socio> socio = socioRepository.findById(id);
@@ -51,7 +51,7 @@ public class SocioService {
         return socio.get();
     }
 
-    // Guarda la familia socia
+    // Registra una nueva familia socia, valida que no se duplique el nombre
     public Socio guardarSocio(Socio socio){
         log.info("Iniciando registro de una nueva familia socia: [{}]", socio.getSocio());
 
@@ -72,7 +72,7 @@ public class SocioService {
         }
     }
 
-    // Actualiza por id la familia socia
+    // Reemplaza todos los campos de una familia socia existente
     public Socio actualizarPorId(Long id, Socio socioActualizado){
         log.info("Petición recibida para actualizar (PUT) socio con ID: [{}]", id);
 
@@ -100,7 +100,7 @@ public class SocioService {
         }
     }
 
-    // Elimina a la familia socia por id
+    // Elimina una familia socia si existe, retorna true si se borró
     public boolean eliminarSocio(Long id){
         log.info("Petición recibida para eliminar socio con ID: [{}]", id);
 
@@ -121,7 +121,7 @@ public class SocioService {
         }
     }
 
-    // Actualiza parcialmente a la familia socia
+    // Actualiza solo los campos que vienen en el Map, ideal para PATCH
     public Socio actualizarParcial(Long id, Map<String, Object> campos) {
         log.info("Petición recibida para actualización parcial (PATCH) del socio con ID: [{}]", id);
 

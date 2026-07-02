@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO que devuelve los datos de la actividad con el nombre del socio en vez del id
 @Schema(name = "Actividad DTO", description = "Representa una actividad en el sistema, pero cambiando el id de la familia socia por el nombre")
 @Data
 @NoArgsConstructor

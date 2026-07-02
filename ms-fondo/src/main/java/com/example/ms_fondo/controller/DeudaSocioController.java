@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,7 @@ public class DeudaSocioController {
     @Autowired
     private DeudaSocioService deudaSocioService;
 
+    // Obtener todas las deudas
     @GetMapping
     @Operation( summary = "Listar fondos", description = "Obtiene todos los fondos registrados" )
     @ApiResponses({
@@ -52,6 +54,7 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deudaSocioService.listar());
     }
 
+    // Buscar una deuda por su id
     @GetMapping("/{id}")
     @Operation( summary = "Obtener fondo por id", description = "Permite obtener un fondo mediante su id" )
     @ApiResponses({
@@ -90,6 +93,7 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deuda);
     }
 
+    // Crear una nueva deuda
     @PostMapping
     @Operation( summary = "Crear fondo", description = "Permite crear un fondo de acuerdo a sus atributos" )
     @ApiResponses({
@@ -118,10 +122,11 @@ public class DeudaSocioController {
                     description = "Error interno del servidor"
             )
     })
-    public ResponseEntity<DeudaSocio> crear(@RequestBody DeudaSocio deudaSocio) {
+    public ResponseEntity<DeudaSocio> crear(@Valid @RequestBody DeudaSocio deudaSocio) {
         return ResponseEntity.status(201).body(deudaSocioService.guardar(deudaSocio));
     }
 
+    // Actualizar una deuda completa
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar fondo", description = "Permite actualizar un fondo ya existente en el sistema" )
     @ApiResponses({
@@ -151,7 +156,7 @@ public class DeudaSocioController {
             )
     })
     public ResponseEntity<?> actualizar(@PathVariable Long id,
-                                        @RequestBody DeudaSocio deudaSocio) {
+                                        @Valid @RequestBody DeudaSocio deudaSocio) {
 
         DeudaSocio actualizada = deudaSocioService.actualizar(id, deudaSocio);
 
@@ -162,6 +167,7 @@ public class DeudaSocioController {
         return ResponseEntity.ok(actualizada);
     }
 
+    // Eliminar una deuda
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar fondo", description = "Permite eliminar un fondo ya existente en el sistema" )
     @ApiResponses({
@@ -201,7 +207,7 @@ public class DeudaSocioController {
         return ResponseEntity.noContent().build();
     }
 
-    // BUSCAR DEUDAS POR SOCIO
+    // Buscar todas las deudas de un socio específico
     @GetMapping("/socio/{socioId}")
     @Operation( summary = "Obtener fondo por id de familia socia", description = "Obtiene todas las deudas relacionadas a una familia socia mediante su id")
     @ApiResponses({
@@ -234,6 +240,7 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deudaSocioService.buscarPorSocio(socioId));
     }
 
+    // Verificar si un socio tiene deuda activa
     @GetMapping("/validar/{socioId}")
     @Operation( summary = "Validar deuda", description = "Permite validar si una deuda esta activa en una familia socia" )
     @ApiResponses({
@@ -266,6 +273,7 @@ public class DeudaSocioController {
         return ResponseEntity.ok(deudaSocioService.tieneDeudaActiva(socioId));
     }
 
+    // Actualizar solo algunos campos de la deuda
     @PatchMapping("/{id}")
     @Operation( summary = "Actualizar parcialmente deuda", description = "Permite actualizar algunos campos de una deuda mediante su id" )
     @ApiResponses({

@@ -25,6 +25,7 @@ public class ProductoController {
         this.service = service;
     }
 
+    // Crear un nuevo producto
     @PostMapping
     @Operation( summary = "Crear producto", description = "Permite crear un producto de acuerdo a sus atributos" )
     @ApiResponses({
@@ -58,6 +59,7 @@ public class ProductoController {
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
 
+    // Obtener un producto por su id
     @GetMapping("/{id}")
     @Operation( summary = "Obtener producto por id", description = "Obtiene un producto registrado mediante su id" )
     @ApiResponses({
@@ -91,6 +93,7 @@ public class ProductoController {
         return new ResponseEntity<>(producto, HttpStatus.OK);
     }
 
+    // Listar todos los productos registrados
     @GetMapping
     @Operation( summary = "Listar productos", description = "Obtiene todos los productos registrados" )
     @ApiResponses({
@@ -123,6 +126,7 @@ public class ProductoController {
         return new ResponseEntity<>(service.listarTodos(), HttpStatus.OK);
     }
 
+    // Actualizar un producto completamente
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar producto", description = "Permite actualizar un producto mediante su id" )
     @ApiResponses({
@@ -156,6 +160,7 @@ public class ProductoController {
         return new ResponseEntity<>(productoActualizado, HttpStatus.OK);
     }
 
+    // Eliminar un producto por id
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar producto", description = "Elimina un producto registrado mediante su id" )
     @ApiResponses({
@@ -189,6 +194,7 @@ public class ProductoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // Actualizar solo campos específicos del producto
     @PatchMapping("/{id}")
     @Operation(summary = "Actualizar parcialmente un producto", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id del producto")
     @ApiResponses({

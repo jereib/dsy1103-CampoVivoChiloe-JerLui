@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+// Captura errores de validación y los devuelve campo por campo
 @RestControllerAdvice
 public class HuespedException {
     @ExceptionHandler(MethodArgumentNotValidException.class)

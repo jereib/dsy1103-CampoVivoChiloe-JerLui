@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO para mapear la respuesta del ms-socios (solo necesitamos id y nombre)
 @Schema(name = "Socio DTO", description = "Un DTO que permite obtener ciertos atributos del modelo socio de ms-socios, en este caso solo el nombre de la familia socia")
 @Data
 @NoArgsConstructor

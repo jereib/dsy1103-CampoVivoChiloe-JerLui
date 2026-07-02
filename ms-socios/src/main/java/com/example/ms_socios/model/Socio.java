@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Schema(name = "Familia socia", description = "Representa una familia socia del sistema")
 @Entity
+// Modelo principal del microservicio, mapea a la tabla de socios
 public class Socio {
     //atributos
     @Schema(description = "Identificador único", example = "1")

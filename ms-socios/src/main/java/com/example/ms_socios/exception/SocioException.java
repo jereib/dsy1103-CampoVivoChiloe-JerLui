@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-//se encarga de mostrar los mensajes de error de @NotNull y @NotBlank
+// Captura errores de validación y los devuelve en un Map campo -> mensaje
 @RestControllerAdvice
 public class SocioException {
     @ExceptionHandler(MethodArgumentNotValidException.class)

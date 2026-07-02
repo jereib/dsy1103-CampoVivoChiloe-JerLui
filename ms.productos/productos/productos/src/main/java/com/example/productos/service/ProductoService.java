@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Lógica de negocio para la gestión de productos
 @Service
 public class ProductoService {
 
@@ -19,6 +20,7 @@ public class ProductoService {
         this.repository = repository;
     }
 
+    // Crea un producto validando que el precio tenga al menos 20% de margen
     public Producto crearProducto(ProductoRequestDTO dto) {
         double precioMinimo = dto.getCostoProduccion() * 1.20;
 
@@ -37,6 +39,7 @@ public class ProductoService {
         return repository.save(producto);
     }
 
+    // Busca un producto por id, lanza error si no existe
     public Producto obtenerProductoPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado con ID: " + id));
@@ -46,6 +49,7 @@ public class ProductoService {
         return repository.findAll();
     }
 
+    // Actualiza todos los campos de un producto existente
     public Producto actualizarProducto(Long id, ProductoRequestDTO dto) {
         log.info("Iniciando actualización de producto con ID: {}", id);
         Producto producto = obtenerProductoPorId(id);
@@ -65,6 +69,7 @@ public class ProductoService {
         return repository.save(producto);
     }
 
+    // Elimina un producto por su id
     public void eliminarProducto(Long id) {
         log.info("Iniciando eliminación de producto con ID: {}", id);
         Producto producto = obtenerProductoPorId(id);
@@ -72,11 +77,13 @@ public class ProductoService {
         log.info("Producto con ID {} eliminado exitosamente", id);
     }
 
+    // Actualiza solo los campos que vienen en el mapa (PATCH)
     public Producto actualizarParcial(Long id, java.util.Map<String, Object> campos) {
         log.info("Iniciando actualización parcial (PATCH) para el producto con ID: {}", id);
 
         Producto productoActual = obtenerProductoPorId(id);
 
+        // Itera sobre los campos enviados y aplica solo los que corresponden
         campos.forEach((clave, valor) -> {
             switch (clave) {
                 case "nombre":
@@ -105,6 +112,7 @@ public class ProductoService {
             }
         });
 
+        // Vuelve a validar el margen por si se modificó precio o costo
         double precioMinimo = productoActual.getCostoProduccion() * 1.20;
         if (productoActual.getPrecio() < precioMinimo) {
             log.error("Error de validación en PATCH: El precio actual de {} es menor al margen permitido (Mínimo requerido: {})",

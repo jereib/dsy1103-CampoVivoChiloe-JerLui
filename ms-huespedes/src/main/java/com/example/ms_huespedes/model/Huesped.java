@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 
 @Schema(name = "Huesped", description = "Representa a un huesped el sistema")
 @Entity
+// Entidad que representa a un huésped en la base de datos
 public class Huesped {
 
     @Schema(description = "Identificador único", example = "1")
@@ -17,7 +18,7 @@ public class Huesped {
 
     @Schema(description = "Nombre del huesped", example = "Benjamin agüero")
     @NotBlank(message = "Nombre obligatorio")
-    @Column(name = "nombre_completo")
+    @Column(name = "nombre_completo") // Mapea a la columna con snake_case en la BD
     private String nombreCompleto;
 
     @Schema(description = "Rut del huesped", example = "21659428-2")

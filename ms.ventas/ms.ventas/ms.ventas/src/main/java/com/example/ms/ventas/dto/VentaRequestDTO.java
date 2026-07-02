@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+// DTO para recibir los datos de una venta desde el cliente
 @Schema(name = "Venta DTO", description = "Un DTO que permite obtener ciertos atributos de la venta en ms-ventas")
 public class VentaRequestDTO {
 

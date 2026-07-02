@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
+    // Configuración de Swagger para documentar la API de huéspedes
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()
                 .info(

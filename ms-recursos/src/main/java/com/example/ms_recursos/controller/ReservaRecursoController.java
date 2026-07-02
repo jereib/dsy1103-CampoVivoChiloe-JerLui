@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class ReservaRecursoController {
     @Autowired
     private ReservaRecursoService reservaRecursoService;
 
+    // Listar todos los recursos registrados
     @GetMapping
     @Operation( summary = "Listar recursos", description = "Obtiene todos los recursos registrados" )
     @ApiResponses({
@@ -52,6 +54,7 @@ public class ReservaRecursoController {
         return ResponseEntity.ok(reservaRecursoService.listar());
     }
 
+    // Buscar un recurso por su id
     @GetMapping("/{id}")
     @Operation( summary = "Listar Recursos por id", description = "Obtiene un recurso registrado mediante el id" )
     @ApiResponses({
@@ -90,6 +93,7 @@ public class ReservaRecursoController {
         return ResponseEntity.ok(r);
     }
 
+    // Crear un nuevo recurso
     @PostMapping
     @Operation( summary = "Crear recurso", description = "Permite crear un recurso de acuerdo a sus atributos" )
     @ApiResponses({
@@ -118,7 +122,7 @@ public class ReservaRecursoController {
                     description = "Error interno del servidor"
             )
     })
-    public ResponseEntity<?> crear(@RequestBody ReservaRecurso reserva) {
+    public ResponseEntity<?> crear(@Valid @RequestBody ReservaRecurso reserva) {
         try {
             ReservaRecurso nueva = reservaRecursoService.guardar(reserva);
             return ResponseEntity.status(201).body(nueva);
@@ -127,6 +131,47 @@ public class ReservaRecursoController {
         }
     }
 
+    // Actualizar un recurso existente
+    @PutMapping("/{id}")
+    @Operation( summary = "Actualizar recurso", description = "Permite actualizar un recurso existente por su id" )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Consulta exitosa"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Solicitud inválida"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No autenticado"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Acceso denegado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Recurso no encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
+    public ResponseEntity<?> actualizar(@PathVariable Long id,
+                                         @Valid @RequestBody ReservaRecurso reserva) {
+        try {
+            reserva.setId(id);
+            ReservaRecurso actualizada = reservaRecursoService.guardar(reserva);
+            return ResponseEntity.ok(actualizada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    // Eliminar un recurso por id
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar recurso", description = "Permite eliminar un recurso mediante su id" )
     @ApiResponses({

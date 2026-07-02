@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 //http://localhost:8087/swagger-ui.html
+
+// Punto de entrada del microservicio de ventas
 @SpringBootApplication
 @EnableFeignClients
 public class Application {

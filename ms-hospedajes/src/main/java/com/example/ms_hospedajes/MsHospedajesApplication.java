@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class MsHospedajesApplication {
 
+	// Inicio del microservicio que orquesta hospedajes entre socios y huéspedes
 	public static void main(String[] args) {
 		SpringApplication.run(MsHospedajesApplication.class, args);
 	}
