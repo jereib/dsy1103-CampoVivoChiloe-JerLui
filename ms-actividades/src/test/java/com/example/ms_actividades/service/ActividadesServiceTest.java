@@ -269,4 +269,168 @@ class ActividadesServiceTest {
         verify(actividadRepository).findById(id);
         verify(actividadRepository, never()).save(any());
     }
+
+    @Test
+    void listarActividades_retornaListaVacia_cuandoNoHayActividades() {
+        when(actividadRepository.findAll()).thenReturn(List.of());
+
+        List<ActividadesResponseDTO> resultado = actividadesService.listarActividades();
+
+        assertTrue(resultado.isEmpty());
+        verify(actividadRepository).findAll();
+        verify(socioClient, never()).obtenerSocio(anyLong());
+    }
+
+    @Test
+    void obtenerActividad_retornaDTOSinSocio_cuandoSocioEsNull() {
+        Long id = 1L;
+        ActividadModel actividad = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividad));
+        when(socioClient.obtenerSocio(1L)).thenReturn(null);
+
+        ActividadesResponseDTO resultado = actividadesService.obtenerActividad(id);
+
+        assertNotNull(resultado);
+        assertEquals("Taller", resultado.getNombreActividad());
+        assertNull(resultado.getSocio());
+        verify(actividadRepository).findById(id);
+        verify(socioClient).obtenerSocio(1L);
+    }
+
+    @Test
+    void actualizarActividad_relanzaExcepcion_cuandoSaveFalla() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        ActividadModel actividadActualizada = new ActividadModel(id, "Nuevo", "Nueva desc", "Domingo", 2L);
+
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class)))
+                .thenThrow(new RuntimeException("Error de BD"));
+
+        assertThrows(RuntimeException.class,
+                () -> actividadesService.actualizarActividad(id, actividadActualizada));
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(any(ActividadModel.class));
+    }
+
+    @Test
+    void eliminarActividad_relanzaExcepcion_cuandoDeleteFalla() {
+        Long id = 1L;
+        ActividadModel actividad = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividad));
+        doThrow(new RuntimeException("Error de BD")).when(actividadRepository).delete(actividad);
+
+        assertThrows(RuntimeException.class,
+                () -> actividadesService.eliminarActividad(id));
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).delete(actividad);
+    }
+
+    @Test
+    void actualizarParcial_actualizaDescripcion() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class))).thenReturn(actividadExistente);
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("descripcion", "Nueva descripción");
+
+        ActividadModel resultado = actividadesService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals("Nueva descripción", resultado.getDescripcion());
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(actividadExistente);
+    }
+
+    @Test
+    void actualizarParcial_actualizaCalendario() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class))).thenReturn(actividadExistente);
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("calendario", "Domingo 10:00");
+
+        ActividadModel resultado = actividadesService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals("Domingo 10:00", resultado.getCalendario());
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(actividadExistente);
+    }
+
+    @Test
+    void actualizarParcial_actualizaSocioId() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class))).thenReturn(actividadExistente);
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("socioId", 3L);
+
+        ActividadModel resultado = actividadesService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals(3L, resultado.getSocioId());
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(actividadExistente);
+    }
+
+    @Test
+    void actualizarParcial_actualizaSocioIdNull() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class))).thenReturn(actividadExistente);
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("socioId", null);
+
+        ActividadModel resultado = actividadesService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertNull(resultado.getSocioId());
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(actividadExistente);
+    }
+
+    @Test
+    void actualizarParcial_campoDesconocido_noRealizaCambios() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class))).thenReturn(actividadExistente);
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("campoInexistente", "valor");
+
+        ActividadModel resultado = actividadesService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals("Taller", resultado.getNombreActividad());
+        assertEquals("Desc", resultado.getDescripcion());
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(actividadExistente);
+    }
+
+    @Test
+    void actualizarParcial_relanzaExcepcion_cuandoSaveFalla() {
+        Long id = 1L;
+        ActividadModel actividadExistente = new ActividadModel(id, "Taller", "Desc", "Sábado", 1L);
+        when(actividadRepository.findById(id)).thenReturn(Optional.of(actividadExistente));
+        when(actividadRepository.save(any(ActividadModel.class)))
+                .thenThrow(new RuntimeException("Error de BD"));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("nombreActividad", "Nuevo taller");
+
+        assertThrows(RuntimeException.class,
+                () -> actividadesService.actualizarParcial(id, campos));
+        verify(actividadRepository).findById(id);
+        verify(actividadRepository).save(any(ActividadModel.class));
+    }
 }

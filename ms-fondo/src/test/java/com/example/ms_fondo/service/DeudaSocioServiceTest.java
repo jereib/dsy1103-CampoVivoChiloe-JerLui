@@ -242,4 +242,128 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findById(id);
         verify(deudaSocioRepository, never()).save(any());
     }
+
+    @Test
+    void listar_debeRetornarLista() {
+        List<DeudaSocio> deudas = List.of(
+                new DeudaSocio(1L, 30000, "ACTIVA")
+        );
+        when(deudaSocioRepository.findAll()).thenReturn(deudas);
+
+        List<DeudaSocio> resultado = deudaSocioService.listar();
+
+        assertEquals(1, resultado.size());
+        verify(deudaSocioRepository).findAll();
+    }
+
+    @Test
+    void buscarPorId_debeRetornarDeuda() {
+        Long id = 1L;
+        DeudaSocio deuda = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.findById(id)).thenReturn(Optional.of(deuda));
+
+        DeudaSocio resultado = deudaSocioService.buscarPorId(id);
+
+        assertNotNull(resultado);
+        assertEquals(30000, resultado.getMonto());
+        verify(deudaSocioRepository).findById(id);
+    }
+
+    @Test
+    void guardar_debeGuardarYRetornar() {
+        DeudaSocio deuda = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.save(deuda)).thenReturn(deuda);
+
+        DeudaSocio resultado = deudaSocioService.guardar(deuda);
+
+        assertNotNull(resultado);
+        verify(deudaSocioRepository).save(deuda);
+    }
+
+    @Test
+    void eliminar_debeEliminar() {
+        Long id = 1L;
+        DeudaSocio deuda = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.findById(id)).thenReturn(Optional.of(deuda));
+        doNothing().when(deudaSocioRepository).delete(deuda);
+
+        boolean resultado = deudaSocioService.eliminar(id);
+
+        assertTrue(resultado);
+        verify(deudaSocioRepository).findById(id);
+        verify(deudaSocioRepository).delete(deuda);
+    }
+
+    @Test
+    void actualizarParcial_actualizaSocioId() {
+        Long id = 1L;
+        DeudaSocio deudaExistente = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.findById(id)).thenReturn(Optional.of(deudaExistente));
+        when(deudaSocioRepository.save(any(DeudaSocio.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("socioId", 2L);
+
+        DeudaSocio resultado = deudaSocioService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals(2L, resultado.getSocioId());
+        verify(deudaSocioRepository).findById(id);
+        verify(deudaSocioRepository).save(deudaExistente);
+    }
+
+    @Test
+    void actualizarParcial_actualizaSocioIdNull() {
+        Long id = 1L;
+        DeudaSocio deudaExistente = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.findById(id)).thenReturn(Optional.of(deudaExistente));
+        when(deudaSocioRepository.save(any(DeudaSocio.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("socioId", null);
+
+        DeudaSocio resultado = deudaSocioService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertNull(resultado.getSocioId());
+        verify(deudaSocioRepository).findById(id);
+        verify(deudaSocioRepository).save(deudaExistente);
+    }
+
+    @Test
+    void actualizarParcial_actualizaEstado() {
+        Long id = 1L;
+        DeudaSocio deudaExistente = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.findById(id)).thenReturn(Optional.of(deudaExistente));
+        when(deudaSocioRepository.save(any(DeudaSocio.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("estado", "pagada");
+
+        DeudaSocio resultado = deudaSocioService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals("PAGADA", resultado.getEstado());
+        verify(deudaSocioRepository).findById(id);
+        verify(deudaSocioRepository).save(deudaExistente);
+    }
+
+    @Test
+    void actualizarParcial_campoDesconocido_noRealizaCambios() {
+        Long id = 1L;
+        DeudaSocio deudaExistente = new DeudaSocio(1L, 30000, "ACTIVA");
+        when(deudaSocioRepository.findById(id)).thenReturn(Optional.of(deudaExistente));
+        when(deudaSocioRepository.save(any(DeudaSocio.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("campoInexistente", "valor");
+
+        DeudaSocio resultado = deudaSocioService.actualizarParcial(id, campos);
+
+        assertNotNull(resultado);
+        assertEquals(30000, resultado.getMonto());
+        assertEquals("ACTIVA", resultado.getEstado());
+        verify(deudaSocioRepository).findById(id);
+        verify(deudaSocioRepository).save(deudaExistente);
+    }
 }

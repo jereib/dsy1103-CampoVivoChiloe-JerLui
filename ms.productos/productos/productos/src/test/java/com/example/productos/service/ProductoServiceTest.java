@@ -255,4 +255,86 @@ class ProductoServiceTest {
         verify(repository).findById(id);
         verify(repository, never()).save(any());
     }
+
+    @Test
+    void actualizarParcial_actualizaStock() {
+        // given
+        Long id = 1L;
+        Producto productoExistente = new Producto(id, "Pan", 1200.0, 15.0, 1000.0);
+        when(repository.findById(id)).thenReturn(Optional.of(productoExistente));
+        when(repository.save(any(Producto.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("stock", "20.0");
+
+        // when
+        Producto resultado = productoService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals(20.0, resultado.getStock());
+        verify(repository).findById(id);
+        verify(repository).save(productoExistente);
+    }
+
+    @Test
+    void actualizarParcial_actualizaCostoProduccion() {
+        // given
+        Long id = 1L;
+        Producto productoExistente = new Producto(id, "Pan", 1200.0, 15.0, 1000.0);
+        when(repository.findById(id)).thenReturn(Optional.of(productoExistente));
+        when(repository.save(any(Producto.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("costoProduccion", "500.0");
+
+        // when
+        Producto resultado = productoService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals(500.0, resultado.getCostoProduccion());
+        verify(repository).findById(id);
+        verify(repository).save(productoExistente);
+    }
+
+    @Test
+    void actualizarParcial_lanzaExcepcion_cuandoCostoProduccionHaceFallarMargen() {
+        // given
+        Long id = 1L;
+        Producto productoExistente = new Producto(id, "Pan", 1200.0, 15.0, 1000.0);
+        when(repository.findById(id)).thenReturn(Optional.of(productoExistente));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("costoProduccion", "2000.0");
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> productoService.actualizarParcial(id, campos));
+        verify(repository).findById(id);
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    void actualizarParcial_ignoraCampoDesconocido() {
+        // given
+        Long id = 1L;
+        Producto productoExistente = new Producto(id, "Pan", 1200.0, 15.0, 1000.0);
+        when(repository.findById(id)).thenReturn(Optional.of(productoExistente));
+        when(repository.save(any(Producto.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("campoInexistente", "valor");
+
+        // when
+        Producto resultado = productoService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals("Pan", resultado.getNombre());
+        assertEquals(1200.0, resultado.getPrecio());
+        assertEquals(15.0, resultado.getStock());
+        assertEquals(1000.0, resultado.getCostoProduccion());
+        verify(repository).findById(id);
+        verify(repository).save(productoExistente);
+    }
 }

@@ -14,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -38,8 +41,21 @@ class HospedajeServiceTest {
     private ArgumentCaptor<HospedajeModel> hospedajeCaptor;
 
     @Test
+    void listar_retornaTodosLosHospedajes() {
+        List<HospedajeModel> hospedajes = List.of(
+                crearHospedaje(1L, 1L, 1L),
+                crearHospedaje(2L, 2L, 2L)
+        );
+        when(hospedajeRepositorio.findAll()).thenReturn(hospedajes);
+
+        List<HospedajeModel> resultado = hospedajeService.listar();
+
+        assertEquals(2, resultado.size());
+        verify(hospedajeRepositorio).findAll();
+    }
+
+    @Test
     void obtenerHuesped_retornaHuespedDTO_cuandoExiste() {
-        // given
         Long id = 1L;
         HuespedDTO huespedDTO = new HuespedDTO();
         huespedDTO.setId(id);
@@ -47,10 +63,8 @@ class HospedajeServiceTest {
 
         when(huespedClient.obtenerHuesped(id)).thenReturn(huespedDTO);
 
-        // when
         HuespedDTO resultado = hospedajeService.obtenerHuesped(id);
 
-        // then
         assertNotNull(resultado);
         assertEquals(id, resultado.getId());
         assertEquals("Benjamin agüero", resultado.getNombreCompleto());
@@ -58,19 +72,27 @@ class HospedajeServiceTest {
     }
 
     @Test
+    void obtenerHuesped_retornaNull_cuandoFeignRetornaNull() {
+        Long id = 1L;
+        when(huespedClient.obtenerHuesped(id)).thenReturn(null);
+
+        HuespedDTO resultado = hospedajeService.obtenerHuesped(id);
+
+        assertNull(resultado);
+        verify(huespedClient).obtenerHuesped(id);
+    }
+
+    @Test
     void obtenerHuesped_lanzaExcepcion_cuandoFeignFalla() {
-        // given
         Long id = 1L;
         when(huespedClient.obtenerHuesped(id)).thenThrow(new RuntimeException("Error de comunicación"));
 
-        // when & then
         assertThrows(RuntimeException.class, () -> hospedajeService.obtenerHuesped(id));
         verify(huespedClient).obtenerHuesped(id);
     }
 
     @Test
     void obtenerSocio_retornaSocioDTO_cuandoExiste() {
-        // given
         Long id = 1L;
         SocioDTO socioDTO = new SocioDTO();
         socioDTO.setId(id);
@@ -78,10 +100,8 @@ class HospedajeServiceTest {
 
         when(socioClient.obtenerSocio(id)).thenReturn(socioDTO);
 
-        // when
         SocioDTO resultado = hospedajeService.obtenerSocio(id);
 
-        // then
         assertNotNull(resultado);
         assertEquals(id, resultado.getId());
         assertEquals("Los Jackson", resultado.getSocio());
@@ -89,19 +109,27 @@ class HospedajeServiceTest {
     }
 
     @Test
+    void obtenerSocio_retornaNull_cuandoFeignRetornaNull() {
+        Long id = 1L;
+        when(socioClient.obtenerSocio(id)).thenReturn(null);
+
+        SocioDTO resultado = hospedajeService.obtenerSocio(id);
+
+        assertNull(resultado);
+        verify(socioClient).obtenerSocio(id);
+    }
+
+    @Test
     void obtenerSocio_lanzaExcepcion_cuandoFeignFalla() {
-        // given
         Long id = 1L;
         when(socioClient.obtenerSocio(id)).thenThrow(new RuntimeException("Error de comunicación"));
 
-        // when & then
         assertThrows(RuntimeException.class, () -> hospedajeService.obtenerSocio(id));
         verify(socioClient).obtenerSocio(id);
     }
 
     @Test
     void crearHospedaje_creaHospedaje_cuandoAmbosFeignExitosos() {
-        // given
         Long socioId = 1L;
         Long huespedId = 2L;
 
@@ -122,10 +150,8 @@ class HospedajeServiceTest {
         when(socioClient.obtenerSocio(socioId)).thenReturn(socioDTO);
         when(hospedajeRepositorio.save(any(HospedajeModel.class))).thenReturn(hospedajeGuardado);
 
-        // when
         String resultado = hospedajeService.crearHospedaje(socioId, huespedId);
 
-        // then
         assertNotNull(resultado);
         assertTrue(resultado.contains("Benjamin agüero"));
         assertTrue(resultado.contains("Los Jackson"));
@@ -136,13 +162,11 @@ class HospedajeServiceTest {
 
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoHuespedNoEncontrado() {
-        // given
         Long socioId = 1L;
         Long huespedId = 999L;
 
         when(huespedClient.obtenerHuesped(huespedId)).thenReturn(null);
 
-        // when & then
         assertThrows(RuntimeException.class, () -> hospedajeService.crearHospedaje(socioId, huespedId));
         verify(huespedClient).obtenerHuesped(huespedId);
         verify(socioClient, never()).obtenerSocio(anyLong());
@@ -151,7 +175,6 @@ class HospedajeServiceTest {
 
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoSocioNoEncontrado() {
-        // given
         Long socioId = 999L;
         Long huespedId = 2L;
 
@@ -162,7 +185,6 @@ class HospedajeServiceTest {
         when(huespedClient.obtenerHuesped(huespedId)).thenReturn(huespedDTO);
         when(socioClient.obtenerSocio(socioId)).thenReturn(null);
 
-        // when & then
         assertThrows(RuntimeException.class, () -> hospedajeService.crearHospedaje(socioId, huespedId));
         verify(huespedClient).obtenerHuesped(huespedId);
         verify(socioClient).obtenerSocio(socioId);
@@ -171,13 +193,11 @@ class HospedajeServiceTest {
 
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoFeignFalla() {
-        // given
         Long socioId = 1L;
         Long huespedId = 2L;
 
         when(huespedClient.obtenerHuesped(huespedId)).thenThrow(new RuntimeException("Error de comunicación"));
 
-        // when & then
         assertThrows(RuntimeException.class, () -> hospedajeService.crearHospedaje(socioId, huespedId));
         verify(huespedClient).obtenerHuesped(huespedId);
         verify(socioClient, never()).obtenerSocio(anyLong());
@@ -186,7 +206,6 @@ class HospedajeServiceTest {
 
     @Test
     void crearHospedaje_lanzaExcepcion_cuandoRepositorioFalla() {
-        // given
         Long socioId = 1L;
         Long huespedId = 2L;
 
@@ -202,10 +221,81 @@ class HospedajeServiceTest {
         when(socioClient.obtenerSocio(socioId)).thenReturn(socioDTO);
         when(hospedajeRepositorio.save(any(HospedajeModel.class))).thenThrow(new RuntimeException("Error de BD"));
 
-        // when & then
         assertThrows(RuntimeException.class, () -> hospedajeService.crearHospedaje(socioId, huespedId));
         verify(huespedClient).obtenerHuesped(huespedId);
         verify(socioClient).obtenerSocio(socioId);
         verify(hospedajeRepositorio).save(any(HospedajeModel.class));
+    }
+
+    @Test
+    void actualizar_actualizaHospedaje_cuandoExiste() {
+        Long id = 1L;
+        HospedajeModel existente = crearHospedaje(id, 1L, 1L);
+
+        HospedajeModel datos = new HospedajeModel();
+        datos.setSocioId(2L);
+        datos.setHuespedId(2L);
+
+        HospedajeModel actualizado = crearHospedaje(id, 2L, 2L);
+
+        when(hospedajeRepositorio.findById(id)).thenReturn(Optional.of(existente));
+        when(hospedajeRepositorio.save(any(HospedajeModel.class))).thenReturn(actualizado);
+
+        HospedajeModel resultado = hospedajeService.actualizar(id, datos);
+
+        assertNotNull(resultado);
+        assertEquals(2L, resultado.getSocioId());
+        assertEquals(2L, resultado.getHuespedId());
+        verify(hospedajeRepositorio).findById(id);
+        verify(hospedajeRepositorio).save(existente);
+    }
+
+    @Test
+    void actualizar_retornaNull_cuandoNoExiste() {
+        Long id = 999L;
+        HospedajeModel datos = new HospedajeModel();
+        datos.setSocioId(2L);
+        datos.setHuespedId(2L);
+
+        when(hospedajeRepositorio.findById(id)).thenReturn(Optional.empty());
+
+        HospedajeModel resultado = hospedajeService.actualizar(id, datos);
+
+        assertNull(resultado);
+        verify(hospedajeRepositorio).findById(id);
+        verify(hospedajeRepositorio, never()).save(any());
+    }
+
+    @Test
+    void eliminar_retornaTrue_cuandoExiste() {
+        Long id = 1L;
+        when(hospedajeRepositorio.existsById(id)).thenReturn(true);
+        doNothing().when(hospedajeRepositorio).deleteById(id);
+
+        boolean resultado = hospedajeService.eliminar(id);
+
+        assertTrue(resultado);
+        verify(hospedajeRepositorio).existsById(id);
+        verify(hospedajeRepositorio).deleteById(id);
+    }
+
+    @Test
+    void eliminar_retornaFalse_cuandoNoExiste() {
+        Long id = 999L;
+        when(hospedajeRepositorio.existsById(id)).thenReturn(false);
+
+        boolean resultado = hospedajeService.eliminar(id);
+
+        assertFalse(resultado);
+        verify(hospedajeRepositorio).existsById(id);
+        verify(hospedajeRepositorio, never()).deleteById(anyLong());
+    }
+
+    private HospedajeModel crearHospedaje(Long id, Long socioId, Long huespedId) {
+        HospedajeModel h = new HospedajeModel();
+        h.setId(id);
+        h.setSocioId(socioId);
+        h.setHuespedId(huespedId);
+        return h;
     }
 }

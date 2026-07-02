@@ -196,7 +196,7 @@ done
 ## Cobertura JaCoCo
 
 Los umbrales mínimos están configurados en cada `pom.xml`:
-- LINE ≥ 20% (api-gateway ≥ 10%)
+- LINE ≥ 80%
 - BRANCH ≥ 15%
 
 Reportes generados en `target/site/jacoco/index.html` de cada microservicio.

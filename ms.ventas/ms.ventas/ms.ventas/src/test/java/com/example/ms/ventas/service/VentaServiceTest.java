@@ -299,4 +299,107 @@ class VentaServiceTest {
         verify(productoClient).obtenerProductoPorId(1L);
         verify(repository, never()).save(any());
     }
+
+    @Test
+    void actualizarParcial_actualizaCanal_sinRecalcularTotal() {
+        // given
+        Long id = 1L;
+        Venta ventaExistente = new Venta();
+        ventaExistente.setId(id);
+        ventaExistente.setProductoId(1L);
+        ventaExistente.setCantidad(5);
+        ventaExistente.setTotal(6000.0);
+        ventaExistente.setCanal("WEB");
+
+        when(repository.findById(id)).thenReturn(Optional.of(ventaExistente));
+        when(repository.save(any(Venta.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("canal", "FISICO");
+
+        // when
+        Venta resultado = ventaService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals("FISICO", resultado.getCanal());
+        assertEquals(5, resultado.getCantidad());
+        assertEquals(6000.0, resultado.getTotal());
+        verify(repository).findById(id);
+        verify(repository).save(ventaExistente);
+        verify(productoClient, never()).obtenerProductoPorId(anyLong());
+    }
+
+    @Test
+    void actualizarParcial_ignoraProductoId() {
+        // given
+        Long id = 1L;
+        Venta ventaExistente = new Venta();
+        ventaExistente.setId(id);
+        ventaExistente.setProductoId(1L);
+        ventaExistente.setCantidad(5);
+        ventaExistente.setTotal(6000.0);
+        ventaExistente.setCanal("WEB");
+
+        when(repository.findById(id)).thenReturn(Optional.of(ventaExistente));
+        when(repository.save(any(Venta.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("productoId", 999L);
+
+        // when
+        Venta resultado = ventaService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getProductoId());
+        verify(repository).findById(id);
+        verify(repository).save(ventaExistente);
+        verify(productoClient, never()).obtenerProductoPorId(anyLong());
+    }
+
+    @Test
+    void actualizarParcial_ignoraCampoDesconocido() {
+        // given
+        Long id = 1L;
+        Venta ventaExistente = new Venta();
+        ventaExistente.setId(id);
+        ventaExistente.setProductoId(1L);
+        ventaExistente.setCantidad(5);
+        ventaExistente.setTotal(6000.0);
+        ventaExistente.setCanal("WEB");
+
+        when(repository.findById(id)).thenReturn(Optional.of(ventaExistente));
+        when(repository.save(any(Venta.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("campoInexistente", "valor");
+
+        // when
+        Venta resultado = ventaService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals(5, resultado.getCantidad());
+        assertEquals("WEB", resultado.getCanal());
+        verify(repository).findById(id);
+        verify(repository).save(ventaExistente);
+        verify(productoClient, never()).obtenerProductoPorId(anyLong());
+    }
+
+    @Test
+    void actualizarVenta_lanzaExcepcion_cuandoNoExiste() {
+        // given
+        Long id = 999L;
+        VentaRequestDTO dto = new VentaRequestDTO();
+        dto.setCantidad(10);
+        dto.setCanal("FISICO");
+
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> ventaService.actualizarVenta(id, dto));
+        verify(repository).findById(id);
+        verify(repository, never()).save(any());
+    }
 }

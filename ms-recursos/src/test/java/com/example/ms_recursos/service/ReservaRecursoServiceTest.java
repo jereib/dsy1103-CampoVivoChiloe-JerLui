@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -60,6 +62,59 @@ class ReservaRecursoServiceTest {
         assertEquals("Tractor", resultado.getNombreRecurso());
         assertEquals("PENDIENTE", resultado.getEstado());
         verify(reservaRecursoRepository, times(1)).save(reserva);
+    }
+
+    @Test
+    void listar_debeRetornarLista() {
+        when(reservaRecursoRepository.findAll()).thenReturn(List.of());
+
+        List<ReservaRecurso> resultado = reservaRecursoService.listar();
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void buscarPorId_debeRetornarReserva_cuandoExiste() {
+        ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
+        r.setId(1L);
+        when(reservaRecursoRepository.findById(1L)).thenReturn(java.util.Optional.of(r));
+
+        ReservaRecurso resultado = reservaRecursoService.buscarPorId(1L);
+
+        assertNotNull(resultado);
+        assertEquals("Tractor", resultado.getNombreRecurso());
+    }
+
+    @Test
+    void buscarPorId_debeRetornarNull_cuandoNoExiste() {
+        when(reservaRecursoRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+
+        ReservaRecurso resultado = reservaRecursoService.buscarPorId(99L);
+
+        assertNull(resultado);
+    }
+
+    @Test
+    void eliminar_debeRetornarTrue_cuandoExiste() {
+        ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
+        r.setId(1L);
+        when(reservaRecursoRepository.findById(1L)).thenReturn(java.util.Optional.of(r));
+
+        boolean resultado = reservaRecursoService.eliminar(1L);
+
+        assertTrue(resultado);
+        verify(reservaRecursoRepository).delete(r);
+    }
+
+    @Test
+    void eliminar_debeRetornarFalse_cuandoNoExiste() {
+        when(reservaRecursoRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+
+        boolean resultado = reservaRecursoService.eliminar(99L);
+
+        assertFalse(resultado);
+        verify(reservaRecursoRepository, never()).delete(any());
     }
 
     @Test

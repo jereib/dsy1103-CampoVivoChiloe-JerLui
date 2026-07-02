@@ -299,4 +299,61 @@ class InsumoServiceTest {
         assertEquals(5000.0, resultado.getPrecioUnidad());
         verify(repository).save(insumoExistente);
     }
+
+    @Test
+    void actualizarParcial_ignoraCampoDesconocido() {
+        // given
+        Long id = 1L;
+        Insumo insumoExistente = new Insumo();
+        insumoExistente.setId(id);
+        insumoExistente.setNombre("Original");
+        insumoExistente.setDescripcion("Desc original");
+        insumoExistente.setStock(10);
+        insumoExistente.setPrecioUnidad(1000.0);
+
+        when(repository.findById(id)).thenReturn(Optional.of(insumoExistente));
+        when(repository.save(any(Insumo.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("campoInexistente", "valor");
+
+        // when
+        Insumo resultado = insumoService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals("Original", resultado.getNombre());
+        assertEquals("Desc original", resultado.getDescripcion());
+        assertEquals(10, resultado.getStock());
+        assertEquals(1000.0, resultado.getPrecioUnidad());
+        verify(repository).save(insumoExistente);
+    }
+
+    @Test
+    void actualizarParcial_ignoraCamposConValorNull() {
+        // given
+        Long id = 1L;
+        Insumo insumoExistente = new Insumo();
+        insumoExistente.setId(id);
+        insumoExistente.setNombre("Original");
+        insumoExistente.setDescripcion("Desc original");
+        insumoExistente.setStock(10);
+        insumoExistente.setPrecioUnidad(1000.0);
+
+        when(repository.findById(id)).thenReturn(Optional.of(insumoExistente));
+        when(repository.save(any(Insumo.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("nombre", null);
+        campos.put("stock", null);
+
+        // when
+        Insumo resultado = insumoService.actualizarParcial(id, campos);
+
+        // then
+        assertNotNull(resultado);
+        assertEquals("Original", resultado.getNombre());
+        assertEquals(10, resultado.getStock());
+        verify(repository).save(insumoExistente);
+    }
 }
