@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.*;
 public class SocioController {
     private final SocioService socioService;
 
+    // Inyectamos el servicio por constructor
     public SocioController(SocioService socioService){
         this.socioService = socioService;
     }
 
 
-    //mostrar familias socias
+    // Devuelve todas las familias socias registradas
     @GetMapping
     @Operation( summary = "Listar socios", description = "Obtiene todas las familias socias registradas" )
     @ApiResponses({
@@ -57,7 +58,7 @@ public class SocioController {
         return ResponseEntity.ok(socioService.listarSocios());
     }
 
-    //buscar por id de las familias socias
+    // Busca una familia socia por su id
     @GetMapping("/{id}")
     @Operation( summary = "Listar socios por id", description = "Obtiene una familia socia registrada mediante su id" )
     @ApiResponses({
@@ -97,7 +98,7 @@ public class SocioController {
         return ResponseEntity.ok(socio);
     }
 
-    //buscar por el estado de las familias socias
+    // Filtra por estado: DISPONIBLE, SUSPENDIDO o MANTENIMIENTO
     @GetMapping("/estado/{estado}")
     @Operation( summary = "Listar socios por estado", description = "Obtiene una familia socia registrada mediante su estado" )
     @ApiResponses({
@@ -142,7 +143,7 @@ public class SocioController {
         }
     }
 
-    //guardar familias socias
+    // Crea una nueva familia socia
     @PostMapping
     @Operation( summary = "ingresa una familia socia", description = "se ingresa una familia socia nueva con sus atributos correspondientes" )
     @ApiResponses({
@@ -184,7 +185,7 @@ public class SocioController {
         return ResponseEntity.ok(nuevoSocio);
     }
 
-    //actualizar familias socias por id
+    // Reemplaza todos los datos de una familia socia
     @PutMapping("/{id}")
     @Operation( summary = "Actualiza socios por id", description = "Actualiza una familia socia mediante su id" )
     @ApiResponses({
@@ -225,7 +226,7 @@ public class SocioController {
         return ResponseEntity.ok(socioActualizado);
     }
 
-    //eliminar familias socias por id
+    // Elimina una familia socia por su id
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar socios por id", description = "Elimina una familia socia registrada mediante su id" )
     @ApiResponses({
@@ -295,6 +296,7 @@ public class SocioController {
             )
     })
 
+    // Actualiza solo los campos enviados en el Map, útil para cambios rápidos
     public ResponseEntity<?> actualizarParcialSocio(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
 
         Socio socioActualizado = socioService.actualizarParcial(id, campos);

@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface ReservaRecursoRepository extends JpaRepository<ReservaRecurso, Long> {
 
+    // Buscar reservas por el socio que las hizo
     List<ReservaRecurso> findBySocioId(Long socioId);
 
+    // Buscar reservas por el nombre del recurso
     List<ReservaRecurso> findByNombreRecurso(String nombreRecurso);
 }

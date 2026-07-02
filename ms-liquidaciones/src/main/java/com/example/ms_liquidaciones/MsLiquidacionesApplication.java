@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 //http://localhost:8090/swagger-ui.html
 @SpringBootApplication
-@EnableFeignClients
+@EnableFeignClients // habilita Feign para llamar a ms-fondo
 public class MsLiquidacionesApplication {
 
 	public static void main(String[] args) {

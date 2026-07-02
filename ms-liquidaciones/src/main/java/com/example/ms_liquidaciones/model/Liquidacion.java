@@ -1,10 +1,17 @@
 package com.example.ms_liquidaciones.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+// Entidad que representa una liquidación (ingresos - deuda)
 @Schema(name = "Liquidacion", description = "Representa una liquidacion del sistema")
+@Entity
 public class Liquidacion {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull(message = "El socioId es obligatorio")
     @Schema(description = "Id socio", example = "1")
@@ -14,10 +21,10 @@ public class Liquidacion {
     private double ingresos;
 
     @Schema(description = "Deuda", example = "50000")
-    private double deuda;
+    private double deuda; // monto que se descuenta si el socio debe
 
     @Schema(description = "Total", example = "250000")
-    private double total;
+    private double total; // ingresos - deuda
 
     public Liquidacion() {
     }
@@ -31,6 +38,14 @@ public class Liquidacion {
     }
 
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getSocioId() {
         return socioId;

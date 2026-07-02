@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MsSociosApplication {
 
+	// Punto de entrada del microservicio de socios
 	public static void main(String[] args) {
 		SpringApplication.run(MsSociosApplication.class, args);
 	}

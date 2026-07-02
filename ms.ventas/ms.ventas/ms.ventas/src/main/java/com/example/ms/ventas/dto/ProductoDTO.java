@@ -2,6 +2,7 @@ package com.example.ms.ventas.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+// DTO para mapear la respuesta del ms-productos
 @Schema(name = "Producto DTO", description = "Un DTO que permite obtener ciertos atributos de un producto en ms-productos")
 public class ProductoDTO {
     @Schema(description = "Identificador único", example = "1")

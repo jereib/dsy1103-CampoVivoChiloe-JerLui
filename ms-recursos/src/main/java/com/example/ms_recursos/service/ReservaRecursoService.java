@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Lógica de negocio para reservas de recursos
 @Service
 public class ReservaRecursoService {
 
@@ -23,6 +24,7 @@ public class ReservaRecursoService {
         this.fondoClient = fondoClient;
     }
 
+    // Obtener todos los recursos sin filtro
     public List<ReservaRecurso> listar() {
         log.info("Listando todos los recursos registrados");
         List<ReservaRecurso> recursos = reservaRecursoRepository.findAll();
@@ -30,16 +32,19 @@ public class ReservaRecursoService {
         return recursos;
     }
 
+    // Buscar recurso por id, retorna null si no existe
     public ReservaRecurso buscarPorId(Long id) {
         log.debug("Buscando recurso por ID: {}", id);
         return reservaRecursoRepository.findById(id).orElse(null);
     }
 
+    // Guarda una reserva pero antes valida que el socio no tenga deuda
     public ReservaRecurso guardar(ReservaRecurso reserva) {
         log.info("Validando deuda del socio ID: {} antes de reservar recurso", reserva.getSocioId());
 
         Boolean tieneDeuda;
         try {
+            // Consulta externa al ms-fondo para ver si el socio debe dinero
             tieneDeuda = fondoClient.tieneDeudaActiva(reserva.getSocioId());
             log.debug("Respuesta de ms-fondo para socio ID {}: tieneDeuda={}", reserva.getSocioId(), tieneDeuda);
         } catch (Exception e) {
@@ -57,6 +62,7 @@ public class ReservaRecursoService {
         return reservaRecursoRepository.save(reserva);
     }
 
+    // Elimina un recurso si existe, retorna false si no se encontró
     public boolean eliminar(Long id) {
         log.info("Eliminando recurso con ID: {}", id);
         ReservaRecurso r = buscarPorId(id);

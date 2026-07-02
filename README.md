@@ -19,11 +19,15 @@ venta de productos y gestión de recursos comunitarios.
 - Apache Maven 3.9+ (o usar `./mvnw` en cada microservicio)
 - Docker + Docker Compose (para ejecución con contenedores)
 
-Los wrappers Maven (`mvnw`) deben tener permisos de ejecución:
+Los wrappers Maven deben tener permisos de ejecución:
 
-```bash
-find . -name mvnw -type f -exec chmod +x {} \;
-```
+- **macOS / Linux / Git Bash en Windows**:
+  ```bash
+  find . -name mvnw -type f -exec chmod +x {} \;
+  ```
+- **Windows cmd / PowerShell**: los archivos `mvnw.cmd` ya son ejecutables, usar `mvnw.cmd` en vez de `./mvnw`.
+
+> **Tip**: Si usas **Git Bash** (incluido con Git for Windows), todos los comandos del README funcionan igual que en macOS/Linux.
 
 ## Microservicios
 
@@ -95,7 +99,10 @@ Cada microservicio expone su documentación OpenAPI:
 
 ## Ejecución local (Maven)
 
-Cada microservicio usa su wrapper `./mvnw` (dar permiso con `chmod +x mvnw` si es necesario):
+Cada microservicio usa su wrapper Maven:
+
+- **macOS / Linux / Git Bash**: `./mvnw`
+- **Windows cmd / PowerShell**: `mvnw.cmd`
 
 ```bash
 # Compilar y ejecutar pruebas
@@ -105,7 +112,7 @@ cd ms-recursos && ./mvnw clean test
 cd ms-recursos && ./mvnw spring-boot:run
 ```
 
-Para ejecutar todos los microservicios (terminales separadas):
+Para ejecutar todos los microservicios (terminales separadas) en **macOS/Linux/Git Bash**:
 
 ```bash
 cd ms-socios                    && ./mvnw spring-boot:run
@@ -119,6 +126,22 @@ cd ms-recursos                  && ./mvnw spring-boot:run
 cd ms-fondo                     && ./mvnw spring-boot:run
 cd ms-liquidaciones             && ./mvnw spring-boot:run
 cd api-gateway/api-gateway      && ./mvnw spring-boot:run
+```
+
+En **Windows cmd**, abrir una terminal por cada MS y ejecutar:
+
+```batch
+cd ms-socios & mvnw.cmd spring-boot:run
+cd ms-hospedajes & mvnw.cmd spring-boot:run
+cd ms-huespedes & mvnw.cmd spring-boot:run
+cd ms.insumos\ms.insumos & mvnw.cmd spring-boot:run
+cd ms-actividades & mvnw.cmd spring-boot:run
+cd ms.productos\productos\productos & mvnw.cmd spring-boot:run
+cd ms.ventas\ms.ventas\ms.ventas & mvnw.cmd spring-boot:run
+cd ms-recursos & mvnw.cmd spring-boot:run
+cd ms-fondo & mvnw.cmd spring-boot:run
+cd ms-liquidaciones & mvnw.cmd spring-boot:run
+cd api-gateway\api-gateway & mvnw.cmd spring-boot:run
 ```
 
 ## Ejecución con Docker
@@ -153,9 +176,10 @@ en los contenedores vía `SPRING_PROFILES_ACTIVE=docker` definido en `docker-com
 cd ms-recursos && ./mvnw clean test
 
 # Ver reporte de cobertura (abrir en navegador)
-open ms-recursos/target/site/jacoco/index.html
+open ms-recursos/target/site/jacoco/index.html   # macOS
+start ms-recursos/target/site/jacoco/index.html   # Windows cmd
 
-# Ejecutar pruebas de todos los microservicios
+# Ejecutar pruebas de todos los microservicios (macOS / Linux / Git Bash)
 for d in ms-recursos ms-liquidaciones ms-fondo ms-actividades ms-hospedajes \
          ms-huespedes ms-socios ms.insumos/ms.insumos \
          ms.productos/productos/productos ms.ventas/ms.ventas/ms.ventas \
@@ -164,6 +188,9 @@ for d in ms-recursos ms-liquidaciones ms-fondo ms-actividades ms-hospedajes \
   (cd "$d" && ./mvnw clean test 2>&1 | tail -3)
   echo
 done
+
+# Windows cmd — ejecutar manualmente por cada MS:
+# cd ms-recursos & mvnw.cmd clean test
 ```
 
 ## Cobertura JaCoCo

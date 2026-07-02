@@ -3,6 +3,7 @@ package com.example.ms_fondo.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+// Entidad que representa una deuda de un socio
 @Schema(name = "Deudas", description = "Representa una deuda en el sistema")
 @Entity
 public class DeudaSocio {
@@ -19,7 +20,7 @@ public class DeudaSocio {
     private double monto;
 
     @Schema(description = "Estado de la deuda", example = "PAGADA")
-    private String estado; // ACTIVA o PAGADA
+    private String estado; // ACTIVA o PAGADA, controla si la deuda sigue vigente
 
     public DeudaSocio() {
     }

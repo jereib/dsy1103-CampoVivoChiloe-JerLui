@@ -7,6 +7,7 @@ import com.example.ms_hospedajes.dto.SocioDTO;
 import com.example.ms_hospedajes.model.HospedajeModel;
 import com.example.ms_hospedajes.repository.HospedajeRepositorio;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,12 @@ public class HospedajeService {
         this.hospedajeRepositorio = hospedajeRepositorio;
     }
 
+    // Devuelve todos los hospedajes registrados
+    public List<HospedajeModel> listar() {
+        return hospedajeRepositorio.findAll();
+    }
+
+    // Obtiene un huésped llamando al ms-huespedes vía Feign
     public HuespedDTO obtenerHuesped(Long id){
         logger.debug("Consultando externamente al ms-huespedes por el ID: {}", id);
         try {
@@ -41,6 +48,7 @@ public class HospedajeService {
         }
     }
 
+    // Obtiene un socio llamando al ms-socios vía Feign
     public SocioDTO obtenerSocio(Long id){
         logger.debug("Consultando externamente al ms-socios por el ID: {}", id);
         try {
@@ -55,6 +63,27 @@ public class HospedajeService {
         }
     }
 
+    // Actualiza los IDs de un hospedaje existente
+    public HospedajeModel actualizar(Long id, HospedajeModel datos) {
+        HospedajeModel existente = hospedajeRepositorio.findById(id).orElse(null);
+        if (existente == null) {
+            return null;
+        }
+        existente.setSocioId(datos.getSocioId());
+        existente.setHuespedId(datos.getHuespedId());
+        return hospedajeRepositorio.save(existente);
+    }
+
+    // Elimina un hospedaje si existe
+    public boolean eliminar(Long id) {
+        if (!hospedajeRepositorio.existsById(id)) {
+            return false;
+        }
+        hospedajeRepositorio.deleteById(id);
+        return true;
+    }
+
+    // Orquesta la creación: valida que existan socio y huésped, luego guarda la relación
     public String crearHospedaje(Long socioId, Long huespedId){
         logger.info("Iniciando proceso para orquestar hospedaje. SocioID: [{}], HuespedID: [{}]", socioId, huespedId);
 

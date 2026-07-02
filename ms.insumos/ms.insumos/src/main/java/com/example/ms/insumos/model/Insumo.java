@@ -3,6 +3,7 @@ package com.example.ms.insumos.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+// Entidad que representa un insumo agrícola en la base de datos
 @Schema(name = "Insumo", description = "Representa un insumo en el sistema")
 @Entity
 @Table(name = "insumos")

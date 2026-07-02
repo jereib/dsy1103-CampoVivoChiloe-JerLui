@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MsHuespedesApplication {
 
+	// Punto de entrada del microservicio de huéspedes
 	public static void main(String[] args) {
 		SpringApplication.run(MsHuespedesApplication.class, args);
 	}

@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //http://localhost:8084/swagger-ui.html
+
+// Punto de entrada del microservicio de insumos
 @SpringBootApplication
 public class Application {
 

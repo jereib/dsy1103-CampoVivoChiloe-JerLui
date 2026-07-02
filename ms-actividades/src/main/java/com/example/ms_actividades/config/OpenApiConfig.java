@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
+    // Configuración de Swagger para la documentación del microservicio
     @Bean
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()

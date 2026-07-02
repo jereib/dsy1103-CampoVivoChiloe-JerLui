@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Lógica de negocio para la gestión de ventas
 @Service
 public class VentaService {
 
@@ -23,19 +24,20 @@ public class VentaService {
         this.productoClient = productoClient;
     }
 
+    // Registra una nueva venta validando que el producto exista y tenga stock
     public Venta registrarVenta(VentaRequestDTO dto) {
         log.info("Iniciando registro de venta para el producto ID: {}", dto.getProductoId());
 
         ProductoDTO productoExistente;
         try {
-            // Llama al otro microservicio
+            // Llama al ms-productos para verificar que el producto existe
             productoExistente = productoClient.obtenerProductoPorId(dto.getProductoId());
         } catch (Exception e) {
             log.error("Error al contactar ms-productos o producto no encontrado");
             throw new IllegalArgumentException("El producto con ID " + dto.getProductoId() + " no existe o el servicio no responde.");
         }
 
-        // Valida el stock
+        // Valida que haya suficiente stock disponible
         if (productoExistente.getStock() < dto.getCantidad()) {
             throw new IllegalArgumentException("Stock insuficiente. Stock actual: " + productoExistente.getStock());
         }
@@ -54,11 +56,13 @@ public class VentaService {
         return repository.findAll();
     }
 
+    // Busca una venta por id, lanza error si no existe
     public Venta obtenerPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Venta no encontrada con ID: " + id));
     }
 
+    // Actualiza cantidad y canal de una venta existente
     public Venta actualizarVenta(Long id, VentaRequestDTO dto) {
         log.info("Actualizando venta con ID: {}", id);
         Venta venta = obtenerPorId(id);
@@ -69,12 +73,14 @@ public class VentaService {
         return repository.save(venta);
     }
 
+    // Elimina una venta por su id
     public void eliminarVenta(Long id) {
         log.info("Eliminando venta con ID: {}", id);
         Venta venta = obtenerPorId(id);
         repository.delete(venta);
     }
 
+    // Actualiza solo los campos que vienen en el mapa (PATCH)
     public Venta actualizarParcial(Long id, java.util.Map<String, Object> campos) {
         log.info("Iniciando actualización parcial (PATCH) para la venta con ID: {}", id);
 
@@ -82,6 +88,7 @@ public class VentaService {
 
         final boolean[] cantidadModificada = {false};
 
+        // Itera sobre los campos enviados y aplica solo los que corresponden
         campos.forEach((clave, valor) -> {
             switch (clave) {
                 case "cantidad":

@@ -23,6 +23,7 @@ public class ActividadesController {
     @Autowired
     private ActividadesService actividadService;
 
+    // Obtener todas las actividades
     @GetMapping
     @Operation( summary = "Listar actividades", description = "Obtiene todas las actividades registradas" )
     @ApiResponses({
@@ -58,6 +59,7 @@ public class ActividadesController {
         );
     }
 
+    // Buscar una actividad por su id
     @GetMapping("/{id}")
     @Operation( summary = "Listar actividad por id", description = "Permite obtener una actividad mediante su id" )
     @ApiResponses({
@@ -96,12 +98,13 @@ public class ActividadesController {
             return ResponseEntity.ok(actividad);
 
         } catch (RuntimeException e){
-
+            // si no existe la actividad, devolvemos 404
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
     }
 
+    // Crear una nueva actividad
     @PostMapping
     @Operation( summary = "Crear actividad", description = "Permite crear una actividad de acuerdo a sus atributos" )
     @ApiResponses({
@@ -138,6 +141,7 @@ public class ActividadesController {
                 .body(nuevaActividad);
     }
 
+    // Actualizar una actividad completa
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar actividad", description = "Permite actualizar una actividad ya existente" )
     @ApiResponses({
@@ -178,12 +182,13 @@ public class ActividadesController {
             return ResponseEntity.ok(actividad);
 
         } catch (RuntimeException e){
-
+            // si no existe, 404
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
     }
 
+    // Eliminar una actividad
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar actividad", description = "Permite eliminar una actividad ya existente" )
     @ApiResponses({
@@ -227,6 +232,7 @@ public class ActividadesController {
         }
     }
 
+    // Actualizar solo algunos campos
     @PatchMapping("/{id}")
     @Operation( summary = "Actualizar parcialmente actividad", description = "Permite actualizar algunos datos de una actividad ya existente" )
     @ApiResponses({

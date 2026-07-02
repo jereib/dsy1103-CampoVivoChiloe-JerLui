@@ -25,6 +25,7 @@ public class VentaController {
         this.service = service;
     }
 
+    // Registrar una nueva venta
     @PostMapping
     @Operation( summary = "Crear venta", description = "Permite crear una venta con sus atributos" )
     @ApiResponses({
@@ -57,6 +58,7 @@ public class VentaController {
         Venta nuevaVenta = service.registrarVenta(dto);
         return new ResponseEntity<>(nuevaVenta, HttpStatus.CREATED);
     }
+    // Listar todas las ventas
     @GetMapping
     @Operation( summary = "Listar ventas", description = "Obtiene todas las ventas registradas" )
     @ApiResponses({
@@ -89,6 +91,7 @@ public class VentaController {
         return new ResponseEntity<>(service.listarTodas(), HttpStatus.OK);
     }
 
+    // Obtener una venta por su id
     @GetMapping("/{id}")
     @Operation( summary = "Listar venta por id", description = "Obtiene una venta registrada mediante su id" )
     @ApiResponses({
@@ -121,6 +124,7 @@ public class VentaController {
         return new ResponseEntity<>(service.obtenerPorId(id), HttpStatus.OK);
     }
 
+    // Actualizar una venta completamente
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar venta", description = "Permite actualizar una venta registrada mediante su id" )
     @ApiResponses({
@@ -154,6 +158,7 @@ public class VentaController {
         return new ResponseEntity<>(ventaActualizada, HttpStatus.OK);
     }
 
+    // Eliminar una venta por id
     @DeleteMapping("/{id}")
     @Operation( summary = "Borrar venta", description = "Permite borrar una venta registrada mediante su id" )
     @ApiResponses({
@@ -187,6 +192,7 @@ public class VentaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // Actualizar solo campos específicos de la venta
     @PatchMapping("/{id}")
     @Operation( summary = "Actualizar parcialmente una venta", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id de la venta" )
     @ApiResponses({

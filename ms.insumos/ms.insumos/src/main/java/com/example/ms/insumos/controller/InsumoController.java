@@ -25,6 +25,7 @@ public class InsumoController {
         this.service = service;
     }
 
+    // Crear un nuevo insumo
     @PostMapping
     @Operation( summary = "Crear insumo", description = "Permite crear un insumo con sus atributos" )
     @ApiResponses({
@@ -58,6 +59,7 @@ public class InsumoController {
         return new ResponseEntity<>(nuevoInsumo, HttpStatus.CREATED);
     }
 
+    // Obtener un insumo por su id
     @GetMapping("/{id}")
     @Operation( summary = "Obtener insumo por id", description = "Permite obtener un insumo existente por su id" )
     @ApiResponses({
@@ -91,6 +93,7 @@ public class InsumoController {
         return new ResponseEntity<>(insumo, HttpStatus.OK);
     }
 
+    // Listar todos los insumos
     @GetMapping
     @Operation( summary = "Listar insumos", description = "Obtiene todos los insumos registrados" )
     @ApiResponses({
@@ -123,6 +126,7 @@ public class InsumoController {
         return new ResponseEntity<>(service.listarTodos(), HttpStatus.OK);
     }
 
+    // Actualizar un insumo completamente
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar insumo", description = "Permite actualizar un insumo por su id" )
     @ApiResponses({
@@ -156,6 +160,7 @@ public class InsumoController {
         return new ResponseEntity<>(insumoActualizado, HttpStatus.OK);
     }
 
+    // Eliminar un insumo por id
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar insumo", description = "Permite eliminar un insumo por su id" )
     @ApiResponses({
@@ -189,6 +194,7 @@ public class InsumoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // Actualizar solo campos específicos del insumo
     @PatchMapping("/{id}")
     @Operation(summary = "Actualizar parcialmente un insumo", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id del insumo")
     @ApiResponses({

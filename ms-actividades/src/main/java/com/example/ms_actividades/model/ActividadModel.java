@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Entidad que representa una actividad en la base de datos
 @Schema(name = "Actividad", description = "Representa una actividad en el sistema")
 @Entity
 @Table(name = "actividades")
@@ -28,5 +29,5 @@ public class ActividadModel {
     private String calendario;
 
     @Schema(description = "Id de la familia socia", example = "1")
-    private Long socioId;
+    private Long socioId; // id de la familia que realiza la actividad
 }

@@ -18,10 +18,12 @@ import org.springframework.http.HttpStatus;
 public class HuespedController {
     private final HuespedService huespedService;
 
+    // Inyectamos el servicio por constructor
     public HuespedController(HuespedService huespedService){
         this.huespedService = huespedService;
     }
 
+    // Devuelve todos los huéspedes registrados
     @GetMapping
     @Operation( summary = "Listar huespedes", description = "Obtiene a todos los huespedes registrados en el sistema" )
     @ApiResponses({
@@ -55,6 +57,7 @@ public class HuespedController {
 
     }
 
+    // Busca un huésped por su id
     @GetMapping("/{id}")
     @Operation( summary = "Listar huesped por id", description = "Permite obtener a un huesped mediante su id" )
     @ApiResponses({
@@ -94,6 +97,7 @@ public class HuespedController {
         return ResponseEntity.ok(huesped);
     }
 
+    // Registra un nuevo huésped en el sistema
     @PostMapping
     @Operation( summary = "Crear huesped", description = "Permite registrar a un huesped en el sistema" )
     @ApiResponses({
@@ -135,6 +139,7 @@ public class HuespedController {
         return ResponseEntity.ok(nuevoHuesped);
     }
 
+    // Reemplaza todos los datos de un huésped existente
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar huesped", description = "Permite actualizar a un huesped por id" )
     @ApiResponses({
@@ -174,6 +179,7 @@ public class HuespedController {
         return ResponseEntity.ok(huespedActualizado);
     }
 
+    // Elimina un huésped por su id
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar huesped", description = "Permite eliminar a un huesped registrado mediante su id" )
     @ApiResponses({
@@ -242,6 +248,7 @@ public class HuespedController {
             )
     })
 
+    // Actualiza solo los campos enviados en el Map, sin tocar el resto
     public ResponseEntity<?> actualizarParcialHuesped(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
 
         Huesped huespedActualizado = huespedService.actualizarParcial(id, campos);

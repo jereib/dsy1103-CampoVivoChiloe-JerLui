@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Schema(name = "Huesped DTO", description = "Un DTO que permite obtener ciertos atributos del modelo huesped de ms-huespedes")
 @Data
+// DTO que solo expone los datos necesarios del huésped (nombre, rut, correo)
 public class HuespedDTO {
 
     @Schema(description = "Identificador único", example = "1")

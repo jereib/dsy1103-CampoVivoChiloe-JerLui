@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// Configuración de Swagger/OpenAPI para documentar los endpoints
 @Configuration
 public class OpenApiConfig {
 

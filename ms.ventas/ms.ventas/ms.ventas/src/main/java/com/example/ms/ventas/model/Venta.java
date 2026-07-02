@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+// Entidad que representa una venta registrada en el sistema
 @Schema(name = "Venta", description = "Representa una venta registrada en el sistema")
 @Entity
 public class Venta {

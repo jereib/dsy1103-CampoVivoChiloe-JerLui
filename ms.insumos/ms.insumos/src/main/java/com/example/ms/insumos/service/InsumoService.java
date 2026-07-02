@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Lógica de negocio para la gestión de insumos
 @Service
 public class InsumoService {
 
@@ -19,6 +20,7 @@ public class InsumoService {
         this.repository = repository;
     }
 
+    // Crea un nuevo insumo a partir del DTO recibido
     public Insumo crearInsumo(InsumoRequestDTO dto) {
         log.info("Iniciando creación de nuevo insumo agrícola: {}", dto.getNombre());
         Insumo insumo = new Insumo();
@@ -32,6 +34,7 @@ public class InsumoService {
         return guardado;
     }
 
+    // Busca un insumo por id, lanza error si no existe
     public Insumo obtenerPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Insumo no encontrado con ID: " + id));
@@ -41,6 +44,7 @@ public class InsumoService {
         return repository.findAll();
     }
 
+    // Actualiza todos los campos de un insumo existente
     public Insumo actualizarInsumo(Long id, InsumoRequestDTO dto) {
         log.info("Actualizando insumo con ID: {}", id);
         Insumo insumo = obtenerPorId(id); // Reutilizamos el método para validar que existe
@@ -53,17 +57,20 @@ public class InsumoService {
         return repository.save(insumo);
     }
 
+    // Elimina un insumo por su id
     public void eliminarInsumo(Long id) {
         log.info("Eliminando insumo con ID: {}", id);
         Insumo insumo = obtenerPorId(id);
         repository.delete(insumo);
     }
 
+    // Actualiza solo los campos que vienen en el mapa (PATCH)
     public Insumo actualizarParcial(Long id, java.util.Map<String, Object> campos) {
         log.info("Iniciando actualización parcial (PATCH) para el insumo con ID: {}", id);
 
         Insumo insumoActual = obtenerPorId(id);
 
+        // Itera sobre los campos enviados y aplica solo los que corresponden
         campos.forEach((clave, valor) -> {
             switch (clave) {
                 case "nombre":

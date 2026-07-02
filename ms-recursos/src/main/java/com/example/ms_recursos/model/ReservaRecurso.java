@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+// Entidad que representa la reserva de un recurso por parte de un socio
 @Schema(name = "Recurso", description = "Representa un recurso del sistema")
 @Entity
 public class ReservaRecurso {
@@ -34,7 +35,7 @@ public class ReservaRecurso {
     @Schema(description = "Estado del recurso", example = "RESERVADO")
     private String estado;
 
-
+    // Constructor vacío necesario para JPA
     public ReservaRecurso() {
     }
 
@@ -48,6 +49,10 @@ public class ReservaRecurso {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getSocioId() {

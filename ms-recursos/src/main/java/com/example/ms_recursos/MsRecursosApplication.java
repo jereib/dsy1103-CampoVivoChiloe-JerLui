@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 //http://localhost:8088/swagger-ui.html
+
+// Punto de entrada del microservicio de recursos
 @SpringBootApplication
 @EnableFeignClients
 public class MsRecursosApplication {
