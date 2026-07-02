@@ -21,6 +21,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests unitarios para la lógica de negocio de ActividadesService.
+ * Verifica el comportamiento del servicio con mocks de repositorio y Feign client.
+ */
 @ExtendWith(MockitoExtension.class)
 class ActividadesServiceTest {
 

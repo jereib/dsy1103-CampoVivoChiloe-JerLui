@@ -9,10 +9,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-// Captura errores de validación y los devuelve campo por campo
+/**
+ * Manejador de excepciones para errores de validación de huéspedes.
+ * Atrapa errores de validación y los devuelve como un mapa campo -> mensaje de error.
+ */
 @RestControllerAdvice
 public class HuespedException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    /**
+     * Procesa errores de validación de los campos de Huesped.
+     *
+     * @param ex excepción lanzada por validación fallida.
+     * @return mapa con los nombres de campo y sus mensajes de error.
+     */
     public ResponseEntity<Map<String, String>>
     manejarErrores(MethodArgumentNotValidException ex){
 

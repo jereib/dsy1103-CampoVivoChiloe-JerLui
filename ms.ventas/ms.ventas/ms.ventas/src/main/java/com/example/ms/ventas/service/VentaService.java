@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// Lógica de negocio para la gestión de ventas
+/**
+ * Servicio que contiene la lógica de negocio para la gestión de ventas.
+ * Valida stock contra el microservicio de productos y realiza el registro
+ * de las ventas en la base de datos.
+ */
 @Service
 public class VentaService {
 
@@ -24,7 +28,14 @@ public class VentaService {
         this.productoClient = productoClient;
     }
 
-    // Registra una nueva venta validando que el producto exista y tenga stock
+    /**
+     * Registra una nueva venta validando que el producto exista en el catálogo
+     * y que tenga stock suficiente.
+     *
+     * @param dto datos de la venta a registrar
+     * @return la venta guardada con su total calculado
+     * @throws IllegalArgumentException si el producto no existe o el stock es insuficiente
+     */
     public Venta registrarVenta(VentaRequestDTO dto) {
         log.info("Iniciando registro de venta para el producto ID: {}", dto.getProductoId());
 
@@ -52,17 +63,35 @@ public class VentaService {
         log.info("Venta calculada con éxito. Total: {}", venta.getTotal());
         return repository.save(venta);
     }
+    /**
+     * Devuelve una lista con todas las ventas registradas.
+     *
+     * @return lista de ventas
+     */
     public List<Venta> listarTodas() {
         return repository.findAll();
     }
 
-    // Busca una venta por id, lanza error si no existe
+    /**
+     * Busca una venta por su id. Lanza una excepción si no existe.
+     *
+     * @param id identificador de la venta
+     * @return la venta encontrada
+     * @throws IllegalArgumentException si no se encuentra ninguna venta con ese id
+     */
     public Venta obtenerPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Venta no encontrada con ID: " + id));
     }
 
-    // Actualiza cantidad y canal de una venta existente
+    /**
+     * Actualiza la cantidad y el canal de una venta existente.
+     *
+     * @param id  identificador de la venta a actualizar
+     * @param dto datos nuevos (cantidad y canal)
+     * @return la venta actualizada
+     * @throws IllegalArgumentException si la venta no existe
+     */
     public Venta actualizarVenta(Long id, VentaRequestDTO dto) {
         log.info("Actualizando venta con ID: {}", id);
         Venta venta = obtenerPorId(id);
@@ -73,14 +102,28 @@ public class VentaService {
         return repository.save(venta);
     }
 
-    // Elimina una venta por su id
+    /**
+     * Elimina una venta del sistema según su id.
+     *
+     * @param id identificador de la venta a eliminar
+     * @throws IllegalArgumentException si la venta no existe
+     */
     public void eliminarVenta(Long id) {
         log.info("Eliminando venta con ID: {}", id);
         Venta venta = obtenerPorId(id);
         repository.delete(venta);
     }
 
-    // Actualiza solo los campos que vienen en el mapa (PATCH)
+    /**
+     * Actualiza solo los campos enviados en el mapa (PATCH).
+     * Si se modifica la cantidad, recalcula el total y valida stock.
+     *
+     * @param id     identificador de la venta
+     * @param campos mapa con los campos a actualizar
+     * @return la venta con los cambios aplicados
+     * @throws IllegalArgumentException si la venta no existe, el stock es insuficiente
+     *                                  o el servicio de productos no responde
+     */
     public Venta actualizarParcial(Long id, java.util.Map<String, Object> campos) {
         log.info("Iniciando actualización parcial (PATCH) para la venta con ID: {}", id);
 

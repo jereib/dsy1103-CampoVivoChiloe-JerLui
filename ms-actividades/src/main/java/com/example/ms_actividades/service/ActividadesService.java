@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servicio que contiene la lógica de negocio de las actividades.
+ * Se encarga de coordinar el repositorio JPA y el cliente Feign
+ * para armar la respuesta con los datos del socio.
+ */
 @Service
 public class ActividadesService {
 
@@ -25,7 +30,13 @@ public class ActividadesService {
     @Autowired
     private SocioClient socioClient; // para llamar al ms-socios
 
-    // Buscar una actividad por id y devolverla con el nombre del socio
+    /**
+     * Obtiene una actividad por su id y le asigna el nombre del socio.
+     *
+     * @param id identificador de la actividad.
+     * @return DTO con los datos de la actividad y el nombre del socio.
+     * @throws RuntimeException si la actividad no existe o falla la comunicación con ms-socios.
+     */
     public ActividadesResponseDTO obtenerActividad(Long id){
         log.info("Petición para obtener detalles de la actividad con ID: [{}]", id);
 
@@ -59,7 +70,12 @@ public class ActividadesService {
         return response;
     }
 
-    // Guardar una nueva actividad en la base de datos
+    /**
+     * Guarda una nueva actividad en la base de datos.
+     *
+     * @param actividad datos de la actividad a crear.
+     * @return la actividad creada con su id generado.
+     */
     public ActividadModel crearActividad(ActividadModel actividad){
         log.info("Iniciando creación de una nueva actividad: [{}]", actividad.getNombreActividad());
         try {
@@ -72,7 +88,13 @@ public class ActividadesService {
         }
     }
 
-    // Trae todas las actividades y les asigna el nombre del socio correspondiente
+    /**
+     * Lista todas las actividades con el nombre del socio en cada una.
+     * Si falla la comunicación con ms-socios para alguna actividad,
+     * esa actividad se omite pero el resto se sigue procesando.
+     *
+     * @return lista de DTOs con los datos de cada actividad y su socio.
+     */
     public List<ActividadesResponseDTO> listarActividades(){
         log.info("Solicitando listado completo de actividades");
         List<ActividadModel> actividades = actividadRepository.findAll();
@@ -106,7 +128,14 @@ public class ActividadesService {
         return respuesta;
     }
 
-    // Reemplaza todos los campos de una actividad
+    /**
+     * Reemplaza todos los campos de una actividad existente.
+     *
+     * @param id                  identificador de la actividad.
+     * @param actividadActualizada datos nuevos de la actividad.
+     * @return la actividad actualizada.
+     * @throws RuntimeException si la actividad no existe.
+     */
     public ActividadModel actualizarActividad(Long id, ActividadModel actividadActualizada){
         log.info("Petición recibida para actualizar (PUT) la actividad con ID: [{}]", id);
 
@@ -131,7 +160,12 @@ public class ActividadesService {
         }
     }
 
-    // Elimina una actividad por su id
+    /**
+     * Elimina una actividad de la base de datos.
+     *
+     * @param id identificador de la actividad a eliminar.
+     * @throws RuntimeException si la actividad no existe.
+     */
     public void eliminarActividad(Long id){
         log.info("Petición recibida para eliminar la actividad con ID: [{}]", id);
 
@@ -150,7 +184,15 @@ public class ActividadesService {
         }
     }
 
-    // Actualiza solo los campos que vienen en el mapa (PATCH)
+    /**
+     * Actualiza solo los campos indicados en el mapa (PATCH).
+     * Los campos válidos son: nombreActividad, descripcion, calendario y socioId.
+     *
+     * @param id     identificador de la actividad.
+     * @param campos mapa con los nombres de campo y sus nuevos valores.
+     * @return la actividad con los cambios aplicados.
+     * @throws RuntimeException si la actividad no existe.
+     */
     public ActividadModel actualizarParcial(Long id, Map<String, Object> campos) {
         log.info("Petición recibida para actualización parcial (PATCH) de la actividad con ID: [{}]", id);
 

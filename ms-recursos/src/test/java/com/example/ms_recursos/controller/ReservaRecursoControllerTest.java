@@ -18,6 +18,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Tests de integracion para el controlador ReservaRecursoController.
+ * Usa MockMvc para simular peticiones HTTP y mockea el servicio.
+ */
 @WebMvcTest(ReservaRecursoController.class)
 class ReservaRecursoControllerTest {
 
@@ -29,11 +33,17 @@ class ReservaRecursoControllerTest {
     @MockitoBean
     private ReservaRecursoService reservaRecursoService;
 
+    /**
+     * Inicializa el ObjectMapper antes de cada test.
+     */
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
     }
 
+    /**
+     * Al listar recursos se espera codigo 200.
+     */
     @Test
     void listar_debeRetornar200() throws Exception {
         when(reservaRecursoService.listar()).thenReturn(List.of());
@@ -42,6 +52,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Al buscar un recurso existente se espera codigo 200 y el nombre del recurso.
+     */
     @Test
     void buscar_debeRetornar200_cuandoExiste() throws Exception {
         ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
@@ -53,6 +66,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(jsonPath("$.nombreRecurso").value("Tractor"));
     }
 
+    /**
+     * Al buscar un recurso que no existe se espera codigo 404.
+     */
     @Test
     void buscar_debeRetornar404_cuandoNoExiste() throws Exception {
         when(reservaRecursoService.buscarPorId(99L)).thenReturn(null);
@@ -61,6 +77,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Al crear un recurso valido se espera codigo 201.
+     */
     @Test
     void crear_debeRetornar201() throws Exception {
         ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
@@ -74,6 +93,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * Al crear un recurso y el servicio lanza excepcion se espera codigo 400.
+     */
     @Test
     void crear_debeRetornar400_cuandoServiceLanzaExcepcion() throws Exception {
         ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
@@ -85,6 +107,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Al actualizar un recurso existente se espera codigo 200.
+     */
     @Test
     void actualizar_debeRetornar200() throws Exception {
         ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
@@ -98,6 +123,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Al eliminar un recurso existente se espera codigo 204.
+     */
     @Test
     void eliminar_debeRetornar204() throws Exception {
         when(reservaRecursoService.eliminar(1L)).thenReturn(true);
@@ -106,6 +134,9 @@ class ReservaRecursoControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    /**
+     * Al eliminar un recurso que no existe se espera codigo 404.
+     */
     @Test
     void eliminar_debeRetornar404_cuandoNoExiste() throws Exception {
         when(reservaRecursoService.eliminar(99L)).thenReturn(false);

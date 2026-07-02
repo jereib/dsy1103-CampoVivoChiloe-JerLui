@@ -19,6 +19,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(SocioController.class)
+/**
+ * Pruebas unitarias del controlador SocioController.
+ * Verifica que los endpoints respondan correctamente y manejen los errores esperados.
+ */
 class SocioControllerTest {
 
     @Autowired
@@ -27,6 +31,9 @@ class SocioControllerTest {
     @MockitoBean
     private SocioService socioService;
 
+    /**
+     * Verifica que listar socios devuelva una lista con los socios mockeados.
+     */
     @Test
     void listarSocios_debeRetornarLista() throws Exception {
         List<Socio> socios = List.of(
@@ -40,6 +47,9 @@ class SocioControllerTest {
                 .andExpect(jsonPath("$[0].socio").value("Los Krausse"));
     }
 
+    /**
+     * Verifica que buscar por ID devuelva el socio cuando existe.
+     */
     @Test
     void buscarPorId_debeRetornarSocio() throws Exception {
         Socio socio = new Socio(1L, "Los Krausse", "Los abetos", 15, Estado.DISPONIBLE);
@@ -50,6 +60,9 @@ class SocioControllerTest {
                 .andExpect(jsonPath("$.socio").value("Los Krausse"));
     }
 
+    /**
+     * Verifica que buscar por ID devuelva 400 cuando el socio no existe.
+     */
     @Test
     void buscarPorId_debeRetornar400_cuandoNoExiste() throws Exception {
         when(socioService.buscarPorId(999L)).thenReturn(null);
@@ -59,6 +72,9 @@ class SocioControllerTest {
                 .andExpect(content().string("El id ingresado no existe"));
     }
 
+    /**
+     * Verifica que filtrar por estado devuelva los socios correspondientes.
+     */
     @Test
     void obtenerSocioPorEstado_debeRetornarListaFiltrada() throws Exception {
         List<Socio> socios = List.of(
@@ -71,6 +87,9 @@ class SocioControllerTest {
                 .andExpect(jsonPath("$.size()").value(1));
     }
 
+    /**
+     * Verifica que un estado inválido devuelva 400 con el mensaje adecuado.
+     */
     @Test
     void obtenerSocioPorEstado_debeRetornar400_cuandoEstadoInvalido() throws Exception {
         mockMvc.perform(get("/api/v1/socios/estado/INVALIDO"))
@@ -78,6 +97,9 @@ class SocioControllerTest {
                 .andExpect(content().string("El estado ingresado no existe"));
     }
 
+    /**
+     * Verifica que guardar un socio válido devuelva 200 con los datos del socio.
+     */
     @Test
     void guardarSocio_debeRetornar200() throws Exception {
         Socio guardado = new Socio(1L, "Los Krausse", "Los abetos", 15, Estado.DISPONIBLE);
@@ -99,6 +121,9 @@ class SocioControllerTest {
                 .andExpect(jsonPath("$.socio").value("Los Krausse"));
     }
 
+    /**
+     * Verifica que guardar un socio duplicado devuelva 400.
+     */
     @Test
     void guardarSocio_debeRetornar400_cuandoDuplicado() throws Exception {
         when(socioService.guardarSocio(any(Socio.class))).thenReturn(null);
@@ -119,6 +144,9 @@ class SocioControllerTest {
                 .andExpect(content().string("Ya existe un socio con ese nombre"));
     }
 
+    /**
+     * Verifica que actualizar un socio existente devuelva 200 con los datos modificados.
+     */
     @Test
     void actualizarSocio_debeRetornar200() throws Exception {
         Socio actualizado = new Socio(1L, "Los Krausse Updated", "El mirador", 20, Estado.SUSPENDIDO);
@@ -140,6 +168,9 @@ class SocioControllerTest {
                 .andExpect(jsonPath("$.socio").value("Los Krausse Updated"));
     }
 
+    /**
+     * Verifica que actualizar un socio inexistente devuelva 400.
+     */
     @Test
     void actualizarSocio_debeRetornar400_cuandoNoExiste() throws Exception {
         when(socioService.actualizarPorId(anyLong(), any(Socio.class))).thenReturn(null);
@@ -160,6 +191,9 @@ class SocioControllerTest {
                 .andExpect(content().string("El socio no existe"));
     }
 
+    /**
+     * Verifica que eliminar un socio existente devuelva 200.
+     */
     @Test
     void eliminarSocio_debeRetornar200() throws Exception {
         when(socioService.eliminarSocio(1L)).thenReturn(true);
@@ -169,6 +203,9 @@ class SocioControllerTest {
                 .andExpect(content().string("Socio eliminado correctamente"));
     }
 
+    /**
+     * Verifica que eliminar un socio inexistente devuelva 400.
+     */
     @Test
     void eliminarSocio_debeRetornar400_cuandoNoExiste() throws Exception {
         when(socioService.eliminarSocio(999L)).thenReturn(false);
@@ -178,6 +215,9 @@ class SocioControllerTest {
                 .andExpect(content().string("El socio no existe"));
     }
 
+    /**
+     * Verifica que actualizar parcialmente un socio devuelva 200 con los cambios aplicados.
+     */
     @SuppressWarnings("unchecked")
     @Test
     void actualizarParcialSocio_debeRetornar200() throws Exception {
@@ -197,6 +237,9 @@ class SocioControllerTest {
                 .andExpect(jsonPath("$.socio").value("Los Krausse Modificado"));
     }
 
+    /**
+     * Verifica que actualizar parcialmente un socio inexistente devuelva 404.
+     */
     @SuppressWarnings("unchecked")
     @Test
     void actualizarParcialSocio_debeRetornar404_cuandoNoExiste() throws Exception {

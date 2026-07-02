@@ -9,18 +9,33 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// Lógica de negocio para la gestión de productos
+/**
+ * Servicio que contiene la lógica de negocio para la gestión de productos.
+ * Valida el margen de precio antes de crear o actualizar un producto.
+ */
 @Service
 public class ProductoService {
 
     private static final Logger log = LoggerFactory.getLogger(ProductoService.class);
     private final ProductoRepository repository;
 
+    /**
+     * Constructor que inyecta el repositorio de productos.
+     *
+     * @param repository repositorio JPA para persistir productos
+     */
     public ProductoService(ProductoRepository repository) {
         this.repository = repository;
     }
 
-    // Crea un producto validando que el precio tenga al menos 20% de margen
+    /**
+     * Crea un producto validando que el precio tenga al menos un 20% de margen
+     * sobre el costo de producción.
+     *
+     * @param dto datos del producto a crear
+     * @return el producto guardado
+     * @throws IllegalArgumentException si el precio no cumple el margen mínimo
+     */
     public Producto crearProducto(ProductoRequestDTO dto) {
         double precioMinimo = dto.getCostoProduccion() * 1.20;
 
@@ -39,17 +54,36 @@ public class ProductoService {
         return repository.save(producto);
     }
 
-    // Busca un producto por id, lanza error si no existe
+    /**
+     * Busca un producto por su id. Lanza excepción si no existe.
+     *
+     * @param id identificador del producto
+     * @return el producto encontrado
+     * @throws IllegalArgumentException si no se encuentra el producto
+     */
     public Producto obtenerProductoPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado con ID: " + id));
     }
 
+    /**
+     * Retorna todos los productos registrados en la base de datos.
+     *
+     * @return lista de productos
+     */
     public List<Producto> listarTodos() {
         return repository.findAll();
     }
 
-    // Actualiza todos los campos de un producto existente
+    /**
+     * Actualiza todos los campos de un producto existente.
+     * Valida el margen mínimo del 20% antes de guardar.
+     *
+     * @param id  identificador del producto a actualizar
+     * @param dto nuevos datos del producto
+     * @return el producto actualizado
+     * @throws IllegalArgumentException si no se encuentra el producto o el margen es inválido
+     */
     public Producto actualizarProducto(Long id, ProductoRequestDTO dto) {
         log.info("Iniciando actualización de producto con ID: {}", id);
         Producto producto = obtenerProductoPorId(id);
@@ -69,7 +103,12 @@ public class ProductoService {
         return repository.save(producto);
     }
 
-    // Elimina un producto por su id
+    /**
+     * Elimina un producto del sistema por su id.
+     *
+     * @param id identificador del producto a eliminar
+     * @throws IllegalArgumentException si no se encuentra el producto
+     */
     public void eliminarProducto(Long id) {
         log.info("Iniciando eliminación de producto con ID: {}", id);
         Producto producto = obtenerProductoPorId(id);
@@ -77,7 +116,15 @@ public class ProductoService {
         log.info("Producto con ID {} eliminado exitosamente", id);
     }
 
-    // Actualiza solo los campos que vienen en el mapa (PATCH)
+    /**
+     * Actualiza solo los campos enviados en el mapa (PATCH).
+     * Vuelve a validar el margen si se modificó el precio o el costo de producción.
+     *
+     * @param id     identificador del producto
+     * @param campos mapa con los campos a modificar
+     * @return el producto actualizado
+     * @throws IllegalArgumentException si el margen deja de cumplirse
+     */
     public Producto actualizarParcial(Long id, java.util.Map<String, Object> campos) {
         log.info("Iniciando actualización parcial (PATCH) para el producto con ID: {}", id);
 

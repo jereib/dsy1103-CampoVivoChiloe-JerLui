@@ -5,9 +5,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //http://localhost:8083/swagger-ui.html
 @SpringBootApplication
+/**
+ * Clase principal del microservicio ms-huespedes.
+ * Inicia la aplicación Spring Boot y sus componentes.
+ */
 public class MsHuespedesApplication {
 
-	// Punto de entrada del microservicio de huéspedes
+	/**
+	 * Punto de entrada del microservicio de huéspedes.
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(MsHuespedesApplication.class, args);
 	}

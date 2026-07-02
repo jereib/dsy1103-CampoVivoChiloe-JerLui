@@ -6,9 +6,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+/**
+ * Configuración de Swagger/OpenAPI para el microservicio.
+ * Define la información descriptiva que aparece en la interfaz de Swagger UI.
+ */
 public class OpenApiConfig {
 
-    // Configuración de Swagger para documentar los endpoints
+    /**
+     * Configura y expone el bean de OpenAPI para documentar los endpoints
+     * del microservicio con Swagger.
+     *
+     * @return objeto OpenAPI con la información de la API.
+     */
     @Bean
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()

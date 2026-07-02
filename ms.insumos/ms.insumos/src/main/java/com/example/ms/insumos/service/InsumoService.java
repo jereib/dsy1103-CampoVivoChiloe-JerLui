@@ -9,18 +9,31 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// Lógica de negocio para la gestión de insumos
+/**
+ * Servicio que contiene la lógica de negocio para la gestión de insumos.
+ * Interactúa con el repositorio para realizar operaciones CRUD.
+ */
 @Service
 public class InsumoService {
 
     private static final Logger log = LoggerFactory.getLogger(InsumoService.class);
     private final InsumoRepository repository;
 
+    /**
+     * Constructor que inyecta el repositorio de insumos.
+     *
+     * @param repository repositorio JPA para la entidad Insumo
+     */
     public InsumoService(InsumoRepository repository) {
         this.repository = repository;
     }
 
-    // Crea un nuevo insumo a partir del DTO recibido
+    /**
+     * Crea un nuevo insumo a partir de los datos del DTO.
+     *
+     * @param dto datos del insumo a crear
+     * @return el insumo recién guardado
+     */
     public Insumo crearInsumo(InsumoRequestDTO dto) {
         log.info("Iniciando creación de nuevo insumo agrícola: {}", dto.getNombre());
         Insumo insumo = new Insumo();
@@ -34,17 +47,35 @@ public class InsumoService {
         return guardado;
     }
 
-    // Busca un insumo por id, lanza error si no existe
+    /**
+     * Busca un insumo por su id. Lanza una excepción si no existe.
+     *
+     * @param id identificador del insumo
+     * @return el insumo encontrado
+     * @throws RuntimeException si el insumo no existe
+     */
     public Insumo obtenerPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Insumo no encontrado con ID: " + id));
     }
 
+    /**
+     * Retorna todos los insumos registrados en la base de datos.
+     *
+     * @return lista de insumos
+     */
     public List<Insumo> listarTodos() {
         return repository.findAll();
     }
 
-    // Actualiza todos los campos de un insumo existente
+    /**
+     * Actualiza todos los campos de un insumo existente.
+     *
+     * @param id  identificador del insumo a actualizar
+     * @param dto datos nuevos del insumo
+     * @return el insumo actualizado
+     * @throws RuntimeException si el insumo no existe
+     */
     public Insumo actualizarInsumo(Long id, InsumoRequestDTO dto) {
         log.info("Actualizando insumo con ID: {}", id);
         Insumo insumo = obtenerPorId(id); // Reutilizamos el método para validar que existe
@@ -57,14 +88,27 @@ public class InsumoService {
         return repository.save(insumo);
     }
 
-    // Elimina un insumo por su id
+    /**
+     * Elimina un insumo por su id.
+     *
+     * @param id identificador del insumo a eliminar
+     * @throws RuntimeException si el insumo no existe
+     */
     public void eliminarInsumo(Long id) {
         log.info("Eliminando insumo con ID: {}", id);
         Insumo insumo = obtenerPorId(id);
         repository.delete(insumo);
     }
 
-    // Actualiza solo los campos que vienen en el mapa (PATCH)
+    /**
+     * Actualiza solo los campos enviados en el mapa (PATCH).
+     * Reconoce "nombre", "descripcion", "stock" y "precioUnidad". Ignora campos desconocidos.
+     *
+     * @param id     identificador del insumo a modificar
+     * @param campos mapa con los campos a actualizar
+     * @return el insumo con los cambios aplicados
+     * @throws RuntimeException si el insumo no existe
+     */
     public Insumo actualizarParcial(Long id, java.util.Map<String, Object> campos) {
         log.info("Iniciando actualización parcial (PATCH) para el insumo con ID: {}", id);
 

@@ -6,10 +6,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+/**
+ * Configuración de Swagger/OpenAPI para el microservicio ms-fondo.
+ * Expone la documentación interactiva de la API.
+ */
 public class OpenApiConfig {
 
-    // Documentación Swagger del microservicio
     @Bean
+    /**
+     * Configura la información general de la API de fondos.
+     *
+     * @return objeto OpenAPI con el título, descripción y versión.
+     */
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()
                 .info(

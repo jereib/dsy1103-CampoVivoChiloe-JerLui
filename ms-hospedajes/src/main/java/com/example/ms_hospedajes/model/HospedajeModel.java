@@ -11,7 +11,10 @@ import lombok.Data;
 @Schema(name = "Hospedaje", description = "Representa un hospedaje en el sistema")
 @Data
 @Entity
-// Tabla intermedia que relaciona un socio con un huésped
+/**
+ * Entidad que representa la relación entre un socio y un huésped.
+ * Funciona como tabla intermedia en la base de datos.
+ */
 public class HospedajeModel {
     @Schema(description = "Identificador único", example = "1")
     @Id

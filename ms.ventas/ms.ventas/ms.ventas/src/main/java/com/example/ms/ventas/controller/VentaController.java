@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador encargado de gestionar las operaciones relacionadas con las ventas.
+ * Expone los endpoints REST para el CRUD de ventas y actualizaciones parciales.
+ */
 @RestController
 @RequestMapping("/api/v1/ventas")
 @Tag( name = "Ventas", description = "Operaciones relacionadas con las ventas")
@@ -25,7 +29,9 @@ public class VentaController {
         this.service = service;
     }
 
-    // Registrar una nueva venta
+    /**
+     * Registra una nueva venta en el sistema a partir de los datos enviados.
+     */
     @PostMapping
     @Operation( summary = "Crear venta", description = "Permite crear una venta con sus atributos" )
     @ApiResponses({
@@ -58,7 +64,9 @@ public class VentaController {
         Venta nuevaVenta = service.registrarVenta(dto);
         return new ResponseEntity<>(nuevaVenta, HttpStatus.CREATED);
     }
-    // Listar todas las ventas
+    /**
+     * Obtiene todas las ventas registradas en el sistema.
+     */
     @GetMapping
     @Operation( summary = "Listar ventas", description = "Obtiene todas las ventas registradas" )
     @ApiResponses({
@@ -91,7 +99,9 @@ public class VentaController {
         return new ResponseEntity<>(service.listarTodas(), HttpStatus.OK);
     }
 
-    // Obtener una venta por su id
+    /**
+     * Busca y devuelve una venta específica según su id.
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Listar venta por id", description = "Obtiene una venta registrada mediante su id" )
     @ApiResponses({
@@ -124,7 +134,9 @@ public class VentaController {
         return new ResponseEntity<>(service.obtenerPorId(id), HttpStatus.OK);
     }
 
-    // Actualizar una venta completamente
+    /**
+     * Reemplaza completamente los datos de una venta existente.
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar venta", description = "Permite actualizar una venta registrada mediante su id" )
     @ApiResponses({
@@ -158,7 +170,9 @@ public class VentaController {
         return new ResponseEntity<>(ventaActualizada, HttpStatus.OK);
     }
 
-    // Eliminar una venta por id
+    /**
+     * Elimina una venta del sistema según su id.
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Borrar venta", description = "Permite borrar una venta registrada mediante su id" )
     @ApiResponses({
@@ -192,7 +206,9 @@ public class VentaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Actualizar solo campos específicos de la venta
+    /**
+     * Actualiza parcialmente una venta, modificando solo los campos enviados.
+     */
     @PatchMapping("/{id}")
     @Operation( summary = "Actualizar parcialmente una venta", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id de la venta" )
     @ApiResponses({

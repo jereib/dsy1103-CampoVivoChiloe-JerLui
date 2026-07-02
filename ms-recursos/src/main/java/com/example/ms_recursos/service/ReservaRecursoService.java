@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// Lógica de negocio para reservas de recursos
+/**
+ * Servicio que contiene la logica de negocio para gestionar reservas de
+ * recursos. Valida deudas del socio antes de permitir una reserva.
+ */
 @Service
 public class ReservaRecursoService {
 
@@ -24,7 +27,11 @@ public class ReservaRecursoService {
         this.fondoClient = fondoClient;
     }
 
-    // Obtener todos los recursos sin filtro
+    /**
+     * Retorna todos los recursos registrados sin aplicar ningun filtro.
+     *
+     * @return lista de recursos
+     */
     public List<ReservaRecurso> listar() {
         log.info("Listando todos los recursos registrados");
         List<ReservaRecurso> recursos = reservaRecursoRepository.findAll();
@@ -32,13 +39,26 @@ public class ReservaRecursoService {
         return recursos;
     }
 
-    // Buscar recurso por id, retorna null si no existe
+    /**
+     * Busca un recurso por su id. Retorna null si no existe.
+     *
+     * @param id identificador del recurso
+     * @return recurso encontrado o null
+     */
     public ReservaRecurso buscarPorId(Long id) {
         log.debug("Buscando recurso por ID: {}", id);
         return reservaRecursoRepository.findById(id).orElse(null);
     }
 
-    // Guarda una reserva pero antes valida que el socio no tenga deuda
+    /**
+     * Guarda una reserva de recurso. Antes de persistir, consulta al
+     * microservicio ms-fondo para verificar que el socio no tenga deuda
+     * activa.
+     *
+     * @param reserva datos de la reserva
+     * @return reserva guardada
+     * @throws RuntimeException si el socio tiene deuda o no se puede validar
+     */
     public ReservaRecurso guardar(ReservaRecurso reserva) {
         log.info("Validando deuda del socio ID: {} antes de reservar recurso", reserva.getSocioId());
 
@@ -62,7 +82,12 @@ public class ReservaRecursoService {
         return reservaRecursoRepository.save(reserva);
     }
 
-    // Elimina un recurso si existe, retorna false si no se encontró
+    /**
+     * Elimina un recurso por su id. Retorna false si no se encuentra.
+     *
+     * @param id identificador del recurso a eliminar
+     * @return true si se elimino, false si no existia
+     */
     public boolean eliminar(Long id) {
         log.info("Eliminando recurso con ID: {}", id);
         ReservaRecurso r = buscarPorId(id);

@@ -19,6 +19,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Pruebas unitarias del controlador LiquidacionController.
+ * Verifica que los endpoints respondan correctamente según cada escenario.
+ */
 @WebMvcTest(LiquidacionController.class)
 class LiquidacionControllerTest {
 
@@ -30,11 +34,17 @@ class LiquidacionControllerTest {
     @MockitoBean
     private LiquidacionService liquidacionService;
 
+    /**
+     * Prepara el ObjectMapper antes de cada prueba.
+     */
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
     }
 
+    /**
+     * Verifica que listar liquidaciones retorne 200 OK.
+     */
     @Test
     void listar_debeRetornar200() throws Exception {
         when(liquidacionService.listar()).thenReturn(List.of());
@@ -43,6 +53,9 @@ class LiquidacionControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Verifica que generar liquidación retorne 200 con los datos correctos.
+     */
     @Test
     void generar_debeRetornar200() throws Exception {
         Liquidacion l = new Liquidacion(1L, 200000, 50000, 150000);
@@ -54,6 +67,9 @@ class LiquidacionControllerTest {
                 .andExpect(jsonPath("$.total").value(150000));
     }
 
+    /**
+     * Verifica que crear una liquidación retorne 201 Created.
+     */
     @Test
     void crear_debeRetornar201() throws Exception {
         Liquidacion l = new Liquidacion(1L, 200000, 50000, 150000);
@@ -65,6 +81,9 @@ class LiquidacionControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * Verifica que crear retorne 400 cuando el servicio lanza una excepción.
+     */
     @Test
     void crear_debeRetornar400_cuandoServiceLanzaExcepcion() throws Exception {
         Liquidacion l = new Liquidacion(1L, 200000, 50000, 150000);
@@ -76,6 +95,9 @@ class LiquidacionControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Verifica que actualizar una liquidación existente retorne 200 OK.
+     */
     @Test
     void actualizar_debeRetornar200() throws Exception {
         Liquidacion l = new Liquidacion(1L, 200000, 0, 200000);
@@ -87,6 +109,9 @@ class LiquidacionControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Verifica que actualizar retorne 404 cuando la liquidación no existe.
+     */
     @Test
     void actualizar_debeRetornar404_cuandoNoExiste() throws Exception {
         Liquidacion l = new Liquidacion(1L, 200000, 0, 200000);
@@ -98,6 +123,9 @@ class LiquidacionControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Verifica que eliminar una liquidación existente retorne 204 No Content.
+     */
     @Test
     void eliminar_debeRetornar204() throws Exception {
         when(liquidacionService.eliminar(1L)).thenReturn(true);
@@ -106,6 +134,9 @@ class LiquidacionControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    /**
+     * Verifica que eliminar retorne 404 cuando la liquidación no existe.
+     */
     @Test
     void eliminar_debeRetornar404_cuandoNoExiste() throws Exception {
         when(liquidacionService.eliminar(99L)).thenReturn(false);

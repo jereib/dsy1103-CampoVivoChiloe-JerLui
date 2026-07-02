@@ -17,6 +17,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Pruebas unitarias del controlador HuespedController.
+ * Simula peticiones HTTP y verifica las respuestas del controlador.
+ */
 @WebMvcTest(HuespedController.class)
 class HuespedControllerTest {
 
@@ -26,6 +30,9 @@ class HuespedControllerTest {
     @MockitoBean
     private HuespedService huespedService;
 
+    /**
+     * Verifica que listar todos los huéspedes retorna una lista con código 200.
+     */
     @Test
     void listarHuespedes_debeRetornarLista() throws Exception {
         List<Huesped> huespedes = List.of(
@@ -39,6 +46,9 @@ class HuespedControllerTest {
                 .andExpect(jsonPath("$[0].nombreCompleto").value("Benjamin agüero"));
     }
 
+    /**
+     * Verifica que buscar un huésped por id retorna el huésped con código 200.
+     */
     @Test
     void buscarPorId_debeRetornarHuesped() throws Exception {
         Huesped huesped = new Huesped(1L, "Benjamin agüero", "21659428-2", 21, "chileno", "historial", "benja123@gmail.com");
@@ -49,6 +59,9 @@ class HuespedControllerTest {
                 .andExpect(jsonPath("$.nombreCompleto").value("Benjamin agüero"));
     }
 
+    /**
+     * Verifica que buscar un huésped inexistente retorna código 400.
+     */
     @Test
     void buscarPorId_debeRetornar400_cuandoNoExiste() throws Exception {
         when(huespedService.buscarPorId(999L)).thenReturn(null);
@@ -58,6 +71,9 @@ class HuespedControllerTest {
                 .andExpect(content().string("El id ingresado no existe"));
     }
 
+    /**
+     * Verifica que guardar un huésped retorna código 200.
+     */
     @Test
     void guardarHuesped_debeRetornar200() throws Exception {
         Huesped guardado = new Huesped(1L, "Benjamin agüero", "21659428-2", 21, "chileno", "historial", "benja123@gmail.com");
@@ -81,6 +97,9 @@ class HuespedControllerTest {
                 .andExpect(jsonPath("$.nombreCompleto").value("Benjamin agüero"));
     }
 
+    /**
+     * Verifica que guardar un huésped duplicado retorna código 400.
+     */
     @Test
     void guardarHuesped_debeRetornar400_cuandoDuplicado() throws Exception {
         when(huespedService.guardarHuesped(any(Huesped.class))).thenReturn(null);
@@ -103,6 +122,9 @@ class HuespedControllerTest {
                 .andExpect(content().string("Ya existe un huesped con ese nombre"));
     }
 
+    /**
+     * Verifica que actualizar un huésped existente retorna código 200.
+     */
     @Test
     void actualizarHuesped_debeRetornar200() throws Exception {
         Huesped actualizado = new Huesped(1L, "Benjamin agüero update", "21659428-2", 22, "turista", "nuevo historial", "nuevo@gmail.com");
@@ -126,6 +148,9 @@ class HuespedControllerTest {
                 .andExpect(jsonPath("$.nombreCompleto").value("Benjamin agüero update"));
     }
 
+    /**
+     * Verifica que actualizar un huésped inexistente retorna código 400.
+     */
     @Test
     void actualizarHuesped_debeRetornar400_cuandoNoExiste() throws Exception {
         when(huespedService.actualizarPorId(anyLong(), any(Huesped.class))).thenReturn(null);
@@ -148,6 +173,9 @@ class HuespedControllerTest {
                 .andExpect(content().string("El huesped no existe"));
     }
 
+    /**
+     * Verifica que eliminar un huésped existente retorna código 200.
+     */
     @Test
     void eliminarHuesped_debeRetornar200() throws Exception {
         when(huespedService.eliminarHuesped(1L)).thenReturn(true);
@@ -157,6 +185,9 @@ class HuespedControllerTest {
                 .andExpect(content().string("Huesped eliminado correctamente"));
     }
 
+    /**
+     * Verifica que eliminar un huésped inexistente retorna código 400.
+     */
     @Test
     void eliminarHuesped_debeRetornar400_cuandoNoExiste() throws Exception {
         when(huespedService.eliminarHuesped(999L)).thenReturn(false);
@@ -167,6 +198,9 @@ class HuespedControllerTest {
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * Verifica que actualizar parcialmente un huésped retorna código 200.
+     */
     @Test
     void actualizarParcialHuesped_debeRetornar200() throws Exception {
         Huesped actualizado = new Huesped(1L, "Benjamin modificado", "21659428-2", 21, "chileno", "historial", "benja123@gmail.com");
@@ -186,6 +220,9 @@ class HuespedControllerTest {
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * Verifica que actualizar parcialmente un huésped inexistente retorna código 404.
+     */
     @Test
     void actualizarParcialHuesped_debeRetornar404_cuandoNoExiste() throws Exception {
         when(huespedService.actualizarParcial(anyLong(), any(Map.class))).thenReturn(null);

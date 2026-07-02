@@ -5,11 +5,19 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuración de OpenAPI / Swagger para el microservicio de hospedajes.
+ * Define la información básica de la API (título, descripción, versión).
+ */
 @Configuration
 public class OpenApiConfig {
 
+    /**
+     * Crea y configura el bean de OpenAPI con la metadata del microservicio.
+     *
+     * @return objeto OpenAPI con la configuración de la documentación.
+     */
     @Bean
-    // Configuración de Swagger para documentar los endpoints de hospedajes
     public OpenAPI configurarOpenApi() {
         return new OpenAPI()
                 .info(

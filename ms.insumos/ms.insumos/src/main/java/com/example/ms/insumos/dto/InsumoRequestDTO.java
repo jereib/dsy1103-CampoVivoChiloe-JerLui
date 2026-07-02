@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-// DTO para recibir los datos de un insumo desde el cliente
+/**
+ * DTO que transporta los datos de un insumo desde las peticiones del cliente.
+ * Incluye validaciones para asegurar que los campos obligatorios sean enviados.
+ */
 @Schema(name = "Insumo DTO", description = "Un DTO que permite obtener ciertos atributos de un insumo")
 public class InsumoRequestDTO {
 
@@ -27,13 +30,43 @@ public class InsumoRequestDTO {
     @Min(value = 1, message = "El precio debe ser mayor a 0")
     private Double precioUnidad;
 
-    // Getters y Setters
+    /**
+     * @return el nombre del insumo
+     */
     public String getNombre() { return nombre; }
+
+    /**
+     * @param nombre nombre del insumo a asignar
+     */
     public void setNombre(String nombre) { this.nombre = nombre; }
+
+    /**
+     * @return la descripción del insumo
+     */
     public String getDescripcion() { return descripcion; }
+
+    /**
+     * @param descripcion descripción a asignar
+     */
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    /**
+     * @return la cantidad en stock del insumo
+     */
     public Integer getStock() { return stock; }
+
+    /**
+     * @param stock cantidad en stock a asignar
+     */
     public void setStock(Integer stock) { this.stock = stock; }
+
+    /**
+     * @return el precio unitario del insumo
+     */
     public Double getPrecioUnidad() { return precioUnidad; }
+
+    /**
+     * @param precioUnidad precio unitario a asignar
+     */
     public void setPrecioUnidad(Double precioUnidad) { this.precioUnidad = precioUnidad; }
 }

@@ -9,9 +9,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-// Captura errores de validación y los devuelve como mapa
+/**
+ * Manejador global de excepciones para el microservicio.
+ * Captura errores de validación y los devuelve como un mapa de campos y mensajes.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * Maneja errores de validación de argumentos.
+     *
+     * @param ex excepción de validación.
+     * @return mapa con los campos inválidos y sus mensajes de error.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> manejarErrores(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();

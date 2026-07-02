@@ -9,9 +9,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-// Captura errores de validación y los devuelve en un Map campo -> mensaje
 @RestControllerAdvice
+/**
+ * Manejador global de excepciones para el microservicio.
+ * Captura errores de validación y los devuelve como un mapa campo -> mensaje.
+ */
 public class SocioException {
+    /**
+     * Maneja errores de validación de campos en los request body.
+     *
+     * @param ex excepción lanzada cuando falla la validación con @Valid
+     * @return mapa con los nombres de los campos y sus mensajes de error
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>>
     manejarErrores(MethodArgumentNotValidException ex){

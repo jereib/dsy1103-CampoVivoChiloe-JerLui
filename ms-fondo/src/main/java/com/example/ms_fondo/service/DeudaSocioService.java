@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+/**
+ * Servicio que contiene la lógica de negocio para gestionar las deudas de socios.
+ * Actúa como intermediario entre el controlador y el repositorio.
+ */
 public class DeudaSocioService {
 
     private static final Logger log = LoggerFactory.getLogger(DeudaSocioService.class);
@@ -18,25 +22,45 @@ public class DeudaSocioService {
     @Autowired
     private DeudaSocioRepository deudaSocioRepository;
 
-    // Devuelve todas las deudas registradas
+    /**
+     * Obtiene todas las deudas registradas en el sistema.
+     *
+     * @return lista de todas las deudas.
+     */
     public List<DeudaSocio> listar() {
         log.info("Listando todas las deudas registradas");
         return deudaSocioRepository.findAll();
     }
 
-    // Busca una deuda por id, si no existe retorna null
+    /**
+     * Busca una deuda por su identificador.
+     *
+     * @param id identificador de la deuda.
+     * @return la deuda encontrada o null si no existe.
+     */
     public DeudaSocio buscarPorId(Long id) {
         log.debug("Buscando deuda por ID: {}", id);
         return deudaSocioRepository.findById(id).orElse(null);
     }
 
-    // Guarda una nueva deuda
+    /**
+     * Guarda una nueva deuda en la base de datos.
+     *
+     * @param deudaSocio datos de la deuda a guardar.
+     * @return la deuda guardada.
+     */
     public DeudaSocio guardar(DeudaSocio deudaSocio) {
         log.info("Guardando nueva deuda para socio ID: {}", deudaSocio.getSocioId());
         return deudaSocioRepository.save(deudaSocio);
     }
 
-    // Actualiza todos los campos de una deuda
+    /**
+     * Actualiza completamente una deuda existente.
+     *
+     * @param id         identificador de la deuda a actualizar.
+     * @param deudaSocio deuda con los nuevos datos.
+     * @return la deuda actualizada o null si no se encontró.
+     */
     public DeudaSocio actualizar(Long id, DeudaSocio deudaSocio) {
         log.info("Actualizando deuda ID: {}", id);
         DeudaSocio deudaExistente = buscarPorId(id);
@@ -53,7 +77,12 @@ public class DeudaSocioService {
         return deudaSocioRepository.save(deudaExistente);
     }
 
-    // Elimina una deuda por su id, retorna false si no existe
+    /**
+     * Elimina una deuda del sistema.
+     *
+     * @param id identificador de la deuda a eliminar.
+     * @return true si se eliminó correctamente, false si no existe.
+     */
     public boolean eliminar(Long id) {
         log.info("Eliminando deuda ID: {}", id);
         DeudaSocio deudaExistente = buscarPorId(id);
@@ -68,13 +97,23 @@ public class DeudaSocioService {
         return true;
     }
 
-    // Retorna todas las deudas de un socio
+    /**
+     * Obtiene todas las deudas asociadas a un socio.
+     *
+     * @param socioId identificador del socio.
+     * @return lista de deudas del socio.
+     */
     public List<DeudaSocio> buscarPorSocio(Long socioId) {
         log.debug("Buscando deudas del socio ID: {}", socioId);
         return deudaSocioRepository.findBySocioId(socioId);
     }
 
-    // Retorna true si el socio tiene al menos una deuda en estado ACTIVA
+    /**
+     * Verifica si un socio tiene al menos una deuda activa.
+     *
+     * @param socioId identificador del socio.
+     * @return true si tiene deuda activa, false en caso contrario.
+     */
     public boolean tieneDeudaActiva(Long socioId) {
         log.debug("Verificando deuda activa para socio ID: {}", socioId);
         List<DeudaSocio> deudasActivas =
@@ -85,7 +124,13 @@ public class DeudaSocioService {
         return activa;
     }
 
-    // Actualiza solo los campos indicados en el mapa
+    /**
+     * Actualiza solo los campos indicados de una deuda existente.
+     *
+     * @param id     identificador de la deuda.
+     * @param campos mapa con los campos y valores a actualizar.
+     * @return la deuda actualizada o null si no se encontró.
+     */
     public DeudaSocio actualizarParcial(Long id, Map<String, Object> campos) {
         log.info("Actualizando parcialmente deuda ID: {}", id);
         DeudaSocio deudaExistente = buscarPorId(id);

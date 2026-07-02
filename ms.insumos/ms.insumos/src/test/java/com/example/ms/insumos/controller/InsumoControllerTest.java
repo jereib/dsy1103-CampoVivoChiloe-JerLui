@@ -22,6 +22,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+/**
+ * Pruebas unitarias para el controlador InsumoController.
+ * Usa MockMvc para simular peticiones HTTP y verificar las respuestas.
+ */
 @ExtendWith(MockitoExtension.class)
 class InsumoControllerTest {
 
@@ -35,11 +39,17 @@ class InsumoControllerTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Configura MockMvc antes de cada prueba usando el controlador real.
+     */
     @BeforeEach
     void setUp() {
         mockMvc = standaloneSetup(controller).build();
     }
 
+    /**
+     * Verifica que listar todos los insumos retorna 200 y una lista con 2 elementos.
+     */
     @Test
     void listarTodos_retorna200YLista() throws Exception {
         when(service.listarTodos()).thenReturn(List.of(new Insumo(), new Insumo()));
@@ -51,6 +61,9 @@ class InsumoControllerTest {
         verify(service).listarTodos();
     }
 
+    /**
+     * Verifica que obtener un insumo por id retorna 200 y los datos correctos.
+     */
     @Test
     void obtenerPorId_retorna200YInsumo() throws Exception {
         Insumo insumo = new Insumo();
@@ -66,6 +79,9 @@ class InsumoControllerTest {
         verify(service).obtenerPorId(1L);
     }
 
+    /**
+     * Verifica que crear un insumo retorna 201 (Created) con los datos del insumo.
+     */
     @Test
     void crear_retorna201YInsumo() throws Exception {
         InsumoRequestDTO dto = new InsumoRequestDTO();
@@ -88,6 +104,9 @@ class InsumoControllerTest {
         verify(service).crearInsumo(any());
     }
 
+    /**
+     * Verifica que actualizar un insumo retorna 200 con los datos modificados.
+     */
     @Test
     void actualizar_retorna200YInsumo() throws Exception {
         InsumoRequestDTO dto = new InsumoRequestDTO();
@@ -110,6 +129,9 @@ class InsumoControllerTest {
         verify(service).actualizarInsumo(eq(1L), any());
     }
 
+    /**
+     * Verifica que eliminar un insumo retorna 204 (No Content).
+     */
     @Test
     void eliminar_retorna204() throws Exception {
         doNothing().when(service).eliminarInsumo(1L);
@@ -120,6 +142,9 @@ class InsumoControllerTest {
         verify(service).eliminarInsumo(1L);
     }
 
+    /**
+     * Verifica que actualizar parcialmente un insumo retorna 200 con los cambios aplicados.
+     */
     @Test
     void actualizarParcial_retorna200() throws Exception {
         Insumo insumo = new Insumo();
@@ -138,6 +163,9 @@ class InsumoControllerTest {
         verify(service).actualizarParcial(eq(1L), any());
     }
 
+    /**
+     * Verifica que actualizar un insumo que no existe retorna 404.
+     */
     @Test
     void actualizarParcial_retorna404_cuandoNotFound() throws Exception {
         when(service.actualizarParcial(eq(999L), any())).thenThrow(new RuntimeException("Insumo no encontrado"));
@@ -152,6 +180,9 @@ class InsumoControllerTest {
         verify(service).actualizarParcial(eq(999L), any());
     }
 
+    /**
+     * Verifica que un error en la actualización parcial retorna 400.
+     */
     @Test
     void actualizarParcial_retorna400_cuandoError() throws Exception {
         doAnswer(invocation -> {

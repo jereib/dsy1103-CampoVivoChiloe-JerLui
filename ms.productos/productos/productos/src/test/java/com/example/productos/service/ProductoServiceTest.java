@@ -18,6 +18,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Pruebas unitarias del servicio ProductoService.
+ * Verifica la lógica de negocio incluyendo la validación del margen de precio.
+ */
 @ExtendWith(MockitoExtension.class)
 class ProductoServiceTest {
 
@@ -27,6 +31,9 @@ class ProductoServiceTest {
     @InjectMocks
     private ProductoService productoService;
 
+    /**
+     * crearProducto debe guardar el producto cuando el precio supera el margen mínimo del 20%.
+     */
     @Test
     void crearProducto_guardaProducto_cuandoPrecioSuperaMargenMinimo() {
         // given
@@ -50,6 +57,9 @@ class ProductoServiceTest {
         verify(repository).save(any(Producto.class));
     }
 
+    /**
+     * crearProducto debe lanzar excepción cuando el precio no cumple el margen mínimo del 20%.
+     */
     @Test
     void crearProducto_lanzaExcepcion_cuandoPrecioNoCumpleMargenMinimo() {
         // given
@@ -64,6 +74,9 @@ class ProductoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * obtenerProductoPorId debe retornar el producto cuando existe en la base de datos.
+     */
     @Test
     void obtenerProductoPorId_retornaProducto_cuandoExiste() {
         // given
@@ -81,6 +94,9 @@ class ProductoServiceTest {
         verify(repository).findById(id);
     }
 
+    /**
+     * obtenerProductoPorId debe lanzar excepción cuando el producto no existe.
+     */
     @Test
     void obtenerProductoPorId_lanzaExcepcion_cuandoNoExiste() {
         // given
@@ -92,6 +108,9 @@ class ProductoServiceTest {
         verify(repository).findById(id);
     }
 
+    /**
+     * listarTodos debe retornar todos los productos registrados.
+     */
     @Test
     void listarTodos_retornaTodosLosProductos() {
         // given
@@ -110,6 +129,9 @@ class ProductoServiceTest {
         verify(repository).findAll();
     }
 
+    /**
+     * actualizarProducto debe actualizar el producto cuando el margen de precio es válido.
+     */
     @Test
     void actualizarProducto_actualizaProducto_cuandoMargenEsValido() {
         // given
@@ -134,6 +156,9 @@ class ProductoServiceTest {
         verify(repository).save(productoExistente);
     }
 
+    /**
+     * actualizarProducto debe lanzar excepción cuando el nuevo precio no cumple el margen.
+     */
     @Test
     void actualizarProducto_lanzaExcepcion_cuandoMargenNoCumple() {
         // given
@@ -153,6 +178,9 @@ class ProductoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * actualizarProducto debe lanzar excepción cuando el producto no existe.
+     */
     @Test
     void actualizarProducto_lanzaExcepcion_cuandoProductoNoEncontrado() {
         // given
@@ -171,6 +199,9 @@ class ProductoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * eliminarProducto debe eliminar el producto cuando existe.
+     */
     @Test
     void eliminarProducto_eliminaProducto_cuandoExiste() {
         // given
@@ -186,6 +217,9 @@ class ProductoServiceTest {
         verify(repository).delete(producto);
     }
 
+    /**
+     * eliminarProducto debe lanzar excepción cuando el producto no existe.
+     */
     @Test
     void eliminarProducto_lanzaExcepcion_cuandoNoExiste() {
         // given
@@ -198,6 +232,9 @@ class ProductoServiceTest {
         verify(repository, never()).delete(any());
     }
 
+    /**
+     * actualizarParcial debe actualizar el nombre cuando el margen sigue siendo válido.
+     */
     @Test
     void actualizarParcial_actualizaNombre_cuandoMargenSigueSiendoValido() {
         // given
@@ -219,6 +256,9 @@ class ProductoServiceTest {
         verify(repository).save(productoExistente);
     }
 
+    /**
+     * actualizarParcial debe validar el margen cuando se actualiza el precio.
+     */
     @Test
     void actualizarParcial_validaMargen_cuandoSeActualizaPrecio() {
         // given
@@ -240,6 +280,9 @@ class ProductoServiceTest {
         verify(repository).save(productoExistente);
     }
 
+    /**
+     * actualizarParcial debe lanzar excepción cuando el margen deja de cumplirse.
+     */
     @Test
     void actualizarParcial_lanzaExcepcion_cuandoMargenFalla() {
         // given
@@ -256,6 +299,9 @@ class ProductoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * actualizarParcial debe actualizar el stock correctamente.
+     */
     @Test
     void actualizarParcial_actualizaStock() {
         // given
@@ -277,6 +323,9 @@ class ProductoServiceTest {
         verify(repository).save(productoExistente);
     }
 
+    /**
+     * actualizarParcial debe actualizar el costo de producción correctamente.
+     */
     @Test
     void actualizarParcial_actualizaCostoProduccion() {
         // given
@@ -298,6 +347,9 @@ class ProductoServiceTest {
         verify(repository).save(productoExistente);
     }
 
+    /**
+     * actualizarParcial debe lanzar excepción cuando el nuevo costo de producción hace fallar el margen.
+     */
     @Test
     void actualizarParcial_lanzaExcepcion_cuandoCostoProduccionHaceFallarMargen() {
         // given
@@ -314,6 +366,9 @@ class ProductoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * actualizarParcial debe ignorar campos no reconocidos sin lanzar error.
+     */
     @Test
     void actualizarParcial_ignoraCampoDesconocido() {
         // given

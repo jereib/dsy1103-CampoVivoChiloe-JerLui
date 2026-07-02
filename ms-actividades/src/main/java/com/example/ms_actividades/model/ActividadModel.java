@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// Entidad que representa una actividad en la base de datos
+/**
+ * Entidad JPA que representa una actividad en la base de datos.
+ * Cada actividad tiene un nombre, descripción, calendario y un socio asociado.
+ */
 @Schema(name = "Actividad", description = "Representa una actividad en el sistema")
 @Entity
 @Table(name = "actividades")

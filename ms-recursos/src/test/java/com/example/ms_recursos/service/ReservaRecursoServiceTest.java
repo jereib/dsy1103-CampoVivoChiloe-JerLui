@@ -15,6 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests unitarios para el servicio ReservaRecursoService.
+ * Mockea el repositorio y el cliente Feign para aislar la logica de negocio.
+ */
 @ExtendWith(MockitoExtension.class)
 class ReservaRecursoServiceTest {
 
@@ -27,6 +31,9 @@ class ReservaRecursoServiceTest {
     @InjectMocks
     private ReservaRecursoService reservaRecursoService;
 
+    /**
+     * Si el socio tiene deuda activa, guardar debe lanzar excepcion.
+     */
     @Test
     void guardar_debeLanzarExcepcion_cuandoSocioTieneDeuda() {
         // Given: un socio con deuda activa
@@ -44,6 +51,9 @@ class ReservaRecursoServiceTest {
         verify(reservaRecursoRepository, never()).save(any());
     }
 
+    /**
+     * Si el socio no tiene deuda, guardar debe persistir la reserva.
+     */
     @Test
     void guardar_debeGuardarReserva_cuandoSocioNoTieneDeuda() {
         // Given: un socio sin deuda
@@ -64,6 +74,9 @@ class ReservaRecursoServiceTest {
         verify(reservaRecursoRepository, times(1)).save(reserva);
     }
 
+    /**
+     * listar debe retornar una lista de recursos.
+     */
     @Test
     void listar_debeRetornarLista() {
         when(reservaRecursoRepository.findAll()).thenReturn(List.of());
@@ -74,6 +87,9 @@ class ReservaRecursoServiceTest {
         assertTrue(resultado.isEmpty());
     }
 
+    /**
+     * buscarPorId debe retornar la reserva cuando existe.
+     */
     @Test
     void buscarPorId_debeRetornarReserva_cuandoExiste() {
         ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
@@ -86,6 +102,9 @@ class ReservaRecursoServiceTest {
         assertEquals("Tractor", resultado.getNombreRecurso());
     }
 
+    /**
+     * buscarPorId debe retornar null cuando no existe la reserva.
+     */
     @Test
     void buscarPorId_debeRetornarNull_cuandoNoExiste() {
         when(reservaRecursoRepository.findById(99L)).thenReturn(java.util.Optional.empty());
@@ -95,6 +114,9 @@ class ReservaRecursoServiceTest {
         assertNull(resultado);
     }
 
+    /**
+     * eliminar debe retornar true cuando el recurso existe.
+     */
     @Test
     void eliminar_debeRetornarTrue_cuandoExiste() {
         ReservaRecurso r = new ReservaRecurso(1L, "Tractor", "2026-07-01", "2026-07-03", "PENDIENTE");
@@ -107,6 +129,9 @@ class ReservaRecursoServiceTest {
         verify(reservaRecursoRepository).delete(r);
     }
 
+    /**
+     * eliminar debe retornar false cuando el recurso no existe.
+     */
     @Test
     void eliminar_debeRetornarFalse_cuandoNoExiste() {
         when(reservaRecursoRepository.findById(99L)).thenReturn(java.util.Optional.empty());
@@ -117,6 +142,9 @@ class ReservaRecursoServiceTest {
         verify(reservaRecursoRepository, never()).delete(any());
     }
 
+    /**
+     * Si ms-fondo no responde, guardar debe lanzar excepcion de comunicacion.
+     */
     @Test
     void guardar_debeLanzarExcepcion_cuandoFondoNoResponde() {
         // Given: ms-fondo no responde

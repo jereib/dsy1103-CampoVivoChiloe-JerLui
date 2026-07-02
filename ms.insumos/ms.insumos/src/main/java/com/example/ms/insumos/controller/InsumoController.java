@@ -14,6 +14,10 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+/**
+ * Controlador que expone los endpoints REST para la gestión de insumos.
+ * Permite crear, consultar, actualizar y eliminar insumos del sistema.
+ */
 @RestController
 @RequestMapping("/api/v1/insumos")
 @Tag( name = "Insumos", description = "Operaciones relacionadas con los insumos")
@@ -21,11 +25,21 @@ public class InsumoController {
 
     private final InsumoService service;
 
+    /**
+     * Constructor que inyecta el servicio de insumos.
+     *
+     * @param service servicio con la lógica de negocio de insumos
+     */
     public InsumoController(InsumoService service) {
         this.service = service;
     }
 
-    // Crear un nuevo insumo
+    /**
+     * Crea un nuevo insumo a partir de los datos enviados en el cuerpo de la petición.
+     *
+     * @param dto objeto con los datos del insumo a crear
+     * @return el insumo creado con código 201 (Created)
+     */
     @PostMapping
     @Operation( summary = "Crear insumo", description = "Permite crear un insumo con sus atributos" )
     @ApiResponses({
@@ -59,7 +73,12 @@ public class InsumoController {
         return new ResponseEntity<>(nuevoInsumo, HttpStatus.CREATED);
     }
 
-    // Obtener un insumo por su id
+    /**
+     * Obtiene un insumo por su identificador único.
+     *
+     * @param id identificador del insumo
+     * @return el insumo encontrado con código 200
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Obtener insumo por id", description = "Permite obtener un insumo existente por su id" )
     @ApiResponses({
@@ -93,7 +112,11 @@ public class InsumoController {
         return new ResponseEntity<>(insumo, HttpStatus.OK);
     }
 
-    // Listar todos los insumos
+    /**
+     * Lista todos los insumos registrados en el sistema.
+     *
+     * @return lista de insumos con código 200
+     */
     @GetMapping
     @Operation( summary = "Listar insumos", description = "Obtiene todos los insumos registrados" )
     @ApiResponses({
@@ -126,7 +149,13 @@ public class InsumoController {
         return new ResponseEntity<>(service.listarTodos(), HttpStatus.OK);
     }
 
-    // Actualizar un insumo completamente
+    /**
+     * Reemplaza completamente los datos de un insumo existente.
+     *
+     * @param id  identificador del insumo a actualizar
+     * @param dto objeto con los nuevos datos del insumo
+     * @return el insumo actualizado con código 200
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar insumo", description = "Permite actualizar un insumo por su id" )
     @ApiResponses({
@@ -160,7 +189,12 @@ public class InsumoController {
         return new ResponseEntity<>(insumoActualizado, HttpStatus.OK);
     }
 
-    // Eliminar un insumo por id
+    /**
+     * Elimina un insumo del sistema por su identificador.
+     *
+     * @param id identificador del insumo a eliminar
+     * @return código 204 (No Content) si la operación fue exitosa
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar insumo", description = "Permite eliminar un insumo por su id" )
     @ApiResponses({
@@ -194,7 +228,14 @@ public class InsumoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Actualizar solo campos específicos del insumo
+    /**
+     * Actualiza solo los campos enviados en el cuerpo de la petición (PATCH).
+     * Si el insumo no existe retorna 404; si hay un error de datos retorna 400.
+     *
+     * @param id     identificador del insumo a modificar
+     * @param campos mapa con los campos a actualizar y sus nuevos valores
+     * @return el insumo modificado o un mensaje de error
+     */
     @PatchMapping("/{id}")
     @Operation(summary = "Actualizar parcialmente un insumo", description = "Permite modificar únicamente los atributos enviados en el cuerpo de la petición utilizando el id del insumo")
     @ApiResponses({

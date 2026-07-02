@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Servicio que contiene la lógica de negocio para gestionar liquidaciones.
+ * Se comunica con el repositorio y con el cliente Feign de ms-fondo.
+ */
 @Service
 public class LiquidacionService {
 
@@ -23,22 +27,42 @@ public class LiquidacionService {
         this.liquidacionRepository = liquidacionRepository;
     }
 
-    // Todas las liquidaciones
+    /**
+     * Retorna todas las liquidaciones registradas.
+     *
+     * @return lista de liquidaciones.
+     */
     public List<Liquidacion> listar() {
         return liquidacionRepository.findAll();
     }
 
-    // Guardar una nueva liquidación
+    /**
+     * Guarda una nueva liquidación en la base de datos.
+     *
+     * @param liquidacion datos de la liquidación.
+     * @return liquidación guardada.
+     */
     public Liquidacion guardar(Liquidacion liquidacion) {
         return liquidacionRepository.save(liquidacion);
     }
 
-    // Buscar por id, retorna null si no existe
+    /**
+     * Busca una liquidación por su id.
+     *
+     * @param id identificador de la liquidación.
+     * @return liquidación encontrada, o null si no existe.
+     */
     public Liquidacion buscarPorId(Long id) {
         return liquidacionRepository.findById(id).orElse(null);
     }
 
-    // Actualizar todos los campos de una liquidación
+    /**
+     * Actualiza todos los campos de una liquidación existente.
+     *
+     * @param id   identificador de la liquidación a actualizar.
+     * @param datos datos nuevos de la liquidación.
+     * @return liquidación actualizada, o null si no se encuentra.
+     */
     public Liquidacion actualizar(Long id, Liquidacion datos) {
         Liquidacion existente = liquidacionRepository.findById(id).orElse(null);
         if (existente == null) {
@@ -51,7 +75,12 @@ public class LiquidacionService {
         return liquidacionRepository.save(existente);
     }
 
-    // Eliminar por id, retorna false si no existe
+    /**
+     * Elimina una liquidación por su id.
+     *
+     * @param id identificador de la liquidación.
+     * @return true si se eliminó, false si no existe.
+     */
     public boolean eliminar(Long id) {
         if (!liquidacionRepository.existsById(id)) {
             return false;
@@ -60,7 +89,14 @@ public class LiquidacionService {
         return true;
     }
 
-    // Genera una liquidación calculando ingresos - deuda (consulta a ms-fondo)
+    /**
+     * Genera una liquidación calculando ingresos - deuda.
+     * Consulta a ms-fondo si el socio tiene deuda activa.
+     *
+     * @param socioId identificador del socio.
+     * @return liquidación calculada.
+     * @throws RuntimeException si no se puede consultar ms-fondo.
+     */
     public Liquidacion generarLiquidacion(Long socioId) {
         log.info("Generando liquidación para socio ID: {}", socioId);
 

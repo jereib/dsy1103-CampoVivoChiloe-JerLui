@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST que expone los endpoints para gestionar reservas de
+ * recursos. Soporta operaciones CRUD basicas.
+ */
 @RestController
 @RequestMapping("/api/v1/recursos")
 @Tag( name = "Recursos", description = "Operaciones relacionadas con los recursos")
@@ -21,7 +25,11 @@ public class ReservaRecursoController {
     @Autowired
     private ReservaRecursoService reservaRecursoService;
 
-    // Listar todos los recursos registrados
+    /**
+     * Lista todos los recursos registrados en el sistema.
+     *
+     * @return lista de recursos con estado 200
+     */
     @GetMapping
     @Operation( summary = "Listar recursos", description = "Obtiene todos los recursos registrados" )
     @ApiResponses({
@@ -54,7 +62,12 @@ public class ReservaRecursoController {
         return ResponseEntity.ok(reservaRecursoService.listar());
     }
 
-    // Buscar un recurso por su id
+    /**
+     * Busca un recurso por su id.
+     *
+     * @param id identificador del recurso
+     * @return recurso encontrado con estado 200, o mensaje de error con 404
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Listar Recursos por id", description = "Obtiene un recurso registrado mediante el id" )
     @ApiResponses({
@@ -93,7 +106,13 @@ public class ReservaRecursoController {
         return ResponseEntity.ok(r);
     }
 
-    // Crear un nuevo recurso
+    /**
+     * Crea un nuevo recurso. Valida que el socio no tenga deuda activa
+     * antes de guardar la reserva.
+     *
+     * @param reserva datos del recurso a crear
+     * @return recurso creado con estado 201, o mensaje de error con 400
+     */
     @PostMapping
     @Operation( summary = "Crear recurso", description = "Permite crear un recurso de acuerdo a sus atributos" )
     @ApiResponses({
@@ -131,7 +150,13 @@ public class ReservaRecursoController {
         }
     }
 
-    // Actualizar un recurso existente
+    /**
+     * Actualiza un recurso existente identificado por su id.
+     *
+     * @param id     identificador del recurso a actualizar
+     * @param reserva datos nuevos del recurso
+     * @return recurso actualizado con estado 200, o mensaje de error con 400
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualizar recurso", description = "Permite actualizar un recurso existente por su id" )
     @ApiResponses({
@@ -171,7 +196,12 @@ public class ReservaRecursoController {
         }
     }
 
-    // Eliminar un recurso por id
+    /**
+     * Elimina un recurso por su id.
+     *
+     * @param id identificador del recurso a eliminar
+     * @return estado 204 si se elimino, o 404 si no existe
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar recurso", description = "Permite eliminar un recurso mediante su id" )
     @ApiResponses({

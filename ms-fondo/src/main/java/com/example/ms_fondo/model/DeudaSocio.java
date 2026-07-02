@@ -3,7 +3,10 @@ package com.example.ms_fondo.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
-// Entidad que representa una deuda de un socio
+/**
+ * Entidad que representa una deuda de un socio en el sistema.
+ * Cada deuda tiene un monto, un estado (ACTIVA o PAGADA) y está asociada a un socio.
+ */
 @Schema(name = "Deudas", description = "Representa una deuda en el sistema")
 @Entity
 public class DeudaSocio {
@@ -22,9 +25,19 @@ public class DeudaSocio {
     @Schema(description = "Estado de la deuda", example = "PAGADA")
     private String estado; // ACTIVA o PAGADA, controla si la deuda sigue vigente
 
+    /**
+     * Constructor vacío requerido por JPA.
+     */
     public DeudaSocio() {
     }
 
+    /**
+     * Constructor con los campos principales de la deuda.
+     *
+     * @param socioId identificador del socio asociado.
+     * @param monto   monto de la deuda.
+     * @param estado  estado de la deuda (ACTIVA o PAGADA).
+     */
     public DeudaSocio(Long socioId, double monto, String estado) {
         this.socioId = socioId;
         this.monto = monto;

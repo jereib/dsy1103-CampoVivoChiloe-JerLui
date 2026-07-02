@@ -17,6 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Pruebas unitarias del servicio DeudaSocioService.
+ * Utiliza mocks del repositorio para verificar la lógica de negocio.
+ */
 @ExtendWith(MockitoExtension.class)
 class DeudaSocioServiceTest {
 
@@ -26,6 +30,9 @@ class DeudaSocioServiceTest {
     @InjectMocks
     private DeudaSocioService deudaSocioService;
 
+    /**
+     * Verifica que listar devuelve todas las deudas del repositorio.
+     */
     @Test
     void listar_retornaTodasLasDeudas() {
         // given
@@ -43,6 +50,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findAll();
     }
 
+    /**
+     * Verifica que buscarPorId retorna la deuda cuando existe.
+     */
     @Test
     void buscarPorId_retornaDeudaSocioCuandoExiste() {
         // given
@@ -59,6 +69,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findById(id);
     }
 
+    /**
+     * Verifica que buscarPorId retorna null cuando la deuda no existe.
+     */
     @Test
     void buscarPorId_retornaNullCuandoNoExiste() {
         // given
@@ -73,6 +86,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findById(id);
     }
 
+    /**
+     * Verifica que guardar persiste y retorna la deuda.
+     */
     @Test
     void guardar_guardaYRetorna() {
         // given
@@ -89,6 +105,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deuda);
     }
 
+    /**
+     * Verifica que actualizar modifica la deuda cuando existe.
+     */
     @Test
     void actualizar_actualizaCuandoExiste() {
         // given
@@ -110,6 +129,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deudaExistente);
     }
 
+    /**
+     * Verifica que actualizar retorna null si la deuda no existe.
+     */
     @Test
     void actualizar_retornaNullCuandoNoExiste() {
         // given
@@ -126,6 +148,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository, never()).save(any());
     }
 
+    /**
+     * Verifica que eliminar retorna true cuando la deuda existe.
+     */
     @Test
     void eliminar_retornaTrueCuandoExiste() {
         // given
@@ -143,6 +168,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).delete(deuda);
     }
 
+    /**
+     * Verifica que eliminar retorna false si la deuda no existe.
+     */
     @Test
     void eliminar_retornaFalseCuandoNoExiste() {
         // given
@@ -158,6 +186,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository, never()).delete(any());
     }
 
+    /**
+     * Verifica que buscarPorSocio retorna las deudas de un socio específico.
+     */
     @Test
     void buscarPorSocio_retornaListaPorSocioId() {
         // given
@@ -176,6 +207,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findBySocioId(socioId);
     }
 
+    /**
+     * Verifica que tieneDeudaActiva retorna true si hay deudas activas.
+     */
     @Test
     void tieneDeudaActiva_retornaTrueCuandoHayDeudasActivas() {
         // given
@@ -191,6 +225,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findBySocioIdAndEstado(socioId, "ACTIVA");
     }
 
+    /**
+     * Verifica que tieneDeudaActiva retorna false si no hay deudas activas.
+     */
     @Test
     void tieneDeudaActiva_retornaFalseCuandoNoHayDeudasActivas() {
         // given
@@ -205,6 +242,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findBySocioIdAndEstado(socioId, "ACTIVA");
     }
 
+    /**
+     * Verifica que actualizarParcial modifica solo el campo monto.
+     */
     @Test
     void actualizarParcial_actualizaCampoMonto() {
         // given
@@ -226,6 +266,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deudaExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial retorna null si la deuda no existe.
+     */
     @Test
     void actualizarParcial_retornaNullCuandoNoExiste() {
         // given
@@ -243,6 +286,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository, never()).save(any());
     }
 
+    /**
+     * Verifica que listar retorna una lista con una deuda.
+     */
     @Test
     void listar_debeRetornarLista() {
         List<DeudaSocio> deudas = List.of(
@@ -256,6 +302,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findAll();
     }
 
+    /**
+     * Verifica que buscarPorId retorna la deuda cuando existe.
+     */
     @Test
     void buscarPorId_debeRetornarDeuda() {
         Long id = 1L;
@@ -269,6 +318,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).findById(id);
     }
 
+    /**
+     * Verifica que guardar persiste y retorna la deuda correctamente.
+     */
     @Test
     void guardar_debeGuardarYRetornar() {
         DeudaSocio deuda = new DeudaSocio(1L, 30000, "ACTIVA");
@@ -280,6 +332,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deuda);
     }
 
+    /**
+     * Verifica que eliminar borra la deuda cuando existe.
+     */
     @Test
     void eliminar_debeEliminar() {
         Long id = 1L;
@@ -294,6 +349,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).delete(deuda);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el campo socioId.
+     */
     @Test
     void actualizarParcial_actualizaSocioId() {
         Long id = 1L;
@@ -312,6 +370,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deudaExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial permite poner socioId en null.
+     */
     @Test
     void actualizarParcial_actualizaSocioIdNull() {
         Long id = 1L;
@@ -330,6 +391,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deudaExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial modifica el estado y lo convierte a mayúsculas.
+     */
     @Test
     void actualizarParcial_actualizaEstado() {
         Long id = 1L;
@@ -348,6 +412,9 @@ class DeudaSocioServiceTest {
         verify(deudaSocioRepository).save(deudaExistente);
     }
 
+    /**
+     * Verifica que actualizarParcial ignora campos desconocidos.
+     */
     @Test
     void actualizarParcial_campoDesconocido_noRealizaCambios() {
         Long id = 1L;

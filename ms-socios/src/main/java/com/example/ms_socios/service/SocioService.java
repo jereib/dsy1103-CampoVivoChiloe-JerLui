@@ -12,17 +12,29 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+/**
+ * Servicio que contiene la lógica de negocio para la gestión de familias socias.
+ * Actúa como intermediario entre el controlador y el repositorio.
+ */
 public class SocioService {
 
-    // Logger para rastrear lo que pasa en el servicio
     private static final Logger log = LoggerFactory.getLogger(SocioService.class);
     private final SocioRepository socioRepository;
 
+    /**
+     * Constructor que inyecta el repositorio de socios.
+     *
+     * @param socioRepository repositorio JPA para acceso a datos
+     */
     public SocioService(SocioRepository socioRepository){
         this.socioRepository = socioRepository;
     }
 
-    // Devuelve todas las familias socias sin filtro
+    /**
+     * Devuelve todas las familias socias registradas, sin ningún filtro.
+     *
+     * @return lista completa de socios
+     */
     public List<Socio> listarSocios(){
         log.info("Solicitando listado completo de familias socias");
         List<Socio> socios = socioRepository.findAll();
@@ -30,7 +42,12 @@ public class SocioService {
         return socios;
     }
 
-    // Filtra según el estado (disponible, suspendido, mantenimiento)
+    /**
+     * Filtra las familias socias según su estado (DISPONIBLE, SUSPENDIDO, MANTENIMIENTO).
+     *
+     * @param estado enum del estado por el que filtrar
+     * @return lista de socios que coinciden con el estado
+     */
     public List<Socio> buscarPorEstado(Estado estado){
         log.info("Buscando familias socias con estado: [{}]", estado);
         List<Socio> socios = socioRepository.findByEstado(estado);
@@ -38,7 +55,12 @@ public class SocioService {
         return socios;
     }
 
-    // Busca una familia socia por su id, devuelve null si no existe
+    /**
+     * Busca una familia socia por su ID. Retorna null si no se encuentra.
+     *
+     * @param id identificador único del socio
+     * @return el socio encontrado o null si no existe
+     */
     public Socio buscarPorId(Long id){
         log.debug("Buscando socio por ID: {}", id);
         Optional<Socio> socio = socioRepository.findById(id);
@@ -51,7 +73,12 @@ public class SocioService {
         return socio.get();
     }
 
-    // Registra una nueva familia socia, valida que no se duplique el nombre
+    /**
+     * Registra una nueva familia socia. Valida que no exista otra con el mismo nombre.
+     *
+     * @param socio datos de la familia socia a guardar
+     * @return el socio guardado o null si el nombre ya está registrado
+     */
     public Socio guardarSocio(Socio socio){
         log.info("Iniciando registro de una nueva familia socia: [{}]", socio.getSocio());
 
@@ -72,7 +99,13 @@ public class SocioService {
         }
     }
 
-    // Reemplaza todos los campos de una familia socia existente
+    /**
+     * Reemplaza todos los campos de una familia socia existente.
+     *
+     * @param id               identificador del socio a actualizar
+     * @param socioActualizado objeto con los nuevos valores
+     * @return el socio actualizado o null si no existe
+     */
     public Socio actualizarPorId(Long id, Socio socioActualizado){
         log.info("Petición recibida para actualizar (PUT) socio con ID: [{}]", id);
 
@@ -100,7 +133,12 @@ public class SocioService {
         }
     }
 
-    // Elimina una familia socia si existe, retorna true si se borró
+    /**
+     * Elimina una familia socia por su ID si existe.
+     *
+     * @param id identificador del socio a eliminar
+     * @return true si se eliminó correctamente, false si no existía
+     */
     public boolean eliminarSocio(Long id){
         log.info("Petición recibida para eliminar socio con ID: [{}]", id);
 
@@ -121,7 +159,15 @@ public class SocioService {
         }
     }
 
-    // Actualiza solo los campos que vienen en el Map, ideal para PATCH
+    /**
+     * Actualiza solo los campos que vienen en el Map, útil para operaciones PATCH.
+     * Los campos válidos son: socio, predio, capacidad, estado.
+     *
+     * @param id     identificador del socio a modificar
+     * @param campos mapa con los nombres de los campos y sus nuevos valores
+     * @return el socio actualizado o null si no existe
+     * @throws IllegalArgumentException si el valor del estado no es válido
+     */
     public Socio actualizarParcial(Long id, Map<String, Object> campos) {
         log.info("Petición recibida para actualización parcial (PATCH) del socio con ID: [{}]", id);
 

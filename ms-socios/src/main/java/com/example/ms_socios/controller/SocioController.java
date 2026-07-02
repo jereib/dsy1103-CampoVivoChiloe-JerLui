@@ -16,16 +16,28 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/socios")
 @Tag( name = "Socios", description = "Operaciones relacionadas con socios")
+/**
+ * Controlador REST que maneja las operaciones CRUD de familias socias.
+ * Expone endpoints bajo /api/v1/socios.
+ */
 public class SocioController {
     private final SocioService socioService;
 
-    // Inyectamos el servicio por constructor
+    /**
+     * Constructor que inyecta la dependencia del servicio.
+     *
+     * @param socioService servicio con la lógica de negocio de socios
+     */
     public SocioController(SocioService socioService){
         this.socioService = socioService;
     }
 
 
-    // Devuelve todas las familias socias registradas
+    /**
+     * Obtiene todas las familias socias registradas en el sistema.
+     *
+     * @return lista de socios en formato JSON
+     */
     @GetMapping
     @Operation( summary = "Listar socios", description = "Obtiene todas las familias socias registradas" )
     @ApiResponses({
@@ -58,7 +70,12 @@ public class SocioController {
         return ResponseEntity.ok(socioService.listarSocios());
     }
 
-    // Busca una familia socia por su id
+    /**
+     * Busca una familia socia por su ID.
+     *
+     * @param id identificador único del socio
+     * @return el socio encontrado o un mensaje de error si no existe
+     */
     @GetMapping("/{id}")
     @Operation( summary = "Listar socios por id", description = "Obtiene una familia socia registrada mediante su id" )
     @ApiResponses({
@@ -98,7 +115,12 @@ public class SocioController {
         return ResponseEntity.ok(socio);
     }
 
-    // Filtra por estado: DISPONIBLE, SUSPENDIDO o MANTENIMIENTO
+    /**
+     * Filtra las familias socias por su estado (DISPONIBLE, SUSPENDIDO, MANTENIMIENTO).
+     *
+     * @param estado nombre del estado en string (se convierte a mayúsculas internamente)
+     * @return lista de socios con ese estado o error si el estado no es válido
+     */
     @GetMapping("/estado/{estado}")
     @Operation( summary = "Listar socios por estado", description = "Obtiene una familia socia registrada mediante su estado" )
     @ApiResponses({
@@ -143,7 +165,12 @@ public class SocioController {
         }
     }
 
-    // Crea una nueva familia socia
+    /**
+     * Registra una nueva familia socia en el sistema.
+     *
+     * @param socio datos de la familia socia a crear
+     * @return el socio creado o un error si ya existe uno con el mismo nombre
+     */
     @PostMapping
     @Operation( summary = "ingresa una familia socia", description = "se ingresa una familia socia nueva con sus atributos correspondientes" )
     @ApiResponses({
@@ -185,7 +212,13 @@ public class SocioController {
         return ResponseEntity.ok(nuevoSocio);
     }
 
-    // Reemplaza todos los datos de una familia socia
+    /**
+     * Reemplaza todos los datos de una familia socia existente.
+     *
+     * @param id    identificador del socio a actualizar
+     * @param socio objeto con los nuevos datos
+     * @return el socio actualizado o un error si no existe
+     */
     @PutMapping("/{id}")
     @Operation( summary = "Actualiza socios por id", description = "Actualiza una familia socia mediante su id" )
     @ApiResponses({
@@ -226,7 +259,12 @@ public class SocioController {
         return ResponseEntity.ok(socioActualizado);
     }
 
-    // Elimina una familia socia por su id
+    /**
+     * Elimina una familia socia del sistema por su ID.
+     *
+     * @param id identificador del socio a eliminar
+     * @return mensaje de éxito o error si el socio no existe
+     */
     @DeleteMapping("/{id}")
     @Operation( summary = "Eliminar socios por id", description = "Elimina una familia socia registrada mediante su id" )
     @ApiResponses({
@@ -296,7 +334,14 @@ public class SocioController {
             )
     })
 
-    // Actualiza solo los campos enviados en el Map, útil para cambios rápidos
+    /**
+     * Actualiza solo los campos enviados en el Map, útil para cambios rápidos
+     * sin reemplazar todo el objeto.
+     *
+     * @param id     identificador del socio a modificar
+     * @param campos mapa con los campos a actualizar y sus nuevos valores
+     * @return el socio actualizado o un error si no existe
+     */
     public ResponseEntity<?> actualizarParcialSocio(@PathVariable Long id, @RequestBody java.util.Map<String, Object> campos) {
 
         Socio socioActualizado = socioService.actualizarParcial(id, campos);
